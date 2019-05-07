@@ -110,7 +110,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         
         Auth.auth().signIn(withEmail: email, password: password, completion: {
             if let err = $1 {
-                Utils.showAlertMessage(presenter: self, title: "Login Failed", message: "Email/Password combination was incorrect")
+                Utilities.showAlertMessage(presenter: self, title: "Login Failed", message: "Email/Password combination was incorrect")
 
                 print("Failed to sign in with email:", err)
                 return

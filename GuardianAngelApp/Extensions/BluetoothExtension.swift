@@ -18,22 +18,18 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     }
     @objc func startScan() {
         guard !uart_is_connected else { return }
-        peripherals = []
         print("Now Scanning...")
-        // Setup timer for scanning
-        self.timer.invalidate()
+        // Start scanning
         centralManager?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
-        Timer.scheduledTimer(timeInterval: 30, target: self, selector: #selector(self.stopScan), userInfo: nil, repeats: false)
+        
+        // Setup timer to stop scanning
+        let timer = CustomTimer {
+            self.stopScan()
+        }
+        timer.start()
     }
-    @objc func stopScan() {
+    func stopScan() {
         self.centralManager?.stopScan()
-//        print("Scan Stopped")
-//        print("Number of Peripherals Found: \(peripherals.count)")
-//        print("peripherals: ", peripherals)
-//        if !uart_is_connected && repeatScan {
-//            startScan()
-//            repeatScan = false
-//        }
     }
     
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {

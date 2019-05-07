@@ -48,14 +48,12 @@ class DeviceViewController: UIViewController {
     var centralManager: CBCentralManager?
     var RSSIs = [NSNumber]()
     var selectedPeripheral: CBPeripheral?
-    var peripherals: [CBPeripheral] = []
     var characteristicValue = [CBUUID: NSData]()
     var characteristics = [String : CBCharacteristic]()
     var is_baby_in_seat: Bool = false
     var repeatScan = true
     var maxTemp: Int = 80
     
-    var timer = Timer()
     let center = UNUserNotificationCenter.current()
     
     override func viewDidLoad() {
@@ -442,6 +440,10 @@ class DeviceViewController: UIViewController {
         if !temp_loadingView.isAnimating && !tempStatusLabelField.isHidden {
             temp_loadingView.startAnimating()
             tempStatusLabelField.isHidden = true
+            let timer = CustomTimer {
+                self.hideTempSpinner()
+            }
+            timer.start()
         }
     }
     
@@ -456,6 +458,10 @@ class DeviceViewController: UIViewController {
         if !beacon_loadingView.isAnimating && !beaconStatusLabelField.isHidden {
             beacon_loadingView.startAnimating()
             beaconStatusLabelField.isHidden = true
+            let timer = CustomTimer {
+                self.hideBeaconSpinner()
+            }
+            timer.start()
         }
     }
     
@@ -470,6 +476,10 @@ class DeviceViewController: UIViewController {
         if !weight_loadingView.isAnimating && !activeStatusLabelField.isHidden {
             weight_loadingView.startAnimating()
             activeStatusLabelField.isHidden = true
+            let timer = CustomTimer {
+                self.hideWeightSpinner()
+            }
+            timer.start()
         }
     }
     

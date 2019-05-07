@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Utils {
+class Utilities {
     static func showAlertMessage(presenter: UIViewController, title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
@@ -24,6 +24,34 @@ class Utils {
             DispatchQueue.main.async {
                 completion()
             }
+        }
+    }
+}
+
+class CustomTimer {
+    typealias Update = ()->Void
+    var timer:Timer?
+    var count: Int = 0
+    var update: Update?
+    
+    init(update:@escaping Update){
+        self.update = update
+    }
+    func start(){
+        timer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: false)
+    }
+    func stop(){
+        if let timer = timer {
+            timer.invalidate()
+        }
+    }
+    /**
+     * This method must be in the public or scope
+     */
+    @objc func timerUpdate() {
+        count += 1;
+        if let update = update {
+            update()
         }
     }
 }

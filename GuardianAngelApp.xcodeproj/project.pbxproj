@@ -11,7 +11,7 @@
 		5885068CBE3E53517F8AC765 /* Pods_GuardianAngelApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491E8AF9F8C7E4C2B4C973AA /* Pods_GuardianAngelApp.framework */; };
 		E702BC8A2193BB5E002A7BF8 /* TemperatureAdjustViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */; };
 		E70AB612227DD0E2003F71BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E70AB611227DD0E1003F71BF /* GoogleService-Info.plist */; };
-		E70AB614227DDF57003F71BF /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AB613227DDF57003F71BF /* Utils.swift */; };
+		E70AB614227DDF57003F71BF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AB613227DDF57003F71BF /* Utilities.swift */; };
 		E70AB618227E1A83003F71BF /* LocalUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AB617227E1A83003F71BF /* LocalUser.swift */; };
 		E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92542176E34E00B4AE8B /* AppDelegate.swift */; };
 		E70B92572176E34E00B4AE8B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92562176E34E00B4AE8B /* LoginViewController.swift */; };
@@ -63,7 +63,7 @@
 		C55B0522F7688AD936A11AA5 /* Pods-GuardianAngelApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureAdjustViewController.swift; sourceTree = "<group>"; };
 		E70AB611227DD0E1003F71BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		E70AB613227DDF57003F71BF /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		E70AB613227DDF57003F71BF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E70AB617227E1A83003F71BF /* LocalUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalUser.swift; sourceTree = "<group>"; };
 		E70B92512176E34E00B4AE8B /* Guardian Angel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardian Angel.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70B92542176E34E00B4AE8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -180,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				E753D898217CEE4500A0A627 /* GuardianAngelApp.entitlements */,
+				E70AB613227DDF57003F71BF /* Utilities.swift */,
 				E70B92542176E34E00B4AE8B /* AppDelegate.swift */,
 				E7EA650921A433AF0095AD38 /* UI */,
 				E7EA650A21A433B70095AD38 /* Model */,
@@ -221,7 +222,6 @@
 				E753D887217BE79A00A0A627 /* NotificationExtension.swift */,
 				E7801712217A839B00108D31 /* ColorExtension.swift */,
 				E753D894217C0B5F00A0A627 /* ImageExtension.swift */,
-				E70AB613227DDF57003F71BF /* Utils.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -588,7 +588,7 @@
 				E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */,
 				E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */,
 				E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */,
-				E70AB614227DDF57003F71BF /* Utils.swift in Sources */,
+				E70AB614227DDF57003F71BF /* Utilities.swift in Sources */,
 				E70B92572176E34E00B4AE8B /* LoginViewController.swift in Sources */,
 				E70B925D2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld in Sources */,
 				E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */,
