@@ -1,0 +1,6 @@
+framework module Pods_GuardianAngelAppTests {
+  umbrella header "Pods-GuardianAngelAppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
