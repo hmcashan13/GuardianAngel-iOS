@@ -214,24 +214,24 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 
                 if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
                     let tempWithDegree: String = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
-                    self.tempStatusLabelField.text = tempWithDegree
+                    tempStatusLabelField.text = tempWithDegree
                 } else {
-                    self.tempStatusLabelField.text = "Not Connected"
+                    tempStatusLabelField.text = "Not Connected"
                 }
                 
                 let temp = Int(convertedTemp)
                 let weight = Int(parsedWeightString)
 
                 if let weight = weight, weight < 3000 {
-                    self.activeStatusLabelField.text = "Yes"
-                    self.is_baby_in_seat = true
+                    activeStatusLabelField.text = "Yes"
+                    is_baby_in_seat = true
                 } else {
-                    self.activeStatusLabelField.text = "No"
-                    self.is_baby_in_seat = false
+                    activeStatusLabelField.text = "No"
+                    is_baby_in_seat = false
                 }
-                if let temp = temp, temp > self.maxTemp && self.is_baby_in_seat && AppDelegate.is_temp_enabled {
-                    self.sendLocalNotificationTemperature()
-                    self.beaconStatusLabelField.text = "Alarm"
+                if let temp = temp, temp > maxTemp && is_baby_in_seat && AppDelegate.is_temp_enabled {
+                    sendLocalNotificationTemperature()
+                    beaconStatusLabelField.text = "Alarm"
                 }
             }
         }
