@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GuardianAngelApp/Extensions/BluetoothExtension.swift"
-            timestampString = "578963158.406454"
+            timestampString = "579571826.8167911"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "279"
-            endingLineNumber = "279"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "updateIncomingData()"
             landmarkType = "7">
          </BreakpointContent>

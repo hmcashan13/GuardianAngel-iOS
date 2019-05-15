@@ -64,13 +64,17 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     }
     //Found peripheral
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        print("peripheral: ", peripheral)
         //sendStartScanNotification()
+        
         guard peripheral.identifier == UART_UUID && !uart_is_connected else { return }
-        print("connected device: ", peripheral)
-        //guard let services = peripheral.services else { return }
-        //for service in services {
-        //    print("services: ", service)
-        //}
+        if let services = peripheral.services {
+            for service in services {
+               print("services: ", service)
+            }
+        } else {
+            print("no services")
+        }
         sendLocalNotificationConnected()
         selectedPeripheral = peripheral
         //Connect to peripheral

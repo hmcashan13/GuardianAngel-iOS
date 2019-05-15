@@ -18,15 +18,14 @@ import GoogleSignIn
 class DeviceViewController: UIViewController {
     // Beacon Regions
     let beaconRegion = CLBeaconRegion(
-        proximityUUID: UUID(uuidString:"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!,
+        proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
         major: 0,
         minor: 0,
         identifier: "Guardian")
-    
     let beaconRegion2 = CLBeaconRegion(
-        proximityUUID: UUID(uuidString:"FDA50693-A4E2-4FB1-AFCF-C6EB07647825")!,
-        major: 10011,
-        minor: 10011,
+        proximityUUID: UUID(uuidString:"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!,
+        major: 0,
+        minor: 0,
         identifier: "Guardian")
     // Beacon variables
     var proximity = "Not Connected"
@@ -39,7 +38,8 @@ class DeviceViewController: UIViewController {
     
     // UART variables
     let cbarray =  [CBUUID(string: "6E400003-B5A3-F393-E0A9-E50E24DCCA9E")]
-    let UART_UUID = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")
+    let UART_UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")
+    let UART_UUID2 = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")
     var txCharacteristic : CBCharacteristic?
     var rxCharacteristic : CBCharacteristic?
     var blePeripheral : CBPeripheral?
