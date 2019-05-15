@@ -33,6 +33,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     /// Local notification sent when you have gone too far away from the child
     func sendLocalNotificationLeftRegion() {
         let center = UNUserNotificationCenter.current()
+        print("sending left region notification")
         let content = UNMutableNotificationContent()
         content.title = "You are too far from your baby"
         content.body = "Save your baby!"
@@ -52,7 +53,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     /// Notification for temperation
     func sendLocalNotificationTemperature() {
         let center = UNUserNotificationCenter.current()
-        print("sending notification")
+        print("sending temp notification")
         let content = UNMutableNotificationContent()
         content.title = "It's too hot!"
         content.body = "Save your baby now!"
@@ -72,6 +73,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     // **************** Debugging purposes notifications *************************//
     func sendLocalNotificationEnteredRegion() {
         let center = UNUserNotificationCenter.current()
+        print("sending entered region notification")
         let content = UNMutableNotificationContent()
         content.title = "Entered Region"
         content.body = "Save your baby now!"
@@ -87,28 +89,10 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
             }
         }
     }
-    
-    func sendStartScanNotification() {
-        let center = UNUserNotificationCenter.current()
-        let content = UNMutableNotificationContent()
-        content.title = "Scan started"
-        content.body = "Save your baby now!"
-        content.sound = UNNotificationSound.default
-        content.threadIdentifier = "guardian-angel"
-        let identifier = "LocalEnteredRegion"
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: content, trigger: trigger)
-        center.add(request) { (error : Error?) in
-            if let theError = error {
-                print(theError.localizedDescription)
-            }
-        }
-    }
-    
+
     @objc func sendLocalNotificationConnected() {
         let center = UNUserNotificationCenter.current()
-        print("sending notification")
+        print("sending connected notification")
         let content = UNMutableNotificationContent()
         content.title = "UART Connected!"
         content.body = "Save your baby now!"
@@ -127,9 +111,28 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     
     @objc func sendLocalNotificationDisconnected() {
         let center = UNUserNotificationCenter.current()
-        print("sending notification")
+        print("sending disconnected notification")
         let content = UNMutableNotificationContent()
         content.title = "UART Disconnected!"
+        content.body = "Save your baby now!"
+        content.sound = UNNotificationSound.default
+        content.threadIdentifier = "guardian-angel"
+        let identifier = "LocalDisconnected"
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: content, trigger: trigger)
+        center.add(request) { (error : Error?) in
+            if let theError = error {
+                print(theError.localizedDescription)
+            }
+        }
+    }
+    
+    @objc func sendLocalNotificationBackgroundScanning() {
+        let center = UNUserNotificationCenter.current()
+        print("sending background scanning notification")
+        let content = UNMutableNotificationContent()
+        content.title = "Started Background Scanning!"
         content.body = "Save your baby now!"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"

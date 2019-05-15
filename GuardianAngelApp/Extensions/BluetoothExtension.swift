@@ -14,7 +14,18 @@ public let babyInSeatNotification = Notification.Name("tempSensorTurnedOff")
 extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     
     func altScan() {
-        centralManager?.scanForPeripherals(withServices: cbarray, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
+        guard !uart_is_connected else {
+            print("Background scan failed :(")
+            return
+        }
+        sendLocalNotificationBackgroundScanning()
+        print("Background scan started!")
+        let cbUUID1 = CBUUID(string: "00000001-1212-EFDE-1523-785FEABCD123")
+        let cbUUID2 = CBUUID(string: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+        let cbUUID3 = CBUUID(string: "6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+        let cbUUID4 = CBUUID(string: "6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
+        let cbArray =  [cbUUID1, cbUUID2, cbUUID3, cbUUID4]
+        centralManager?.scanForPeripherals(withServices: cbArray, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
     }
     @objc func startScan() {
         guard !uart_is_connected else { return }
@@ -64,18 +75,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     }
     //Found peripheral
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("peripheral: ", peripheral)
-        //sendStartScanNotification()
-        
         guard peripheral.identifier == UART_UUID && !uart_is_connected else { return }
-        if let services = peripheral.services {
-            for service in services {
-               print("services: ", service)
-            }
-        } else {
-            print("no services")
-        }
-        sendLocalNotificationConnected()
         selectedPeripheral = peripheral
         //Connect to peripheral
         centralManager?.connect(peripheral, options: nil)
@@ -95,6 +95,8 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         print("state: \(String(describing: blePeripheral?.state.rawValue))")
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
         centralManager?.stopScan()
+        // DEBUG PURPOSES ONLY
+        sendLocalNotificationConnected()
         print("Scan Stopped")
         // Set uart connection state
         uart_is_connected = true
@@ -185,12 +187,60 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         
         if characteristic == rxCharacteristic {
             if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue) {
-                characteristicASCIIValue = ASCIIstring
+                let uartValues = ASCIIstring
                 //print("Device Location: \(String(describing: device.locationString()))")
-                print("Value Recieved: \((characteristicASCIIValue as String))")
-                NotificationCenter.default.post(name:NSNotification.Name(rawValue: "Notify"), object: nil)
+                //print("Value Recieved: \((uartValues as String))")
+                
+                // Hide spinners
+                hideTempSpinner()
+                hideWeightSpinner()
+                
+                let parsedUartValues = uartValues.components(separatedBy: " ")
+                var parsedTempString: String = ""
+                var parsedWeightString: String = ""
+                if uartValues == "" {
+                    print("No data")
+                    parsedTempString = "invalid"
+                    parsedWeightString = "Not Connnected"
+                } else {
+                    let tempString = parsedUartValues[0]
+                    let weightString = parsedUartValues[1]
+                    let parseTemp = try! NSRegularExpression(pattern: "T=", options: NSRegularExpression.Options.caseInsensitive)
+                    parsedTempString = parseTemp.stringByReplacingMatches(in: tempString, options: [], range: NSRange(0..<tempString.count), withTemplate: "")
+                    let parseWeight = try! NSRegularExpression(pattern: "W=", options: NSRegularExpression.Options.caseInsensitive)
+                    parsedWeightString = parseWeight.stringByReplacingMatches(in: weightString, options: [], range: NSRange(0..<weightString.count), withTemplate: "")
+                }
+                let convertedTemp: String = convertTempString(parsedTempString)
+                
+                if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
+                    let tempWithDegree: String = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
+                    self.tempStatusLabelField.text = tempWithDegree
+                } else {
+                    self.tempStatusLabelField.text = "Not Connected"
+                }
+                
+                let temp = Int(convertedTemp)
+                let weight = Int(parsedWeightString)
+
+                if let weight = weight, weight < 3000 {
+                    self.activeStatusLabelField.text = "Yes"
+                    self.is_baby_in_seat = true
+                } else {
+                    self.activeStatusLabelField.text = "No"
+                    self.is_baby_in_seat = false
+                }
+                if let temp = temp, temp > self.maxTemp && self.is_baby_in_seat && AppDelegate.is_temp_enabled {
+                    self.sendLocalNotificationTemperature()
+                    self.beaconStatusLabelField.text = "Alarm"
+                }
             }
         }
+    }
+    
+    private func convertTempString(_ temperature: String) -> String {
+        guard let temp = Double(temperature) else { return "" }
+        let convertedTemp = Int(temp / 21.5)
+        return String(convertedTemp)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverDescriptorsFor characteristic: CBCharacteristic, error: Error?) {
@@ -231,6 +281,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         tempStatusLabelField.text = "Not Connected"
         activeStatusLabelField.text = "No"
         print("Disconnected")
+        if beacon_is_connected {
+            altScan()
+        }
         sendLocalNotificationDisconnected()
     }
     
@@ -248,52 +301,6 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             return
         }
         print("Succeeded!")
-    }
-    
-    func updateIncomingData() {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "Notify"), object: nil , queue: nil){
-            notification in
-            // Hide spinners
-            self.hideTempSpinner()
-            self.hideWeightSpinner()
-            
-            let uartString = self.characteristicASCIIValue
-            
-            let readings = uartString.components(separatedBy: " ")
-//            print("uartString: ", uartString)
-            var parsedTempString: String = ""
-            var parsedWeightString: String = ""
-//            if uartString == "" || readings.count <= 3 {
-//                print("No data")
-//                parsedTempString = "invalid"
-//                parsedWeightString = "Not Connnected"
-//            } else {
-                parsedTempString = "70"//readings[1]
-                parsedWeightString = "200"//readings[3]
-//            }
-            
-            if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
-                let tempWithDegree: String = AppDelegate.farenheit_celsius ? "\(parsedTempString)˚F" : parsedTempString.farenheitToCelsius()
-                self.tempStatusLabelField.text = tempWithDegree
-            } else {
-                self.tempStatusLabelField.text = "Not Connected"
-            }
-            
-            let weight: Int? = Int(parsedWeightString)
-            let temp: Int? = Int(parsedTempString)
-            
-            if let weight = weight, weight > 100 {
-                self.activeStatusLabelField.text = "Yes"
-                self.is_baby_in_seat = true
-            } else {
-                self.activeStatusLabelField.text = "No"
-                self.is_baby_in_seat = false
-            }
-            if let temp = temp, temp > self.maxTemp && self.is_baby_in_seat && AppDelegate.is_temp_enabled {
-                self.sendLocalNotificationTemperature()
-                self.beaconStatusLabelField.text = "Alarm"
-            }
-        }
     }
 }
 

@@ -16,13 +16,13 @@ extension DeviceViewController: CLLocationManagerDelegate {
     
     @objc func startBeaconAndUart() {
         print("Start beacon")
-        locationManager?.startMonitoring(for: beaconRegion)
+        if !beacon_is_connected {
+            locationManager?.startMonitoring(for: beaconRegion)
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-        print("Monitoring commenced")
         if CLLocationManager.isRangingAvailable() {
-            print("Monitoring is available")
             guard let region = region as? CLBeaconRegion else {
                 print("Beacon Region is not valid")
                 return
@@ -34,15 +34,17 @@ extension DeviceViewController: CLLocationManagerDelegate {
             print("Monitoring is NOT available")
         }
         // Start uart
-        startScan()
+        altScan()
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        sendLocalNotificationEnteredRegion()
+        
         beacon_is_connected = true
         showBeaconSpinner()
         print("Entered region")
-        //altScan()
+        if !uart_is_connected {
+            altScan()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {

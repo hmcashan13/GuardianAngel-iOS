@@ -37,13 +37,12 @@ class DeviceViewController: UIViewController {
     let peripheralName = "Guardian Angel"
     
     // UART variables
-    let cbarray =  [CBUUID(string: "6E400003-B5A3-F393-E0A9-E50E24DCCA9E")]
+    
     let UART_UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")
     let UART_UUID2 = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")
     var txCharacteristic : CBCharacteristic?
     var rxCharacteristic : CBCharacteristic?
     var blePeripheral : CBPeripheral?
-    var characteristicASCIIValue = NSString()
     var uart_is_connected: Bool = false
     var centralManager: CBCentralManager?
     var RSSIs = [NSNumber]()
@@ -73,7 +72,6 @@ class DeviceViewController: UIViewController {
  
         // Setup UART
         centralManager = CBCentralManager(delegate: self, queue: nil)
-        updateIncomingData()
         
         // Setup Beacon
         locationManager = CLLocationManager()
