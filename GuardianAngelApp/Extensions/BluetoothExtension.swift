@@ -18,7 +18,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             print("Background scan failed :(")
             return
         }
-        sendLocalNotificationBackgroundScanning()
+        if AppDelegate.isDebugging {
+            sendLocalNotificationBackgroundScanning()
+        }
         print("Background scan started!")
         let cbUUID1 = CBUUID(string: "00000001-1212-EFDE-1523-785FEABCD123")
         let cbUUID2 = CBUUID(string: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
@@ -34,7 +36,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         centralManager?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
         
         // Setup timer to stop scanning
-        let timer = CustomTimer {
+        let timer = CustomTimer(timeInterval: 30) {
             self.stopScan()
         }
         timer.start()
@@ -58,9 +60,11 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         if central.state != CBManagerState.poweredOn {
             //If Bluetooth is off, display a UI alert message saying "Bluetooth is not enable" and "Make sure that your bluetooth is turned on"
             print("Bluetooth Disabled- Make sure your Bluetooth is turned on")
-            
-            let alertVC = UIAlertController(title: "Bluetooth is not enabled", message: "Make sure that your bluetooth is turned on", preferredStyle: UIAlertController.Style.alert)
-            let action = UIAlertAction(title: "ok", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
+            hideTempSpinner()
+            hideBeaconSpinner()
+            hideWeightSpinner()
+            let alertVC = UIAlertController(title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on", preferredStyle: UIAlertController.Style.alert)
+            let action = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: { (action: UIAlertAction) -> Void in
                 self.dismiss(animated: true, completion: nil)
             })
             alertVC.addAction(action)
@@ -95,8 +99,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         print("state: \(String(describing: blePeripheral?.state.rawValue))")
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
         centralManager?.stopScan()
-        // DEBUG PURPOSES ONLY
-        sendLocalNotificationConnected()
+        if AppDelegate.isDebugging {
+            sendLocalNotificationConnected()
+        }
         print("Scan Stopped")
         // Set uart connection state
         uart_is_connected = true
@@ -211,7 +216,10 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                     parsedWeightString = parseWeight.stringByReplacingMatches(in: weightString, options: [], range: NSRange(0..<weightString.count), withTemplate: "")
                 }
                 let convertedTemp: String = convertTempString(parsedTempString)
-                
+                x += 1
+                if x % 4 == 0 {
+                    print("temperature: \(convertedTemp)˚F")
+                }
                 if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
                     let tempWithDegree: String = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
                     tempStatusLabelField.text = tempWithDegree
@@ -221,7 +229,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 
                 let temp = Int(convertedTemp)
                 let weight = Int(parsedWeightString)
-
+                
                 if let weight = weight, weight < 3000 {
                     activeStatusLabelField.text = "Yes"
                     is_baby_in_seat = true
@@ -231,7 +239,6 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 }
                 if let temp = temp, temp > maxTemp && is_baby_in_seat && AppDelegate.is_temp_enabled {
                     sendLocalNotificationTemperature()
-                    beaconStatusLabelField.text = "Alarm"
                 }
             }
         }
@@ -284,7 +291,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         if beacon_is_connected {
             altScan()
         }
-        sendLocalNotificationDisconnected()
+        if AppDelegate.isDebugging {
+            sendLocalNotificationDisconnected()
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {

@@ -20,7 +20,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         super.viewDidLoad()
         
         navigationItem.title = "Adjust Temperature Sensor"
-        view.backgroundColor = UIColor.purple
+        view.backgroundColor = UIColor(displayP3Red: 0.698, green: 0.4, blue: 1.0, alpha: 1.0)
         navigationItem.rightBarButtonItem = infoButton
         setupUIConstraints()
     }

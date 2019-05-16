@@ -38,7 +38,6 @@ extension DeviceViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        
         beacon_is_connected = true
         showBeaconSpinner()
         print("Entered region")
@@ -62,21 +61,24 @@ extension DeviceViewController: CLLocationManagerDelegate {
             let distance = beacon.accuracy
             switch distance {
             case _ where distance < 0:
-                print("Not Connected")
+                print("")
             case 0...10:
                 hideBeaconSpinner()
                 proximity = "Very Close"
+                print("beacon distance: \(distance)m")
             case 10...20:
                 hideBeaconSpinner()
                 proximity = "Near"
+                print("beacon distance: \(distance)m")
             case _ where distance > 20:
                 hideBeaconSpinner()
                 proximity = "Far"
+                print("beacon distance: \(distance)m")
             default:
-                print("Unknown")
+                print("")
             }
             beaconStatusLabelField.text = proximity
-            print("beacon distance: \(distance)m")
+            
         }
     }
 }

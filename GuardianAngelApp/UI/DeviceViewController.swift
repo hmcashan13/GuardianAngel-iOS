@@ -52,19 +52,21 @@ class DeviceViewController: UIViewController {
     var is_baby_in_seat: Bool = false
     var repeatScan = true
     var maxTemp: Int = 80
+    var x = 0
     
     let center = UNUserNotificationCenter.current()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Setup UI
-        view.backgroundColor = UIColor.purple
+        
+        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         
         setupDeviceContainerView()
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
-        
+    
+        //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.black
         
         // Setup Notifications
         center.delegate = self
@@ -85,13 +87,23 @@ class DeviceViewController: UIViewController {
         
         // Check if we are connected when we foreground
         NotificationCenter.default.addObserver(self, selector: #selector(startScan), name: UIApplication.willEnterForegroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(checkIfUserLeggedIn), name: UIApplication.willEnterForegroundNotification, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(checkIfUserLeggedIn), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+        startBeaconAndUart()
+        showTempSpinner()
+        showWeightSpinner()
+        showBeaconSpinner()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Authentication
-        checkIfUserLeggedIn()
+        if beacon_is_connected && !uart_is_connected {
+            showBeaconSpinner()
+            showTempSpinner()
+            showWeightSpinner()
+            startScan()
+        }
     }
     
     @objc func checkIfUserLeggedIn() {
@@ -231,16 +243,6 @@ class DeviceViewController: UIViewController {
     let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     let weight_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
-    /// Label that is shown under the logo
-    let logoTextLabelField: UILabel = {
-        let tf = UILabel()
-        tf.text = "Guardian Angel"
-        tf.textColor = UIColor.white
-        tf.textAlignment = .center
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
-    }()
-    
     /// Contains all of the labels that shows the Bluetooth information
     let inputsContainerView: UIView = {
         let view = UIView()
@@ -306,7 +308,7 @@ class DeviceViewController: UIViewController {
     /// Seperator Field 1
     let tempSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(red: 220, green: 91, blue: 151)
+        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -314,7 +316,7 @@ class DeviceViewController: UIViewController {
     /// Seperator Field 2
     let weightSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(red: 220, green: 91, blue: 151)
+        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -438,7 +440,7 @@ class DeviceViewController: UIViewController {
         if !temp_loadingView.isAnimating && !tempStatusLabelField.isHidden {
             temp_loadingView.startAnimating()
             tempStatusLabelField.isHidden = true
-            let timer = CustomTimer {
+            let timer = CustomTimer(timeInterval: 15) {
                 self.hideTempSpinner()
             }
             timer.start()
@@ -456,7 +458,7 @@ class DeviceViewController: UIViewController {
         if !beacon_loadingView.isAnimating && !beaconStatusLabelField.isHidden {
             beacon_loadingView.startAnimating()
             beaconStatusLabelField.isHidden = true
-            let timer = CustomTimer {
+            let timer = CustomTimer(timeInterval: 15) {
                 self.hideBeaconSpinner()
             }
             timer.start()
@@ -474,7 +476,7 @@ class DeviceViewController: UIViewController {
         if !weight_loadingView.isAnimating && !activeStatusLabelField.isHidden {
             weight_loadingView.startAnimating()
             activeStatusLabelField.isHidden = true
-            let timer = CustomTimer {
+            let timer = CustomTimer(timeInterval: 15) {
                 self.hideWeightSpinner()
             }
             timer.start()

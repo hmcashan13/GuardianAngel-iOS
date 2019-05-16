@@ -33,12 +33,14 @@ class CustomTimer {
     var timer:Timer?
     var count: Int = 0
     var update: Update?
+    let timeInterval: TimeInterval
     
-    init(update:@escaping Update){
+    init(timeInterval: TimeInterval, update:@escaping Update){
+        self.timeInterval = timeInterval
         self.update = update
     }
     func start(){
-        timer = Timer.scheduledTimer(timeInterval: 30.0, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: false)
+        timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: false)
     }
     func stop(){
         if let timer = timer {
