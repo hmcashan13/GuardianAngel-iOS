@@ -8,8 +8,6 @@
 
 import Foundation
 import UserNotifications
-import Alamofire
-import Firebase
 
 extension DeviceViewController: UNUserNotificationCenterDelegate {
     /// Set up the ability to send local notifications
@@ -157,31 +155,30 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         completionHandler()
     }
     
-    func fetchMessages(_ name: String) {
-        Database.database().reference().child("users").observeSingleEvent(of: .value) { (snapshot) in
-                guard let dictionary = snapshot.value as? [String:Any] else {return}
-                dictionary.forEach({(key,value) in
-                    //print("key: \(key)")
-                    //print("value: \(value)\n")
-                    guard let dict = value as? [String: String]  else { return }
-                    if let name = dict["name"], name == "Hudson" {
-                        //self.sendPushNotification(To: name)
-                    }
-                })
-            }
-        }
+//    func fetchMessages(_ name: String) {
+//        Database.database().reference().child("users").observeSingleEvent(of: .value) { (snapshot) in
+//                guard let dictionary = snapshot.value as? [String:Any] else {return}
+//                dictionary.forEach({(key,value) in
+//                    //print("key: \(key)")
+//                    //print("value: \(value)\n")
+//                    guard let dict = value as? [String: String]  else { return }
+//                    if let name = dict["name"], name == "Hudson" {
+//                        //self.sendPushNotification(To: name)
+//                    }
+//                })
+//            }
+//        }
 
-    func sendPushNotification(){
-        let title = "Push Notification"
-        let body = "Save your baby"
-        let user = "Hudson"
-        print("user: \(user)")
-        var headers: HTTPHeaders = HTTPHeaders()
-        headers = ["Content-Type":"application/json","Authorization":"key=\(AppDelegate.serverKey)"]
-        let notification = ["to":"\(user)","notification":["body":body,"title":title,"badge":1,"sound":"default"]] as [String:Any]
-        Alamofire.request(AppDelegate.notificationURL as String, method: .post, parameters: notification, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
-            print("Response: \(response)")
-        }
-
-    }
+//    func sendPushNotification(){
+//        let title = "Push Notification"
+//        let body = "Save your baby"
+//        let user = "Hudson"
+//        print("user: \(user)")
+//        var headers: HTTPHeaders = HTTPHeaders()
+//        headers = ["Content-Type":"application/json","Authorization":"key=\(AppDelegate.serverKey)"]
+//        let notification = ["to":"\(user)","notification":["body":body,"title":title,"badge":1,"sound":"default"]] as [String:Any]
+//        Alamofire.request(AppDelegate.notificationURL as String, method: .post, parameters: notification, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+//            print("Response: \(response)")
+//        }
+//    }
 }

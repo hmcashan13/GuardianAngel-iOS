@@ -7,14 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3082EB9188E396481090768F /* Pods_GuardianAngelAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B07BA7887499DE126541FF2E /* Pods_GuardianAngelAppTests.framework */; };
-		5885068CBE3E53517F8AC765 /* Pods_GuardianAngelApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 491E8AF9F8C7E4C2B4C973AA /* Pods_GuardianAngelApp.framework */; };
 		E702BC8A2193BB5E002A7BF8 /* TemperatureAdjustViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */; };
-		E70AB612227DD0E2003F71BF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E70AB611227DD0E1003F71BF /* GoogleService-Info.plist */; };
 		E70AB614227DDF57003F71BF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AB613227DDF57003F71BF /* Utilities.swift */; };
-		E70AB618227E1A83003F71BF /* LocalUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AB617227E1A83003F71BF /* LocalUser.swift */; };
 		E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92542176E34E00B4AE8B /* AppDelegate.swift */; };
-		E70B92572176E34E00B4AE8B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92562176E34E00B4AE8B /* LoginViewController.swift */; };
 		E70B925A2176E34E00B4AE8B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70B92582176E34E00B4AE8B /* Main.storyboard */; };
 		E70B925D2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E70B925B2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld */; };
 		E70B925F2176E34F00B4AE8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E70B925E2176E34F00B4AE8B /* Assets.xcassets */; };
@@ -31,8 +26,6 @@
 		E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AF28D2198B48700E7BC6C /* LocationExtension.swift */; };
 		E7801713217A839B00108D31 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7801712217A839B00108D31 /* ColorExtension.swift */; };
 		E7C22EF7218417360071FE8E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C22EF6218417350071FE8E /* SnapshotHelper.swift */; };
-		E7C9C9FE2177E83600BA5C70 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C9C9FD2177E83600BA5C70 /* RegisterViewController.swift */; };
-		EA42A52FEAE55F609A555441 /* Pods_GuardianAngelAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CAF8412F52F8FC9DC10DE4B /* Pods_GuardianAngelAppUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,21 +46,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0A0CE41D8252FA05DF0F8E64 /* Pods-GuardianAngelAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		0B67140D3DB456E787A3AB55 /* Pods-GuardianAngelAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.release.xcconfig"; sourceTree = "<group>"; };
-		0CAF8412F52F8FC9DC10DE4B /* Pods_GuardianAngelAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		491E8AF9F8C7E4C2B4C973AA /* Pods_GuardianAngelApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4072D1FA8218A8815227E4E /* Pods-GuardianAngelAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppTests/Pods-GuardianAngelAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B07BA7887499DE126541FF2E /* Pods_GuardianAngelAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2EE138B5CCB1EE0FAECC685 /* Pods-GuardianAngelApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.release.xcconfig"; sourceTree = "<group>"; };
-		C55B0522F7688AD936A11AA5 /* Pods-GuardianAngelApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureAdjustViewController.swift; sourceTree = "<group>"; };
-		E70AB611227DD0E1003F71BF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E70AB613227DDF57003F71BF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E70AB617227E1A83003F71BF /* LocalUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalUser.swift; sourceTree = "<group>"; };
 		E70B92512176E34E00B4AE8B /* Guardian Angel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardian Angel.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70B92542176E34E00B4AE8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E70B92562176E34E00B4AE8B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E70B92592176E34E00B4AE8B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E70B925C2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GuardianAngelApp.xcdatamodel; sourceTree = "<group>"; };
 		E70B925E2176E34F00B4AE8B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -90,8 +73,6 @@
 		E77AF28D2198B48700E7BC6C /* LocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtension.swift; sourceTree = "<group>"; };
 		E7801712217A839B00108D31 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E7C22EF6218417350071FE8E /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
-		E7C9C9FD2177E83600BA5C70 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		FA4831DD50E2A723EB72BDDC /* Pods-GuardianAngelAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppTests/Pods-GuardianAngelAppTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5885068CBE3E53517F8AC765 /* Pods_GuardianAngelApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,7 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3082EB9188E396481090768F /* Pods_GuardianAngelAppTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,36 +94,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA42A52FEAE55F609A555441 /* Pods_GuardianAngelAppUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		382CBD67809FF8E038E4A40B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C55B0522F7688AD936A11AA5 /* Pods-GuardianAngelApp.debug.xcconfig */,
-				B2EE138B5CCB1EE0FAECC685 /* Pods-GuardianAngelApp.release.xcconfig */,
-				A4072D1FA8218A8815227E4E /* Pods-GuardianAngelAppTests.debug.xcconfig */,
-				FA4831DD50E2A723EB72BDDC /* Pods-GuardianAngelAppTests.release.xcconfig */,
-				0A0CE41D8252FA05DF0F8E64 /* Pods-GuardianAngelAppUITests.debug.xcconfig */,
-				0B67140D3DB456E787A3AB55 /* Pods-GuardianAngelAppUITests.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		51FAD725A423694118EDCA5E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				491E8AF9F8C7E4C2B4C973AA /* Pods_GuardianAngelApp.framework */,
-				B07BA7887499DE126541FF2E /* Pods_GuardianAngelAppTests.framework */,
-				0CAF8412F52F8FC9DC10DE4B /* Pods_GuardianAngelAppUITests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		E702BC882193BB45002A7BF8 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -161,8 +116,6 @@
 				E70B926B2176E34F00B4AE8B /* GuardianAngelAppTests */,
 				E70B92762176E34F00B4AE8B /* GuardianAngelAppUITests */,
 				E70B92522176E34E00B4AE8B /* Products */,
-				382CBD67809FF8E038E4A40B /* Pods */,
-				51FAD725A423694118EDCA5E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,7 +143,6 @@
 				E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */,
 				E70B92632176E34F00B4AE8B /* Info.plist */,
 				E70B925B2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld */,
-				E70AB611227DD0E1003F71BF /* GoogleService-Info.plist */,
 			);
 			path = GuardianAngelApp;
 			sourceTree = "<group>";
@@ -229,10 +181,8 @@
 		E7EA650921A433AF0095AD38 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				E702BC882193BB45002A7BF8 /* Settings */,
-				E70B92562176E34E00B4AE8B /* LoginViewController.swift */,
-				E7C9C9FD2177E83600BA5C70 /* RegisterViewController.swift */,
 				E753D890217BF6A600A0A627 /* DeviceViewController.swift */,
+				E702BC882193BB45002A7BF8 /* Settings */,
 				E7EA650C21A4340D0095AD38 /* ViewElements */,
 			);
 			path = UI;
@@ -263,12 +213,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E70B927C2176E35000B4AE8B /* Build configuration list for PBXNativeTarget "GuardianAngelApp" */;
 			buildPhases = (
-				8BFAC51F48FC602FCBB797B2 /* [CP] Check Pods Manifest.lock */,
 				E70B924D2176E34E00B4AE8B /* Sources */,
 				E70B924E2176E34E00B4AE8B /* Frameworks */,
 				E70B924F2176E34E00B4AE8B /* Resources */,
-				2C4A8F8B67B7C20738453A5F /* [CP] Embed Pods Frameworks */,
-				EF14B868C831D776A55E88B9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -378,7 +325,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E70B92622176E34F00B4AE8B /* LaunchScreen.storyboard in Resources */,
-				E70AB612227DD0E2003F71BF /* GoogleService-Info.plist in Resources */,
 				E70B925F2176E34F00B4AE8B /* Assets.xcassets in Resources */,
 				E70B925A2176E34E00B4AE8B /* Main.storyboard in Resources */,
 			);
@@ -416,46 +362,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelAppTests/Pods-GuardianAngelAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2C4A8F8B67B7C20738453A5F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
-				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
-				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		512EC4C6AB5E44A73DDB508B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -468,24 +374,6 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-GuardianAngelAppUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8BFAC51F48FC602FCBB797B2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-GuardianAngelApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -555,24 +443,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelAppTests/Pods-GuardianAngelAppTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		EF14B868C831D776A55E88B9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -582,14 +452,11 @@
 			files = (
 				E702BC8A2193BB5E002A7BF8 /* TemperatureAdjustViewController.swift in Sources */,
 				E753D897217CB98400A0A627 /* UUIDKey.swift in Sources */,
-				E7C9C9FE2177E83600BA5C70 /* RegisterViewController.swift in Sources */,
 				E753D88C217BF0F000A0A627 /* BluetoothCell.swift in Sources */,
-				E70AB618227E1A83003F71BF /* LocalUser.swift in Sources */,
 				E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */,
 				E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */,
 				E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */,
 				E70AB614227DDF57003F71BF /* Utilities.swift in Sources */,
-				E70B92572176E34E00B4AE8B /* LoginViewController.swift in Sources */,
 				E70B925D2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld in Sources */,
 				E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */,
 				E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */,
@@ -769,7 +636,6 @@
 		};
 		E70B927D2176E35000B4AE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C55B0522F7688AD936A11AA5 /* Pods-GuardianAngelApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -791,7 +657,6 @@
 		};
 		E70B927E2176E35000B4AE8B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2EE138B5CCB1EE0FAECC685 /* Pods-GuardianAngelApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -813,7 +678,6 @@
 		};
 		E70B92802176E35000B4AE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A4072D1FA8218A8815227E4E /* Pods-GuardianAngelAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -835,7 +699,6 @@
 		};
 		E70B92812176E35000B4AE8B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FA4831DD50E2A723EB72BDDC /* Pods-GuardianAngelAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -857,7 +720,6 @@
 		};
 		E70B92832176E35000B4AE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A0CE41D8252FA05DF0F8E64 /* Pods-GuardianAngelAppUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -878,7 +740,6 @@
 		};
 		E70B92842176E35000B4AE8B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B67140D3DB456E787A3AB55 /* Pods-GuardianAngelAppUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

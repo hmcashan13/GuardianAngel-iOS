@@ -105,6 +105,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         print("Scan Stopped")
         // Set uart connection state
         uart_is_connected = true
+        navigationItem.title = "Connected"
         //Discovery callback
         peripheral.delegate = self
         //Only look for services that matches transmit uuid
@@ -216,10 +217,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                     parsedWeightString = parseWeight.stringByReplacingMatches(in: weightString, options: [], range: NSRange(0..<weightString.count), withTemplate: "")
                 }
                 let convertedTemp: String = convertTempString(parsedTempString)
-                x += 1
-                if x % 4 == 0 {
                     print("temperature: \(convertedTemp)˚F")
-                }
                 if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
                     let tempWithDegree: String = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
                     tempStatusLabelField.text = tempWithDegree
@@ -287,11 +285,11 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         uart_is_connected = false
         tempStatusLabelField.text = "Not Connected"
         activeStatusLabelField.text = "No"
+        navigationItem.title = "Disconnected"
         print("Disconnected")
         if beacon_is_connected {
             altScan()
-        }
-        if AppDelegate.isDebugging {
+        } else {
             sendLocalNotificationDisconnected()
         }
     }

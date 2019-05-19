@@ -6,14 +6,10 @@
 //  Copyright © 2018 Hudson Mcashan. All rights reserved.
 //
 
-import Firebase
-import Alamofire
 import UIKit
 import CoreBluetooth
 import UserNotifications
 import CoreLocation
-import FBSDKLoginKit
-import GoogleSignIn
 
 class DeviceViewController: UIViewController {
     // Beacon Regions
@@ -59,12 +55,10 @@ class DeviceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Setup UI
-        
         view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         
         setupDeviceContainerView()
-    
-        //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.black
         
@@ -82,17 +76,14 @@ class DeviceViewController: UIViewController {
         locationManager?.pausesLocationUpdatesAutomatically = false
         locationManager?.requestAlwaysAuthorization()
         
-        // Setup Google Sign in delegate
-        GIDSignIn.sharedInstance().delegate = self
-        
         // Check if we are connected when we foreground
         NotificationCenter.default.addObserver(self, selector: #selector(startScan), name: UIApplication.willEnterForegroundNotification, object: nil)
-        //NotificationCenter.default.addObserver(self, selector: #selector(checkIfUserLeggedIn), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         startBeaconAndUart()
         showTempSpinner()
         showWeightSpinner()
         showBeaconSpinner()
+        navigationItem.title = "Connecting"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -106,107 +97,10 @@ class DeviceViewController: UIViewController {
         }
     }
     
-    @objc func checkIfUserLeggedIn() {
-        checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
-            if authStatus {
-                self?.startBeaconAndUart()
-            } else {
-                self?.handleLogout()
-            }
-        })
-    }
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // Stop scanning for uart devices
         centralManager?.stopScan()
-    }
-    
-    //MARK: Login/logout
-    /// Logs the user out and brings to Login page if logged off, otherwise user stays on Device page
-    func checkIfUserLoggedIn(completion: @escaping ((Bool) -> Void)) {
-        if !uart_is_connected {
-            showWeightSpinner()
-            showTempSpinner()
-        }
-        if !beacon_is_connected {
-            showBeaconSpinner()
-        }
-        showTitleSpinner()
-        if let currentUser = Auth.auth().currentUser, let name = currentUser.displayName, let email = currentUser.email {
-            //Logged in with Firebase or Google
-            let uid = currentUser.uid
-            AppDelegate.user = LocalUser(id: uid, name: name, email: email, profileImage: nil)
-            hideTitleSpinner()
-            navigationItem.title = name
-            Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { success in
-                print("response from server: ", success)
-                if let dict = success.value as? [String: AnyObject], let name = dict["name"] as? String, let email = dict["email"] as? String, let profileImageUrl = dict["profileImageUrl"] as? String {
-                    print("user is logged in: ", dict)
-                    // TODO: handle creation of user and display profile image
-                }
-                completion(true)
-            })
-        } else if FBSDKAccessToken.currentAccessTokenIsActive() {
-            //Logged in with Facebook
-            guard let accessToken = FBSDKAccessToken.current(), let req = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: accessToken.tokenString, version: nil, httpMethod: "GET") else {
-                completion(false)
-                return
-            }
-            
-            req.start { (connection, result, error) in
-                if let error = error {
-                    print("Facebook error: \(error.localizedDescription)")
-                    completion(false)
-                } else {
-                    print("Facebook result: \(result.debugDescription)")
-                    guard let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else { return }
-                    self.hideTitleSpinner()
-                    self.navigationItem.title = name
-                    AppDelegate.user = LocalUser(id: id, name: name, email: email, profileImage: nil)
-                    completion(true)
-                }
-            }
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
-            completion(false)
-        } else {
-            //Not logged in
-            completion(false)
-        }
-    }
-    
-    @objc func handleLogout() {
-        disconnectEverything()
-        AppDelegate.user = nil
-        navigationItem.title = ""
-        if let uid = Auth.auth().currentUser?.uid {
-            // Logged in with Firebase or Google
-            if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
-                // Logout of Google
-                shared.signOut()
-            }
-            // Logout of Firebase
-            do {
-                try Auth.auth().signOut()
-            } catch let logoutError {
-                print(logoutError)
-            }
-        } else if FBSDKAccessToken.currentAccessTokenIsActive() {
-            // Logout of Facebook
-            let loginManager = FBSDKLoginManager()
-            loginManager.logOut()
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
-            // Logout of Google
-            shared.signOut()
-        } else {
-            print("Not logged into anything")
-        }
-        // Present Login page
-        let loginViewController = LoginViewController()
-        let navController = UINavigationController(rootViewController: loginViewController)
-        DispatchQueue.main.async {
-            self.present(navController, animated: true)
-        }
     }
     
     /// Disconnect from uart and beacon bluetooth devices
@@ -488,38 +382,5 @@ class DeviceViewController: UIViewController {
             weight_loadingView.stopAnimating()
             activeStatusLabelField.isHidden = false
         }
-    }
-}
-
-extension DeviceViewController: GIDSignInDelegate {
-    // Google sign-in delegate methods
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
-              withError error: Error!) {
-        print("Successfully logged into Google", user)
-        
-        if error != nil {
-            print("Error signing into Google: ", error)
-            return
-        }
-        guard let idToken = user.authentication.idToken else { return }
-        guard let accessToken = user.authentication.accessToken else { return }
-        let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-        
-        Auth.auth().signIn(with: credentials, completion: { (user, error) in
-            if let err = error {
-                print("Failed to create a Firebase User with Google account: ", err)
-                return
-            }
-            
-            guard let uid = user?.uid, let name = user?.displayName, let email = user?.email else { return }
-            AppDelegate.user = LocalUser(id: uid, name: name, email: email, profileImage: nil)
-            self.navigationItem.title = name
-        })
-    }
-    
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
-              withError error: Error!) {
-        // Perform any operations when the user disconnects from app here.
-        // ...
     }
 }

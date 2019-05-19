@@ -50,9 +50,12 @@ extension DeviceViewController: CLLocationManagerDelegate {
         print("Adios")
         beacon_is_connected = false
         beaconStatusLabelField.text = "Not Connected"
-        if is_baby_in_seat && !uart_is_connected {
+//        if is_baby_in_seat && !uart_is_connected {
+        if !uart_is_connected {
             sendLocalNotificationLeftRegion()
         }
+        
+//        }
     }
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {

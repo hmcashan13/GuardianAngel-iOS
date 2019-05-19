@@ -7,10 +7,8 @@
 //
 
 import UIKit
-import Firebase
 import UserNotifications
-import FBSDKCoreKit
-import GoogleSignIn
+
 
 // User Default keys
 let farenheit_celsius_key = "farenheit_celsius_key"
@@ -34,21 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var meters_feet = true
     static var is_temp_enabled = true
     static var max_temp = 80
-    
-    static var user: LocalUser?
-    
+
     let defaults = UserDefaults.standard
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Firebase setup
-        FirebaseApp.configure()
-        
-        // Google sign-in setup
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        
-        // Facebook sign-in setup
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
         // Remote notification Setup
         registerForPushNotifications()
 
@@ -103,15 +90,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register: \(error)")
-    }
-
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String!, annotation: options[UIApplication.OpenURLOptionsKey.annotation])
-        
-        GIDSignIn.sharedInstance().handle(url,
-                                          sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String!,
-                                          annotation: options[UIApplication.OpenURLOptionsKey.annotation])
-        return handled
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
