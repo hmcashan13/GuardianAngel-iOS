@@ -9,8 +9,6 @@
 import UIKit
 import CoreBluetooth
 
-public let babyInSeatNotification = Notification.Name("tempSensorTurnedOff")
-
 extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
@@ -19,7 +17,10 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         
         // In order to perform background scanning, we must request a particular service
         let cbUUID1 = CBUUID(string: "00000001-1212-EFDE-1523-785FEABCD123")
-        let cbArray = [cbUUID1]
+        let cbUUID2 = CBUUID(string: kBLEService_UUID)
+        let cbUUID3 = CBUUID(string: kBLE_Characteristic_uuid_Rx)
+        let cbUUID4 = CBUUID(string: kBLE_Characteristic_uuid_Tx)
+        let cbArray = [cbUUID1,cbUUID2,cbUUID3,cbUUID4]
         // Start scanning
         centralManager?.scanForPeripherals(withServices: cbArray, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
         
@@ -113,8 +114,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         
         print("Found \(characteristics.count) characteristics!")
         for characteristic in characteristics {
-            //looks for the right characteristic
-            
+            // We only care about the Rx characteristic
             if characteristic.uuid.isEqual(BLE_Characteristic_uuid_Rx)  {
                 rxCharacteristic = characteristic
                 
@@ -125,10 +125,6 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 peripheral.readValue(for: characteristic)
                 print("Rx Characteristic: \(characteristic.uuid)")
             }
-            if characteristic.uuid.isEqual(BLE_Characteristic_uuid_Tx){
-                txCharacteristic = characteristic
-                print("Tx Characteristic: \(characteristic.uuid)")
-            }
             peripheral.discoverDescriptors(for: characteristic)
         }
     }
@@ -137,19 +133,19 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         
         if characteristic == rxCharacteristic {
             if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue) {
-                let uartValues = ASCIIstring
+                let uartValue = ASCIIstring
                 //print("Device Location: \(String(describing: device.locationString()))")
-                //print("Value Recieved: \((uartValues as String))")
+                //print("Value Recieved: \((uartValue as String))")
                 executeOnMainThread {
                     // Hide spinners
                     self.hideTempSpinner()
                     self.hideWeightSpinner()
                 }
                 
-                let parsedUartValues = uartValues.components(separatedBy: " ")
+                let parsedUartValues = uartValue.components(separatedBy: " ")
                 var parsedTempString: String = ""
                 var parsedWeightString: String = ""
-                if uartValues == "" {
+                if uartValue == "" {
                     print("No data")
                     parsedTempString = notConnected
                     parsedWeightString = "No"
@@ -176,10 +172,10 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 var weightText = ""
                 if let weight = weight, weight < 3000 {
                     weightText = "Yes"
-                    is_baby_in_seat = true
+                    isBabyInSeat = true
                 } else {
                     weightText = "No"
-                    is_baby_in_seat = false
+                    isBabyInSeat = false
                 }
                 // Setup UI
                 executeOnMainThread {
@@ -187,7 +183,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                     self.activeStatusLabelField.text = weightText
                 }
                 // Send temperature notification
-                if let temp = temp, temp > maxTemp && is_baby_in_seat && AppDelegate.is_temp_enabled {
+                if let temp = temp, temp > maxTemp && isBabyInSeat && AppDelegate.is_temp_enabled {
                     sendLocalNotificationTemperature()
                 }
             }

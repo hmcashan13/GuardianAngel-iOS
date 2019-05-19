@@ -12,7 +12,7 @@ import UserNotifications
 import CoreLocation
 
 class DeviceViewController: UIViewController {
-    // Beacon Regions
+    // Beacon properties
     let beaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
         major: 0,
@@ -23,32 +23,19 @@ class DeviceViewController: UIViewController {
         major: 0,
         minor: 0,
         identifier: "Guardian")
-    // Beacon variables
     var proximity = notConnected
     var isBeaconConnected: Bool = false
     var locationManager: CLLocationManager?
-    var beaconsToRange = [CLBeaconRegion]()
-    let peripheralName = "Guardian Angel"
     
-    // UART variables
-    
+    // UART properties
     let UART_UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")
     let UART_UUID2 = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")
-    var txCharacteristic : CBCharacteristic?
     var rxCharacteristic : CBCharacteristic?
-    var blePeripheral : CBPeripheral?
     var isUartConnected: Bool = false
     var centralManager: CBCentralManager?
-    var RSSIs = [NSNumber]()
     var selectedPeripheral: CBPeripheral?
-    var characteristicValue = [CBUUID: NSData]()
-    var characteristics = [String : CBCharacteristic]()
-    var is_baby_in_seat: Bool = false
-    var repeatScan = true
+    var isBabyInSeat: Bool = false
     var maxTemp: Int = 80
-    var x = 0
-    
-    let center = UNUserNotificationCenter.current()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +48,7 @@ class DeviceViewController: UIViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor.black
         
         // Setup Notifications
+        let center = UNUserNotificationCenter.current()
         center.delegate = self
         setupNotification()
  
@@ -104,7 +92,7 @@ class DeviceViewController: UIViewController {
             self.present(navController, animated: true, completion: nil)
         }
     }
-    
+    // MARK: UI properties and setup
     /// Logo on Device page
     lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -115,6 +103,7 @@ class DeviceViewController: UIViewController {
         return imageView
     }()
     
+    // Loading views
     let title_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     let temp_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)

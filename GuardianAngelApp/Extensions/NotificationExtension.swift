@@ -134,7 +134,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
-        let identifier = "LocalDisconnected"
+        let identifier = "LocalScanning"
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
         let request = UNNotificationRequest(identifier: identifier,
                                             content: content, trigger: trigger)
