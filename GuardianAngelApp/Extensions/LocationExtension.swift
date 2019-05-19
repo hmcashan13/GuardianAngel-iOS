@@ -63,6 +63,9 @@ extension DeviceViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if let beacon = beacons.first {
+            if !isUartConnected {
+                backgroundScan()
+            }
             let distance = beacon.accuracy
             switch distance {
             case _ where distance < 0:
