@@ -12,7 +12,7 @@ public let tempSensorOn = Notification.Name("tempSensorOn")
 public let tempSensorOff = Notification.Name("tempSensorOff")
 
 class TemperatureAdjustViewController: UIViewController, UINavigationControllerDelegate {
-    let step:Float = 5  // If you want UISlider to snap to steps by 5
+    let step:Float = 1  // If you want UISlider to snap to steps by 5
     
     let defaults = UserDefaults.standard
     
@@ -113,7 +113,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     let mySlider: UISlider = {
         let slider = UISlider(frame:CGRect(x: 10, y: 100, width: 300, height: 20))
-        slider.minimumValue = 60
+        slider.minimumValue = 80
         slider.maximumValue = 100
         slider.isContinuous = true
         slider.setValue(Float(AppDelegate.max_temp), animated: false)

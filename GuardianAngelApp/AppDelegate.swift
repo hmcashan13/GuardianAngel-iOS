@@ -25,13 +25,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let notificationURL = "https://fcm.googleapis.com/fcm/send"
     
-    static let isDebugging = false
+    static let isDebugging = true
     
     // Init temperature user settings
     static var farenheit_celsius = true
     static var meters_feet = true
     static var is_temp_enabled = true
-    static var max_temp = 80
+    static var max_temp = 85
 
     let defaults = UserDefaults.standard
     
