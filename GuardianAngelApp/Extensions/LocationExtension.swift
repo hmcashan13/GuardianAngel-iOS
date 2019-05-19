@@ -27,61 +27,62 @@ extension DeviceViewController: CLLocationManagerDelegate {
                 print("Beacon Region is not valid")
                 return
             }
-            beacon_is_connected = true
             // Start ranging beacon
             manager.startRangingBeacons(in: region)
-        } else {
-            print("Monitoring is NOT available")
         }
-        // Start uart
-        altScan()
+        // Start UART
+        backgroundScan()
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        beacon_is_connected = true
-        showBeaconSpinner()
         print("Entered region")
-        if !uart_is_connected {
-            altScan()
-        }
+        // Modify state
+        beacon_is_connected = true
+        // Setup UI
+        showBeaconSpinner()
+        // Start UART
+        backgroundScan()
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         print("Adios")
+        // Modify state
         beacon_is_connected = false
+        // Setup UI
         beaconStatusLabelField.text = "Not Connected"
+        // No matter what we want to stop scanning
+        centralManager?.stopScan()
+        // TODO: fix it to where we only send notification if baby is in the seat
 //        if is_baby_in_seat && !uart_is_connected {
         if !uart_is_connected {
             sendLocalNotificationLeftRegion()
         }
-        
 //        }
+
     }
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if let beacon = beacons.first {
-            beacon_is_connected = true
             let distance = beacon.accuracy
             switch distance {
             case _ where distance < 0:
                 print("")
             case 0...10:
-                hideBeaconSpinner()
                 proximity = "Very Close"
-                print("beacon distance: \(distance)m")
             case 10...20:
-                hideBeaconSpinner()
                 proximity = "Near"
-                print("beacon distance: \(distance)m")
             case _ where distance > 20:
-                hideBeaconSpinner()
                 proximity = "Far"
-                print("beacon distance: \(distance)m")
             default:
                 print("")
             }
-            beaconStatusLabelField.text = proximity
+            print("beacon distance: \(distance)m")
             
+            // Modify state
+            beacon_is_connected = true
+            // Setup UI
+            hideBeaconSpinner()
+            beaconStatusLabelField.text = proximity
         }
     }
 }

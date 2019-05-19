@@ -18,22 +18,27 @@ let BLEService_UUID = CBUUID(string: kBLEService_UUID)
 let BLE_Characteristic_uuid_Tx = CBUUID(string: kBLE_Characteristic_uuid_Tx)//(Property = Write without response)
 let BLE_Characteristic_uuid_Rx = CBUUID(string: kBLE_Characteristic_uuid_Rx)// (Property = Read/Notify)
 
-class Utilities {
-    static func showAlertMessage(presenter: UIViewController, title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        
+func showAlertMessage(presenter: UIViewController, title: String, message: String) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    
+    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+    executeOnMainThread {
         presenter.present(alert, animated: true, completion: nil)
     }
+}
+
+func convertTempString(_ temperature: String) -> String {
+    guard let temp = Double(temperature) else { return "" }
+    let convertedTemp = Int(temp / 21.5)
+    return String(convertedTemp)
+}
     
-    static func executeOnMainThread(completion: @escaping () -> Void) {
-        if Thread.isMainThread {
+func executeOnMainThread(completion: @escaping () -> Void) {
+    if Thread.isMainThread {
+        completion()
+    } else {
+        DispatchQueue.main.async {
             completion()
-        } else {
-            DispatchQueue.main.async {
-                completion()
-            }
         }
     }
 }

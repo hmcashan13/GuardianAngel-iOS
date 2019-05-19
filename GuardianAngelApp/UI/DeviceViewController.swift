@@ -77,30 +77,15 @@ class DeviceViewController: UIViewController {
         locationManager?.requestAlwaysAuthorization()
         
         // Check if we are connected when we foreground
-        NotificationCenter.default.addObserver(self, selector: #selector(startScan), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(foregroundScan), name: UIApplication.willEnterForegroundNotification, object: nil)
         
+        // Connect to cushion
         startBeaconAndUart()
+        // Setup UI
         showTempSpinner()
         showWeightSpinner()
         showBeaconSpinner()
         navigationItem.title = "Connecting"
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        // Authentication
-        if beacon_is_connected && !uart_is_connected {
-            showBeaconSpinner()
-            showTempSpinner()
-            showWeightSpinner()
-            startScan()
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        // Stop scanning for uart devices
-        centralManager?.stopScan()
     }
     
     /// Disconnect from uart and beacon bluetooth devices
