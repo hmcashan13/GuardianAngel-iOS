@@ -16,7 +16,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
     
     @objc func startBeaconAndUart() {
         print("Start beacon")
-        if !beacon_is_connected {
+        if !isBeaconConnected {
             locationManager?.startMonitoring(for: beaconRegion)
         }
     }
@@ -37,7 +37,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         print("Entered region")
         // Modify state
-        beacon_is_connected = true
+        isBeaconConnected = true
         // Setup UI
         showBeaconSpinner()
         // Start UART
@@ -47,14 +47,14 @@ extension DeviceViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         print("Adios")
         // Modify state
-        beacon_is_connected = false
+        isBeaconConnected = false
         // Setup UI
         beaconStatusLabelField.text = "Not Connected"
         // No matter what we want to stop scanning
-        centralManager?.stopScan()
+        stopScan()
         // TODO: fix it to where we only send notification if baby is in the seat
 //        if is_baby_in_seat && !uart_is_connected {
-        if !uart_is_connected {
+        if !isUartConnected {
             sendLocalNotificationLeftRegion()
         }
 //        }
@@ -79,7 +79,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
             print("beacon distance: \(distance)m")
             
             // Modify state
-            beacon_is_connected = true
+            isBeaconConnected = true
             // Setup UI
             hideBeaconSpinner()
             beaconStatusLabelField.text = proximity

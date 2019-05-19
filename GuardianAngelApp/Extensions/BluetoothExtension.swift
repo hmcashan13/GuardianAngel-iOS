@@ -14,7 +14,7 @@ public let babyInSeatNotification = Notification.Name("tempSensorTurnedOff")
 extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
-        guard !uart_is_connected else { return }
+        guard !isUartConnected else { return }
         print("Now Background Scanning...")
         
         // In order to perform background scanning, we must request a particular service
@@ -32,7 +32,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     
     /// Scan for bluetooth peripherals in the foreground
     @objc func foregroundScan() {
-        guard !uart_is_connected else { return }
+        guard !isUartConnected else { return }
         print("Now Foreground Scanning...")
         // Start scanning
         centralManager?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
@@ -43,75 +43,46 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         }
         timer.start()
     }
+    
+    /// Stop scanning for bluetooth devices
     func stopScan() {
         self.centralManager?.stopScan()
     }
     
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if central.state != CBManagerState.poweredOn {
-            // Bluetooth is disabled
-            executeOnMainThread {
-                // Setup UI
-                self.hideTempSpinner()
-                self.hideBeaconSpinner()
-                self.hideWeightSpinner()
-                self.navigationItem.title = "Not Connected"
-                // Show error message
-                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on")
-            }
-        }
-    }
-    
-    // Discovered peripheral
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        guard peripheral.identifier == UART_UUID && !uart_is_connected else { return }
-        selectedPeripheral = peripheral
-        //Connect to peripheral
-        centralManager?.connect(peripheral, options: nil)
-    }
-    
+    /// Restart bluetooth manager
     func restartCentralManager() {
         centralManager = CBCentralManager(delegate: self, queue: nil)
         guard let manager = centralManager else { return }
         centralManagerDidUpdateState(manager)
     }
     
+    // Discovered peripheral
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        guard peripheral.identifier == UART_UUID && !isUartConnected else { return }
+        selectedPeripheral = peripheral
+        //Connect to peripheral
+        centralManager?.connect(peripheral, options: nil)
+    }
+    
     // Connected to peripheral
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
-        centralManager?.stopScan()
+        stopScan()
         if AppDelegate.isDebugging {
             sendLocalNotificationConnected()
         }
         // Modify state
-        uart_is_connected = true
+        isUartConnected = true
         // Setup UI
         executeOnMainThread {
-            self.hideTempSpinner()
-            self.hideWeightSpinner()
-            self.navigationItem.title = "Connected"
+            self.setTitleConnected()
         }
         //Discovery callback
         peripheral.delegate = self
         //Only look for services that matches transmit uuid
         peripheral.discoverServices([BLEService_UUID])
     }
-    /*
-     Invoked when the central manager fails to create a connection with a peripheral.
-     */
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        if error != nil {
-            // Modify state
-            uart_is_connected = false
-            // Setup UI
-            executeOnMainThread {
-                self.hideTempSpinner()
-                self.hideWeightSpinner()
-                // Show error message
-                showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion")
-            }
-        }
-    }
+
     
     /*
      Invoked when you discover the peripheral’s available services.
@@ -134,20 +105,13 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
      This method is invoked when your app calls the discoverCharacteristics(_:for:) method. If the characteristics of the specified service are successfully discovered, you can access them through the service's characteristics property. If successful, the error parameter is nil. If unsuccessful, the error parameter returns the cause of the failure.
      */
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        
-        print("*******************************************************")
-        
-        if ((error) != nil) {
-            print("Error discovering services: \(error!.localizedDescription)")
-            return
-        }
-        
-        guard let characteristics = service.characteristics else {
+        guard let characteristics = service.characteristics, error == nil else {
+            // Show error message
+            showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion")
             return
         }
         
         print("Found \(characteristics.count) characteristics!")
-        
         for characteristic in characteristics {
             //looks for the right characteristic
             
@@ -168,10 +132,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             peripheral.discoverDescriptors(for: characteristic)
         }
     }
-    // Getting Values From Characteristic
-    
-    /*After you've found a characteristic of a service that you are interested in, you can read the characteristic's value by calling the peripheral "readValueForCharacteristic" method within the "didDiscoverCharacteristicsFor service" delegate.
-     */
+    // Getting Values from UART
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         if characteristic == rxCharacteristic {
@@ -190,8 +151,8 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 var parsedWeightString: String = ""
                 if uartValues == "" {
                     print("No data")
-                    parsedTempString = "invalid"
-                    parsedWeightString = "Not Connnected"
+                    parsedTempString = notConnected
+                    parsedWeightString = "No"
                 } else {
                     let tempString = parsedUartValues[0]
                     let weightString = parsedUartValues[1]
@@ -206,7 +167,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
                     tempWithDegree = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
                 } else {
-                    tempWithDegree = "Not Connected"
+                    tempWithDegree = notConnected
                 }
 
                 let temp = Int(convertedTemp)
@@ -233,21 +194,53 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         }
     }
     
+    // Disconnected from peripheral
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         print("Disconnected")
         // Modify state
-        uart_is_connected = false
+        isUartConnected = false
         // Setup UI
         executeOnMainThread {
-            self.tempStatusLabelField.text = "Not Connected"
+            self.tempStatusLabelField.text = notConnected
             self.activeStatusLabelField.text = "No"
-            self.navigationItem.title = "Disconnected"
+            self.setTitleDisconnected()
         }
         
         // Reconnect to UART
         backgroundScan()
         
         sendLocalNotificationDisconnected()
+    }
+    
+    // Bluetooth is disabled
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state != CBManagerState.poweredOn {
+            executeOnMainThread {
+                // Setup UI
+                self.hideTempSpinner()
+                self.hideBeaconSpinner()
+                self.hideWeightSpinner()
+                self.setTitleDisconnected()
+                // Show error message
+                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on")
+            }
+        }
+    }
+    
+    // Connection failed
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        if error != nil {
+            // Modify state
+            isUartConnected = false
+            // Setup UI
+            executeOnMainThread {
+                self.hideTempSpinner()
+                self.hideWeightSpinner()
+                self.setTitleDisconnected()
+                // Show error message
+                showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion")
+            }
+        }
     }
 }
 

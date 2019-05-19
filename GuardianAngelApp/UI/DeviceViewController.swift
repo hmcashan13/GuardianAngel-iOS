@@ -24,12 +24,10 @@ class DeviceViewController: UIViewController {
         minor: 0,
         identifier: "Guardian")
     // Beacon variables
-    var proximity = "Not Connected"
-    var beacon_is_connected: Bool = false
+    var proximity = notConnected
+    var isBeaconConnected: Bool = false
     var locationManager: CLLocationManager?
     var beaconsToRange = [CLBeaconRegion]()
-    var leftCount = 0
-    var unknownCount = 0
     let peripheralName = "Guardian Angel"
     
     // UART variables
@@ -39,7 +37,7 @@ class DeviceViewController: UIViewController {
     var txCharacteristic : CBCharacteristic?
     var rxCharacteristic : CBCharacteristic?
     var blePeripheral : CBPeripheral?
-    var uart_is_connected: Bool = false
+    var isUartConnected: Bool = false
     var centralManager: CBCentralManager?
     var RSSIs = [NSNumber]()
     var selectedPeripheral: CBPeripheral?
@@ -85,7 +83,7 @@ class DeviceViewController: UIViewController {
         showTempSpinner()
         showWeightSpinner()
         showBeaconSpinner()
-        navigationItem.title = "Connecting"
+        setTitleConnecting()
     }
     
     /// Disconnect from uart and beacon bluetooth devices
@@ -160,7 +158,7 @@ class DeviceViewController: UIViewController {
     let
     tempStatusLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "Not Connected"
+        tf.text = notConnected
         tf.textAlignment = .right
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
@@ -169,7 +167,7 @@ class DeviceViewController: UIViewController {
     /// Shows status of the beacon readings
     let beaconStatusLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "Not Connected"
+        tf.text = notConnected
         tf.textAlignment = .right
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
@@ -367,5 +365,17 @@ class DeviceViewController: UIViewController {
             weight_loadingView.stopAnimating()
             activeStatusLabelField.isHidden = false
         }
+    }
+    
+    func setTitleConnected() {
+        navigationItem.title = "Connected"
+    }
+    
+    func setTitleDisconnected() {
+        navigationItem.title = "Disconnected"
+    }
+    
+    func setTitleConnecting() {
+        navigationItem.title = "Connecting"
     }
 }

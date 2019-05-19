@@ -18,6 +18,8 @@ let BLEService_UUID = CBUUID(string: kBLEService_UUID)
 let BLE_Characteristic_uuid_Tx = CBUUID(string: kBLE_Characteristic_uuid_Tx)//(Property = Write without response)
 let BLE_Characteristic_uuid_Rx = CBUUID(string: kBLE_Characteristic_uuid_Rx)// (Property = Read/Notify)
 
+let notConnected = "Not Connected"
+/// Present a message to the user (automatically done on the main thread)
 func showAlertMessage(presenter: UIViewController, title: String, message: String) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     
@@ -32,7 +34,8 @@ func convertTempString(_ temperature: String) -> String {
     let convertedTemp = Int(temp / 21.5)
     return String(convertedTemp)
 }
-    
+
+/// Ensure the execution of the code is done on the main thread, for UI purposes
 func executeOnMainThread(completion: @escaping () -> Void) {
     if Thread.isMainThread {
         completion()
