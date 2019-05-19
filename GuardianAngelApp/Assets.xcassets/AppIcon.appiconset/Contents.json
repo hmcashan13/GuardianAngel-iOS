@@ -3,49 +3,49 @@
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "angel_wings40-1.jpeg",
+      "filename" : "iOS_icon copy 2-4.jpg",
       "scale" : "2x"
     },
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "angel_wings60.jpeg",
+      "filename" : "iOS_icon copy 2-3.jpg",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "angel_wings58-1.jpeg",
+      "filename" : "iOS_icon copy 2-2.jpg",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "angel_wings87.jpeg",
+      "filename" : "iOS_icon copy 2-1.jpg",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "angel_wings80-1.jpeg",
+      "filename" : "iOS_icon copy-2.jpg",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "angel_wings120-1.jpeg",
+      "filename" : "iOS_icon copy-1.jpg",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "angel_wings120.jpeg",
+      "filename" : "iOS_icon copy 2.jpg",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "angel_wings180.jpeg",
+      "filename" : "iOS_icon copy.jpg",
       "scale" : "3x"
     },
     {
@@ -56,7 +56,7 @@
     {
       "size" : "20x20",
       "idiom" : "ipad",
-      "filename" : "angel_wings40.jpeg",
+      "filename" : "iOS_icon copy-8.jpg",
       "scale" : "2x"
     },
     {
@@ -67,7 +67,7 @@
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "angel_wings58.jpeg",
+      "filename" : "iOS_icon copy-9.jpg",
       "scale" : "2x"
     },
     {
@@ -78,7 +78,7 @@
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "angel_wings80.jpeg",
+      "filename" : "iOS_icon copy-10.jpg",
       "scale" : "2x"
     },
     {
@@ -87,20 +87,21 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "iOS_icon copy-4.jpg",
       "scale" : "2x"
     },
     {
       "size" : "83.5x83.5",
       "idiom" : "ipad",
-      "filename" : "angel_wings167.jpeg",
+      "filename" : "iOS_icon copy-3.jpg",
       "scale" : "2x"
     },
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "34311.jpg",
+      "filename" : "iOS_icon.jpg",
       "scale" : "1x"
     }
   ],

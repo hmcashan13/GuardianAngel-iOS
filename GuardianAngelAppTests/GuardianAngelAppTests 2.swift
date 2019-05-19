@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import GuardianAngelApp
 
 class GuardianAngelAppTests: XCTestCase {
 
