@@ -34,7 +34,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         print("sending left region notification")
         let content = UNMutableNotificationContent()
         content.title = "You are too far from your baby"
-        content.body = "Save your baby!"
+        content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalLeftRegion"
@@ -54,7 +54,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         print("sending temp notification")
         let content = UNMutableNotificationContent()
         content.title = "It's too hot!"
-        content.body = "Save your baby now!"
+        content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalTemperature"
@@ -74,7 +74,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         print("sending entered region notification")
         let content = UNMutableNotificationContent()
         content.title = "Entered Region"
-        content.body = "Save your baby now!"
+        content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalEnteredRegion"
@@ -93,7 +93,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         print("sending connected notification")
         let content = UNMutableNotificationContent()
         content.title = "UART Connected!"
-        content.body = "Save your baby now!"
+        content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalConnected"
@@ -112,7 +112,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         print("sending disconnected notification")
         let content = UNMutableNotificationContent()
         content.title = "UART Disconnected!"
-        content.body = "Save your baby now!"
+        content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalDisconnected"
@@ -131,7 +131,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         print("sending background scanning notification")
         let content = UNMutableNotificationContent()
         content.title = "Started Background Scanning!"
-        content.body = "Save your baby now!"
+        content.body = "Ensure your baby is safe"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalDisconnected"
