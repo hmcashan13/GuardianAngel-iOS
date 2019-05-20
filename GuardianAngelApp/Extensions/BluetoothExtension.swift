@@ -12,7 +12,7 @@ import CoreBluetooth
 extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
-        guard !isUartConnected else { return }
+        guard let isScan = centralManager?.isScanning, !isUartConnected && !isScan else { return }
         print("Now Background Scanning...")
         
         // In order to perform background scanning, we must request a particular service
@@ -33,7 +33,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     
     /// Scan for bluetooth peripherals in the foreground
     @objc func foregroundScan() {
-        guard !isUartConnected else { return }
+        guard let isScan = centralManager?.isScanning, !isUartConnected || !isScan else { return }
         print("Now Foreground Scanning...")
         // Start scanning
         centralManager?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
