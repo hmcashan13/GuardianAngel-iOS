@@ -33,8 +33,8 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         let center = UNUserNotificationCenter.current()
         print("sending left region notification")
         let content = UNMutableNotificationContent()
-        content.title = "You are too far from your baby"
-        content.body = "Ensure your baby is safe"
+        content.title = "You are far from the smart cushion"
+        content.body = "Just a friendly reminder"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalLeftRegion"
@@ -53,8 +53,8 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         let center = UNUserNotificationCenter.current()
         print("sending temp notification")
         let content = UNMutableNotificationContent()
-        content.title = "It's too hot!"
-        content.body = "Ensure your baby is safe"
+        content.title = "It's too hot in your car!"
+        content.body = "Just a friendly reminder"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
         let identifier = "LocalTemperature"

@@ -119,19 +119,26 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         slider.setValue(Float(AppDelegate.max_temp), animated: false)
         slider.tintColor = UIColor.blue
         slider.addTarget(self, action: #selector(sliderValueDidChange(_:)), for: .valueChanged)
+        slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
     
     func setupUIConstraints() {
         view.addSubview(inputsContainerView)
         view.addSubview(mySlider)
-        mySlider.center = view.center
-        //setup x, y, width, height constraints of inputs container view
+        // setup constraints for container
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
         inputsContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 150).isActive=true
         inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24).isActive=true
         inputsContainerView.heightAnchor.constraint(equalToConstant: 180).isActive=true
         
+        // setup constrains for slider
+        mySlider.topAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 20).isActive=true
+        mySlider.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
+        mySlider.widthAnchor.constraint(equalToConstant: 300).isActive=true
+        mySlider.heightAnchor.constraint(equalToConstant: 20).isActive=true
+        
+        // add items into container view
         inputsContainerView.addSubview(maxTempTextLabel)
         inputsContainerView.addSubview(sliderLabel)
         inputsContainerView.addSubview(seperatorView1)
@@ -141,6 +148,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         inputsContainerView.addSubview(tempSwitchTextLabel)
         inputsContainerView.addSubview(tempSwitch)
         
+        // setup contraints for items in container view
         tempSwitchTextLabel.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: 20).isActive=true
         tempSwitchTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 20).isActive=true
         
