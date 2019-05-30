@@ -130,7 +130,7 @@ class DeviceViewController: UIViewController {
     /// Proximity label
     let beaconTextLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "Proximity from baby:"
+        tf.text = "Proximity from cushion:"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -138,7 +138,7 @@ class DeviceViewController: UIViewController {
     /// Weight label
     let activeTextLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "Baby in seat?"
+        tf.text = "In seat?"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
