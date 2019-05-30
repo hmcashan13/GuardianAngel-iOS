@@ -46,6 +46,12 @@ class DeviceViewController: UIViewController {
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.black
+        navigationItem.leftBarButtonItem = infoButton
+        
+        showTempSpinner()
+        showWeightSpinner()
+        showBeaconSpinner()
+        setTitleConnecting()
         
         // Setup Notifications
         let center = UNUserNotificationCenter.current()
@@ -67,11 +73,6 @@ class DeviceViewController: UIViewController {
         
         // Connect to cushion
         startBeaconAndUart()
-        // Setup UI
-        showTempSpinner()
-        showWeightSpinner()
-        showBeaconSpinner()
-        setTitleConnecting()
     }
     
     /// Disconnect from uart and beacon bluetooth devices
@@ -109,6 +110,15 @@ class DeviceViewController: UIViewController {
     let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     let weight_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
+    // Info button
+    let infoButton: UIBarButtonItem = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "info"), for: .normal)
+        button.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
+        let barButton = UIBarButtonItem(customView: button)
+        return barButton
+    }()
+    
     /// Contains all of the labels that shows the Bluetooth information
     let inputsContainerView: UIView = {
         let view = UIView()
@@ -138,7 +148,7 @@ class DeviceViewController: UIViewController {
     /// Weight label
     let activeTextLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "In seat?"
+        tf.text = "Device Active?"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -366,5 +376,9 @@ class DeviceViewController: UIViewController {
     
     func setTitleConnecting() {
         navigationItem.title = "Connecting"
+    }
+    
+    @objc func showTempInfo() {
+        // view to give details on what these settings mean
     }
 }
