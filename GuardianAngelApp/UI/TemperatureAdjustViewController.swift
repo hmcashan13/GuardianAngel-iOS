@@ -26,11 +26,10 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     }
     
     let infoButton: UIBarButtonItem = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "info"), for: .normal)
-        button.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
-        let barButton = UIBarButtonItem(customView: button)
-        return barButton
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
+        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
+        return infoBarButtonItem
     }()
     
     let inputsContainerView: UIView = {

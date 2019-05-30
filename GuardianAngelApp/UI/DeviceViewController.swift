@@ -112,11 +112,10 @@ class DeviceViewController: UIViewController {
     
     // Info button
     let infoButton: UIBarButtonItem = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "info"), for: .normal)
-        button.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
-        let barButton = UIBarButtonItem(customView: button)
-        return barButton
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
+        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
+        return infoBarButtonItem
     }()
     
     /// Contains all of the labels that shows the Bluetooth information
@@ -378,7 +377,7 @@ class DeviceViewController: UIViewController {
         navigationItem.title = "Connecting"
     }
     
-    @objc func showTempInfo() {
+    @objc func showInfo() {
         // view to give details on what these settings mean
     }
 }
