@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WhatsNewKit
 
 public let tempSensorOn = Notification.Name("tempSensorOn")
 public let tempSensorOff = Notification.Name("tempSensorOff")
@@ -178,7 +179,55 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     }
     
     @objc func showTempInfo() {
-        // view to give details on what these settings mean
+        let whatsNew = WhatsNew(
+            title: "Information about the App",
+            items: [
+                WhatsNew.Item(
+                    title: "Temperature Section:",
+                    subtitle: "The temperature calculated by the smart cushion",
+                    image: UIImage(named: "temp copy")
+                ),
+                WhatsNew.Item(
+                    title: "Proximity from Cushion Section:",
+                    subtitle: "Provides information about the proximity of the user from the smart cushion",
+                    image: UIImage(named: "proximity")
+                ),
+                WhatsNew.Item(
+                    title: "Device Active Section:",
+                    subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
+                    image: UIImage(named: "setup")
+                ),
+                WhatsNew.Item(
+                    title: "Questions?",
+                    subtitle: "Email us at support@guardianangelcushion.com",
+                    image: UIImage(named: "question")
+                )
+            ]
+        )
+        
+        let myTheme = WhatsNewViewController.Theme { configuration in
+            configuration.titleView.titleColor = .white
+            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
+            configuration.itemsView.titleColor = .white
+            configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
+            configuration.itemsView.subtitleColor = .white
+            configuration.itemsView.autoTintImage = false
+            configuration.completionButton.title = "Go Back"
+            configuration.completionButton.backgroundColor = .white
+            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        }
+        
+        let configuration = WhatsNewViewController.Configuration(
+            theme: myTheme
+        )
+        
+        let whatsNewViewController = WhatsNewViewController(
+            whatsNew: whatsNew,
+            configuration: configuration
+        )
+        
+        self.present(whatsNewViewController, animated: true)
     }
     
     @objc func farenheitOrCelsius() {

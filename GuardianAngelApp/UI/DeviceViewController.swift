@@ -379,11 +379,8 @@ class DeviceViewController: UIViewController {
     }
     
     @objc func showInfo() {
-        // Initialize WhatsNew
         let whatsNew = WhatsNew(
-            // The Title
             title: "Information about the App",
-            // The features you want to showcase
             items: [
                 WhatsNew.Item(
                     title: "Temperature Section:",
@@ -408,8 +405,6 @@ class DeviceViewController: UIViewController {
             ]
         )
 
-        
-        // Or create your own Theme and initialize a Configuration with your Theme
         let myTheme = WhatsNewViewController.Theme { configuration in
             configuration.titleView.titleColor = .white
             configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
@@ -427,14 +422,11 @@ class DeviceViewController: UIViewController {
             theme: myTheme
         )
         
-        // Initialize WhatsNewViewController with WhatsNew
         let whatsNewViewController = WhatsNewViewController(
             whatsNew: whatsNew,
             configuration: configuration
-            
         )
         
-        // Present it 🤩
         self.present(whatsNewViewController, animated: true)
     }
 }
