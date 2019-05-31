@@ -1,0 +1,12 @@
+PODS:
+  - WhatsNewKit (1.1.2)
+
+DEPENDENCIES:
+  - WhatsNewKit
+
+SPEC CHECKSUMS:
+  WhatsNewKit: caa478dd9efc4d501c2e4f33f5f59e0b90cbb3cb
+
+PODFILE CHECKSUM: 843171fb48783095f92bbcea472c6bcdc33b46a5
+
+COCOAPODS: 1.4.0

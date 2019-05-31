@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88064975898C3BB603E7C051 /* Pods_GuardianAngelAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82850D88AFFEA4C3EC7228DA /* Pods_GuardianAngelAppUITests.framework */; };
 		E702BC8A2193BB5E002A7BF8 /* TemperatureAdjustViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */; };
 		E70AB614227DDF57003F71BF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70AB613227DDF57003F71BF /* Utilities.swift */; };
 		E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92542176E34E00B4AE8B /* AppDelegate.swift */; };
@@ -15,6 +16,8 @@
 		E70B925F2176E34F00B4AE8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E70B925E2176E34F00B4AE8B /* Assets.xcassets */; };
 		E70B92622176E34F00B4AE8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */; };
 		E70B92782176E34F00B4AE8B /* GuardianAngelAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */; };
+		E7456D1F22A09C7A00083EBF /* DeviceInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7456D1E22A09C7A00083EBF /* DeviceInfoViewController.swift */; };
+		E7456D2122A09C8900083EBF /* TempInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7456D2022A09C8900083EBF /* TempInfoViewController.swift */; };
 		E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D887217BE79A00A0A627 /* NotificationExtension.swift */; };
 		E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D889217BED1800A0A627 /* BluetoothExtension.swift */; };
 		E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D88D217BF22300A0A627 /* SettingsViewController.swift */; };
@@ -23,6 +26,7 @@
 		E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AF28D2198B48700E7BC6C /* LocationExtension.swift */; };
 		E7801713217A839B00108D31 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7801712217A839B00108D31 /* ColorExtension.swift */; };
 		E7C22EF7218417360071FE8E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C22EF6218417350071FE8E /* SnapshotHelper.swift */; };
+		F26A6A15643B40D47EFA5644 /* Pods_GuardianAngelApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ABF8BB08EF8347FEEC3293 /* Pods_GuardianAngelApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18ABF8BB08EF8347FEEC3293 /* Pods_GuardianAngelApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		44CD3DA5B0A0BE9F42E7032A /* Pods-GuardianAngelApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.release.xcconfig"; sourceTree = "<group>"; };
+		5031335C65594623644A20FC /* Pods-GuardianAngelAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.release.xcconfig"; sourceTree = "<group>"; };
+		82850D88AFFEA4C3EC7228DA /* Pods_GuardianAngelAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D752ED4A0CED40F1FC2BEA7F /* Pods-GuardianAngelApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperatureAdjustViewController.swift; sourceTree = "<group>"; };
 		E70AB613227DDF57003F71BF /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		E70B92512176E34E00B4AE8B /* Guardian Angel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guardian Angel.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +58,8 @@
 		E70B92732176E34F00B4AE8B /* GuardianAngelAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GuardianAngelAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardianAngelAppUITests.swift; sourceTree = "<group>"; };
 		E70B92792176E35000B4AE8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E7456D1E22A09C7A00083EBF /* DeviceInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoViewController.swift; sourceTree = "<group>"; };
+		E7456D2022A09C8900083EBF /* TempInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempInfoViewController.swift; sourceTree = "<group>"; };
 		E753D887217BE79A00A0A627 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		E753D889217BED1800A0A627 /* BluetoothExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothExtension.swift; sourceTree = "<group>"; };
 		E753D88D217BF22300A0A627 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -58,6 +69,7 @@
 		E77AF28D2198B48700E7BC6C /* LocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtension.swift; sourceTree = "<group>"; };
 		E7801712217A839B00108D31 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E7C22EF6218417350071FE8E /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
+		F639254028761EFA81E9CD15 /* Pods-GuardianAngelAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F26A6A15643B40D47EFA5644 /* Pods_GuardianAngelApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +85,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88064975898C3BB603E7C051 /* Pods_GuardianAngelAppUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5E67CFC41C25FDE544ED684A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D752ED4A0CED40F1FC2BEA7F /* Pods-GuardianAngelApp.debug.xcconfig */,
+				44CD3DA5B0A0BE9F42E7032A /* Pods-GuardianAngelApp.release.xcconfig */,
+				F639254028761EFA81E9CD15 /* Pods-GuardianAngelAppUITests.debug.xcconfig */,
+				5031335C65594623644A20FC /* Pods-GuardianAngelAppUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		DF13FB087EF76E4F3D7A7D3E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				18ABF8BB08EF8347FEEC3293 /* Pods_GuardianAngelApp.framework */,
+				82850D88AFFEA4C3EC7228DA /* Pods_GuardianAngelAppUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E70B92482176E34E00B4AE8B = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +119,8 @@
 				E70B926B2176E34F00B4AE8B /* GuardianAngelAppTests */,
 				E70B92762176E34F00B4AE8B /* GuardianAngelAppUITests */,
 				E70B92522176E34E00B4AE8B /* Products */,
+				5E67CFC41C25FDE544ED684A /* Pods */,
+				DF13FB087EF76E4F3D7A7D3E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,8 +143,8 @@
 				E753D88F217BF23600A0A627 /* Extensions */,
 				E70B92582176E34E00B4AE8B /* Main.storyboard */,
 				E70B925E2176E34F00B4AE8B /* Assets.xcassets */,
-				E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */,
 				E70B92632176E34F00B4AE8B /* Info.plist */,
+				E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */,
 				E70B925B2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld */,
 			);
 			path = GuardianAngelApp;
@@ -132,12 +168,22 @@
 			path = GuardianAngelAppUITests;
 			sourceTree = "<group>";
 		};
+		E7456D2222A09CA700083EBF /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				E7456D2022A09C8900083EBF /* TempInfoViewController.swift */,
+				E7456D1E22A09C7A00083EBF /* DeviceInfoViewController.swift */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
 		E746F7C72291B11F0044CDD6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				E753D890217BF6A600A0A627 /* DeviceViewController.swift */,
 				E753D88D217BF22300A0A627 /* SettingsViewController.swift */,
 				E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */,
+				E7456D2222A09CA700083EBF /* Info */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -161,9 +207,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E70B927C2176E35000B4AE8B /* Build configuration list for PBXNativeTarget "GuardianAngelApp" */;
 			buildPhases = (
+				4C0A8117E4A27DC3F0133F3D /* [CP] Check Pods Manifest.lock */,
 				E70B924D2176E34E00B4AE8B /* Sources */,
 				E70B924E2176E34E00B4AE8B /* Frameworks */,
 				E70B924F2176E34E00B4AE8B /* Resources */,
+				44667C2C874C210FE6B20B66 /* [CP] Embed Pods Frameworks */,
+				73633181F9890705FF5758BC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -178,9 +227,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E70B92822176E35000B4AE8B /* Build configuration list for PBXNativeTarget "GuardianAngelAppUITests" */;
 			buildPhases = (
+				D57F1570D2994965CCFDE505 /* [CP] Check Pods Manifest.lock */,
 				E70B926F2176E34F00B4AE8B /* Sources */,
 				E70B92702176E34F00B4AE8B /* Frameworks */,
 				E70B92712176E34F00B4AE8B /* Resources */,
+				B45C7AEC02A28C1909B35A84 /* [CP] Embed Pods Frameworks */,
+				C2173D253769C80643050F02 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -260,6 +312,132 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		44667C2C874C210FE6B20B66 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/WhatsNewKit/WhatsNewKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WhatsNewKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4C0A8117E4A27DC3F0133F3D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GuardianAngelApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		73633181F9890705FF5758BC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B45C7AEC02A28C1909B35A84 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C2173D253769C80643050F02 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D57F1570D2994965CCFDE505 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-GuardianAngelAppUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E70B924D2176E34E00B4AE8B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -273,6 +451,8 @@
 				E70B925D2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld in Sources */,
 				E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */,
 				E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */,
+				E7456D1F22A09C7A00083EBF /* DeviceInfoViewController.swift in Sources */,
+				E7456D2122A09C8900083EBF /* TempInfoViewController.swift in Sources */,
 				E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */,
 				E7801713217A839B00108D31 /* ColorExtension.swift in Sources */,
 				E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */,
@@ -436,6 +616,7 @@
 		};
 		E70B927D2176E35000B4AE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D752ED4A0CED40F1FC2BEA7F /* Pods-GuardianAngelApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -457,6 +638,7 @@
 		};
 		E70B927E2176E35000B4AE8B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 44CD3DA5B0A0BE9F42E7032A /* Pods-GuardianAngelApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -478,6 +660,7 @@
 		};
 		E70B92832176E35000B4AE8B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F639254028761EFA81E9CD15 /* Pods-GuardianAngelAppUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -498,6 +681,7 @@
 		};
 		E70B92842176E35000B4AE8B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5031335C65594623644A20FC /* Pods-GuardianAngelAppUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

@@ -10,6 +10,7 @@ import UIKit
 import CoreBluetooth
 import UserNotifications
 import CoreLocation
+import WhatsNewKit
 
 class DeviceViewController: UIViewController {
     // Beacon properties
@@ -46,7 +47,10 @@ class DeviceViewController: UIViewController {
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.black
-        navigationItem.leftBarButtonItem = infoButton
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
+        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
+        navigationItem.leftBarButtonItem = infoBarButtonItem
         
         showTempSpinner()
         showWeightSpinner()
@@ -111,12 +115,9 @@ class DeviceViewController: UIViewController {
     let weight_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
     // Info button
-    let infoButton: UIBarButtonItem = {
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
-        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
-        return infoBarButtonItem
-    }()
+//    let infoButton: UIBarButtonItem = {
+//        return infoBarButtonItem
+//    }()
     
     /// Contains all of the labels that shows the Bluetooth information
     let inputsContainerView: UIView = {
@@ -139,7 +140,7 @@ class DeviceViewController: UIViewController {
     /// Proximity label
     let beaconTextLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "Proximity from cushion:"
+        tf.text = "Proximity from Cushion:"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -378,6 +379,59 @@ class DeviceViewController: UIViewController {
     }
     
     @objc func showInfo() {
-        // view to give details on what these settings mean
+        // Initialize WhatsNew
+        let whatsNew = WhatsNew(
+            // The Title
+            title: "Information about the App",
+            // The features you want to showcase
+            items: [
+                WhatsNew.Item(
+                    title: "Temperature Section:",
+                    subtitle: "The temperature calculated by the cushion",
+                    image: UIImage(named: "temp copy")
+                ),
+                WhatsNew.Item(
+                    title: "Proximity from Cushion Section:",
+                    subtitle: "Provides information about the proximity of the user from the cushion",
+                    image: UIImage(named: "proximity")
+                ),
+                WhatsNew.Item(
+                    title: "Device Active Section:",
+                    subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
+                    image: UIImage(named: "setup")
+                ),
+                WhatsNew.Item(
+                    title: "Questions?",
+                    subtitle: "Email us at support@guardianangelcushion.com",
+                    image: UIImage(named: "question")
+                )
+            ]
+        )
+
+        
+        // Or create your own Theme and initialize a Configuration with your Theme
+        let myTheme = WhatsNewViewController.Theme { configuration in
+            configuration.titleView.titleColor = .white
+            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
+            configuration.itemsView.titleColor = .white
+            configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
+            configuration.itemsView.subtitleColor = .white
+            configuration.itemsView.autoTintImage = false
+        }
+        
+        let configuration = WhatsNewViewController.Configuration(
+            theme: myTheme
+        )
+        
+        // Initialize WhatsNewViewController with WhatsNew
+        let whatsNewViewController = WhatsNewViewController(
+            whatsNew: whatsNew,
+            configuration: configuration
+            
+        )
+        
+        // Present it 🤩
+        self.present(whatsNewViewController, animated: true)
     }
 }
