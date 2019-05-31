@@ -387,12 +387,12 @@ class DeviceViewController: UIViewController {
             items: [
                 WhatsNew.Item(
                     title: "Temperature Section:",
-                    subtitle: "The temperature calculated by the cushion",
+                    subtitle: "The temperature calculated by the smart cushion",
                     image: UIImage(named: "temp copy")
                 ),
                 WhatsNew.Item(
                     title: "Proximity from Cushion Section:",
-                    subtitle: "Provides information about the proximity of the user from the cushion",
+                    subtitle: "Provides information about the proximity of the user from the smart cushion",
                     image: UIImage(named: "proximity")
                 ),
                 WhatsNew.Item(
@@ -418,6 +418,9 @@ class DeviceViewController: UIViewController {
             configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
             configuration.itemsView.subtitleColor = .white
             configuration.itemsView.autoTintImage = false
+            configuration.completionButton.title = "Go Back"
+            configuration.completionButton.backgroundColor = .white
+            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         }
         
         let configuration = WhatsNewViewController.Configuration(
