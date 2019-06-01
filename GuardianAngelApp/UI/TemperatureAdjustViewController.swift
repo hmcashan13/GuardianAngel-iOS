@@ -22,16 +22,12 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         
         navigationItem.title = "Adjust Temperature Sensor"
         view.backgroundColor = UIColor(displayP3Red: 0.698, green: 0.4, blue: 1.0, alpha: 1.0)
-        navigationItem.rightBarButtonItem = infoButton
-        setupUIConstraints()
-    }
-    
-    let infoButton: UIBarButtonItem = {
         let infoButton = UIButton(type: .infoLight)
         infoButton.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
         let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
-        return infoBarButtonItem
-    }()
+        navigationItem.rightBarButtonItem = infoBarButtonItem
+        setupUIConstraints()
+    }
     
     let inputsContainerView: UIView = {
         let view = UIView()
@@ -70,7 +66,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     let metricOrNahTextLabel: UILabel = {
         let label = UILabel()
-        label.text = "Celcius or Farenheit?"
+        label.text = "Farenheit or Celcius?"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -180,22 +176,22 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     @objc func showTempInfo() {
         let whatsNew = WhatsNew(
-            title: "Information about the App",
+            title: "Adjust Temperature Settings Info",
             items: [
                 WhatsNew.Item(
-                    title: "Temperature Section:",
-                    subtitle: "The temperature calculated by the smart cushion",
-                    image: UIImage(named: "temp copy")
+                    title: "Temp Sensor On/Off Section:",
+                    subtitle: "While this is on, you will temperature data from the cushion and notifications from the app. Otherwise you will not receive either of these things",
+                    image: UIImage(named: "setup")
                 ),
                 WhatsNew.Item(
-                    title: "Proximity from Cushion Section:",
-                    subtitle: "Provides information about the proximity of the user from the smart cushion",
+                    title: "Farenheit or Celsius Section:",
+                    subtitle: "Sets the temperature to Farenheit or Celsius",
                     image: UIImage(named: "proximity")
                 ),
                 WhatsNew.Item(
-                    title: "Device Active Section:",
-                    subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
-                    image: UIImage(named: "setup")
+                    title: "Max Temperature Section:",
+                    subtitle: "The temperature that will trigger you to receive notifications from the app. This can be adjusted using the slider below",
+                    image: UIImage(named: "temp copy")
                 ),
                 WhatsNew.Item(
                     title: "Questions?",
@@ -212,7 +208,6 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
             configuration.itemsView.titleColor = .white
             configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
             configuration.itemsView.subtitleColor = .white
-            configuration.itemsView.autoTintImage = false
             configuration.completionButton.title = "Go Back"
             configuration.completionButton.backgroundColor = .white
             configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)

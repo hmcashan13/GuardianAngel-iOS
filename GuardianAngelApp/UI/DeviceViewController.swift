@@ -114,11 +114,6 @@ class DeviceViewController: UIViewController {
     let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     let weight_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
-    // Info button
-//    let infoButton: UIBarButtonItem = {
-//        return infoBarButtonItem
-//    }()
-    
     /// Contains all of the labels that shows the Bluetooth information
     let inputsContainerView: UIView = {
         let view = UIView()
@@ -412,7 +407,6 @@ class DeviceViewController: UIViewController {
             configuration.itemsView.titleColor = .white
             configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
             configuration.itemsView.subtitleColor = .white
-            configuration.itemsView.autoTintImage = false
             configuration.completionButton.title = "Go Back"
             configuration.completionButton.backgroundColor = .white
             configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
