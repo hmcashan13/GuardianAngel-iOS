@@ -35,7 +35,7 @@ class DeviceViewController: UIViewController {
     var isUartConnected: Bool = false
     var centralManager: CBCentralManager?
     var selectedPeripheral: CBPeripheral?
-    var isBabyInSeat: Bool = false
+    var isWeightDetected: Bool = false
     var maxTemp: Int = 80
     
     override func viewDidLoad() {

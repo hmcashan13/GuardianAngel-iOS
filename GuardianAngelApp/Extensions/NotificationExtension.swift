@@ -29,15 +29,15 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     }
     
     /// Local notification sent when you have gone too far away from the cushion
-    func sendLeftRegionLocalNotification() {
+    func sendTooFarLocalNotification() {
         let center = UNUserNotificationCenter.current()
-        print("sending left region notification")
+        print("sending too far notification")
         let content = UNMutableNotificationContent()
         content.title = "You are far from the cushion"
         content.body = "Just a friendly reminder"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
-        let identifier = "LocalLeftRegion"
+        let identifier = "LocalTooFar"
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
         let request = UNNotificationRequest(identifier: identifier,
                                             content: content, trigger: trigger)
@@ -53,7 +53,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         let center = UNUserNotificationCenter.current()
         print("sending temp notification")
         let content = UNMutableNotificationContent()
-        content.title = "It's too hot in your car!"
+        content.title = "It's too hot!"
         content.body = "Just a friendly reminder"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"

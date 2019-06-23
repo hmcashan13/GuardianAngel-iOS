@@ -58,7 +58,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
         guard !isUartConnected else { return }
         if AppDelegate.isDebugging {
             print("Left region")
-            sendLeftRegionLocalNotification()
+            sendTooFarLocalNotification()
         } 
     }
     

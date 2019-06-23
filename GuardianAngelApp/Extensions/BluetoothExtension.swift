@@ -172,10 +172,10 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 var weightText = ""
                 if let weight = weight, weight < 3000 {
                     weightText = "Yes"
-                    isBabyInSeat = true
+                    isWeightDetected = true
                 } else {
                     weightText = "No"
-                    isBabyInSeat = false
+                    isWeightDetected = false
                 }
                 // Setup UI
                 executeOnMainThread {
@@ -183,7 +183,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                     self.activeStatusLabelField.text = weightText
                 }
                 // Send temperature notification
-                if let temp = temp, temp > maxTemp && isBabyInSeat && AppDelegate.is_temp_enabled {
+                if let temp = temp, temp > maxTemp && isWeightDetected && AppDelegate.is_temp_enabled {
                     sendTemperatureLocalNotification()
                 }
             }
@@ -208,8 +208,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         
         if AppDelegate.isDebugging {
             sendDisconnectedLocalNotification()
-        } else {
-            sendLeftRegionLocalNotification()
+        } else if isWeightDetected {
+            // Send
+            sendTooFarLocalNotification()
         }
         
     }
