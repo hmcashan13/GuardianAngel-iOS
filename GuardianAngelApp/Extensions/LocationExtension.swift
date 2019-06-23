@@ -35,7 +35,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if AppDelegate.isDebugging {
             print("Entered region")
-            sendLocalNotificationEnteredRegion()
+            sendEnteredRegionLocalNotification()
         }
         // Modify state
         isBeaconConnected = true
@@ -57,10 +57,9 @@ extension DeviceViewController: CLLocationManagerDelegate {
         // Send notificaiton
         guard !isUartConnected else { return }
         if AppDelegate.isDebugging {
-            sendLocalNotificationLeftRegion()
-        } else if isBabyInSeat {
-            sendLocalNotificationLeftRegion()
-        }
+            print("Left region")
+            sendLeftRegionLocalNotification()
+        } 
     }
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
@@ -87,7 +86,9 @@ extension DeviceViewController: CLLocationManagerDelegate {
             isBeaconConnected = true
             // Setup UI
             hideBeaconSpinner()
-            beaconStatusLabelField.text = proximity
+            if isUartConnected {
+                beaconStatusLabelField.text = proximity
+            }
         }
     }
 }

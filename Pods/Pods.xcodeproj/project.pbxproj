@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -58,7 +58,7 @@
 		10D74CF9EEF19891CBAD6B524EC62232 /* Pods-GuardianAngelAppUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-GuardianAngelAppUITests-resources.sh"; sourceTree = "<group>"; };
 		11D0443A7839C48A83DA866E8EECD483 /* WhatsNewItemsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WhatsNewItemsView.swift; path = Sources/Views/Items/WhatsNewItemsView.swift; sourceTree = "<group>"; };
 		14C6490981C58DF57D4A8D45A6A10772 /* UIColorExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UIColorExtension.swift; path = Sources/Extensions/UIColorExtension.swift; sourceTree = "<group>"; };
-		170DD2B6E2EF1760DD4555A1D0691452 /* Pods_GuardianAngelApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_GuardianAngelApp.framework; path = "Pods-GuardianAngelApp.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		170DD2B6E2EF1760DD4555A1D0691452 /* Pods_GuardianAngelApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B7A473D84A406787393E55A2680BD24 /* WhatsNewViewController+ItemsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WhatsNewViewController+ItemsView.swift"; path = "Sources/Configuration/WhatsNewViewController+ItemsView.swift"; sourceTree = "<group>"; };
 		27F46D942E5D1C5DB373CDE10A5A82B5 /* Pods-GuardianAngelApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GuardianAngelApp.release.xcconfig"; sourceTree = "<group>"; };
 		2EFB40531CB700ADF867FEEE78561E78 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -71,7 +71,7 @@
 		482B4B5EAF18FF561017019560C08CEA /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C59A74275C05E1D53D246D736AB7B4E /* Pods-GuardianAngelAppUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-GuardianAngelAppUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		4F2ED2D421B6B726C241C4D099181EDB /* KeyValueWhatsNewVersionStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyValueWhatsNewVersionStore.swift; path = Sources/Store/KeyValueWhatsNewVersionStore.swift; sourceTree = "<group>"; };
-		4F55DD53DC8B923ECA4CF1EBEBB0F6EC /* Pods_GuardianAngelAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_GuardianAngelAppUITests.framework; path = "Pods-GuardianAngelAppUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F55DD53DC8B923ECA4CF1EBEBB0F6EC /* Pods_GuardianAngelAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuardianAngelAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59AA126B649488798D1E1C7488403A75 /* WhatsNewViewController+HapticFeedback.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WhatsNewViewController+HapticFeedback.swift"; path = "Sources/Configuration/WhatsNewViewController+HapticFeedback.swift"; sourceTree = "<group>"; };
 		5F0BF688D2F1E4926011D9BDEBF77D77 /* WhatsNewViewController+TitleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WhatsNewViewController+TitleView.swift"; path = "Sources/Configuration/WhatsNewViewController+TitleView.swift"; sourceTree = "<group>"; };
 		5F5E7FB69AF213F045743A2BEF68CD65 /* Pods-GuardianAngelApp-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-GuardianAngelApp-frameworks.sh"; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 		9142626670F49892483BFBA15D3A7DBA /* WhatsNewVersionStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WhatsNewVersionStore.swift; path = Sources/Store/WhatsNewVersionStore.swift; sourceTree = "<group>"; };
 		920533C03B8E2038401BCA05C6AC403E /* WhatsNewViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WhatsNewViewController.swift; path = Sources/WhatsNewViewController.swift; sourceTree = "<group>"; };
 		939F9790675C2A5685B57BAA911D0A83 /* Pods-GuardianAngelApp.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-GuardianAngelApp.modulemap"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; wrapsLines = 0; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9AC454964DF716D4C614CC8F86A4978A /* WhatsNewKit.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WhatsNewKit.xcconfig; sourceTree = "<group>"; };
 		9C965740B01FD534AEF5002DD2E35DEC /* Pods-GuardianAngelAppUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-GuardianAngelAppUITests.release.xcconfig"; sourceTree = "<group>"; };
 		A503CC67029DD5D9C7BDB888033EEC3C /* WhatsNew+Item.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WhatsNew+Item.swift"; path = "Sources/Models/WhatsNew+Item.swift"; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 		F3DAAD96E8AC7C90F53A63DF9BEAA919 /* WhatsNewKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WhatsNewKit-prefix.pch"; sourceTree = "<group>"; };
 		F446A5E4991ED61343DD6635A6CB45F9 /* WhatsNewKit.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = WhatsNewKit.modulemap; sourceTree = "<group>"; };
 		F69186F0AFEBA319F608F14C13E2A4AA /* WhatsNewItemTableViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WhatsNewItemTableViewCell.swift; path = Sources/Views/Items/WhatsNewItemTableViewCell.swift; sourceTree = "<group>"; };
-		FB2C57B9170421270AF2CE9E5BAC1CE0 /* WhatsNewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = WhatsNewKit.framework; path = WhatsNewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB2C57B9170421270AF2CE9E5BAC1CE0 /* WhatsNewKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WhatsNewKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCA857282C6298E795A14C93EA444273 /* WhatsNewTitleView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WhatsNewTitleView.swift; path = Sources/Views/Title/WhatsNewTitleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -252,7 +252,6 @@
 				5F0BF688D2F1E4926011D9BDEBF77D77 /* WhatsNewViewController+TitleView.swift */,
 				F4F975943CA0606F2B2363BE1FAD2106 /* Support Files */,
 			);
-			name = WhatsNewKit;
 			path = WhatsNewKit;
 			sourceTree = "<group>";
 		};
@@ -366,10 +365,11 @@
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
 			productRefGroup = 0D8495795CB9AADE7C2F01F659CF79AB /* Products */;
@@ -586,8 +586,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};
@@ -611,11 +610,7 @@
 				INFOPLIST_FILE = "Target Support Files/WhatsNewKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/WhatsNewKit/WhatsNewKit.modulemap";
 				PRODUCT_NAME = WhatsNewKit;
 				SDKROOT = iphoneos;
@@ -646,11 +641,7 @@
 				INFOPLIST_FILE = "Target Support Files/WhatsNewKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/WhatsNewKit/WhatsNewKit.modulemap";
 				PRODUCT_NAME = WhatsNewKit;
 				SDKROOT = iphoneos;
@@ -681,11 +672,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-GuardianAngelApp/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.modulemap";
 				OTHER_LDFLAGS = "";
@@ -719,11 +706,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-GuardianAngelAppUITests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.modulemap";
 				OTHER_LDFLAGS = "";
@@ -756,11 +739,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-GuardianAngelApp/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp.modulemap";
 				OTHER_LDFLAGS = "";
@@ -793,11 +772,7 @@
 				INFOPLIST_FILE = "Target Support Files/Pods-GuardianAngelAppUITests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.modulemap";
 				OTHER_LDFLAGS = "";

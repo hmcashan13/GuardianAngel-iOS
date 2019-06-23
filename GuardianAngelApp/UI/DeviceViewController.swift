@@ -200,7 +200,7 @@ class DeviceViewController: UIViewController {
 
         // Setup constraints of logo image view
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
-        logoImageView.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 37).isActive=true
+        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 37).isActive=true
         logoImageView.widthAnchor.constraint(equalToConstant: 100).isActive=true
         logoImageView.heightAnchor.constraint(equalToConstant: 100).isActive=true
         

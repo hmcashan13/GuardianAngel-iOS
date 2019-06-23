@@ -70,7 +70,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
         stopScan()
         if AppDelegate.isDebugging {
-            sendLocalNotificationConnected()
+            sendConnectedLocalNotification()
         }
         // Modify state
         isUartConnected = true
@@ -184,7 +184,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 }
                 // Send temperature notification
                 if let temp = temp, temp > maxTemp && isBabyInSeat && AppDelegate.is_temp_enabled {
-                    sendLocalNotificationTemperature()
+                    sendTemperatureLocalNotification()
                 }
             }
         }
@@ -198,6 +198,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         // Setup UI
         executeOnMainThread {
             self.tempStatusLabelField.text = notConnected
+            self.beaconStatusLabelField.text = notConnected
             self.activeStatusLabelField.text = "No"
             self.setTitleDisconnected()
         }
@@ -205,7 +206,12 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         // Reconnect to UART
         backgroundScan()
         
-        sendLocalNotificationDisconnected()
+        if AppDelegate.isDebugging {
+            sendDisconnectedLocalNotification()
+        } else {
+            sendLeftRegionLocalNotification()
+        }
+        
     }
     
     // Bluetooth is disabled

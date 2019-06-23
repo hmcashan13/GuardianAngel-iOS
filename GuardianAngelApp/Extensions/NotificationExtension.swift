@@ -28,12 +28,12 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         }
     }
     
-    /// Local notification sent when you have gone too far away from the child
-    func sendLocalNotificationLeftRegion() {
+    /// Local notification sent when you have gone too far away from the cushion
+    func sendLeftRegionLocalNotification() {
         let center = UNUserNotificationCenter.current()
         print("sending left region notification")
         let content = UNMutableNotificationContent()
-        content.title = "You are far from the smart cushion"
+        content.title = "You are far from the cushion"
         content.body = "Just a friendly reminder"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "guardian-angel"
@@ -48,8 +48,8 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         }
     }
     
-    /// Notification for temperation
-    func sendLocalNotificationTemperature() {
+    /// Local notification for temperature being too high
+    func sendTemperatureLocalNotification() {
         let center = UNUserNotificationCenter.current()
         print("sending temp notification")
         let content = UNMutableNotificationContent()
@@ -69,7 +69,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     }
     
     // **************** Debugging purposes notifications *************************//
-    func sendLocalNotificationEnteredRegion() {
+    func sendEnteredRegionLocalNotification() {
         let center = UNUserNotificationCenter.current()
         print("sending entered region notification")
         let content = UNMutableNotificationContent()
@@ -88,7 +88,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         }
     }
 
-    @objc func sendLocalNotificationConnected() {
+    @objc func sendConnectedLocalNotification() {
         let center = UNUserNotificationCenter.current()
         print("sending connected notification")
         let content = UNMutableNotificationContent()
@@ -107,7 +107,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         }
     }
     
-    @objc func sendLocalNotificationDisconnected() {
+    @objc func sendDisconnectedLocalNotification() {
         let center = UNUserNotificationCenter.current()
         print("sending disconnected notification")
         let content = UNMutableNotificationContent()
@@ -126,7 +126,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
         }
     }
     
-    @objc func sendLocalNotificationBackgroundScanning() {
+    @objc func sendBackgroundScanningLocalNotification() {
         let center = UNUserNotificationCenter.current()
         print("sending background scanning notification")
         let content = UNMutableNotificationContent()
@@ -147,6 +147,7 @@ extension DeviceViewController: UNUserNotificationCenterDelegate {
     
     // *********************************************************************//
     
+    // TODO: Push notifications
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler( [.alert, .badge, .sound])
     }
