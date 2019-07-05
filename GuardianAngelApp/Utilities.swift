@@ -9,23 +9,29 @@
 import UIKit
 import CoreBluetooth
 
-let kBLEService_UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-let kBLE_Characteristic_uuid_Tx = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
-let kBLE_Characteristic_uuid_Rx = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
-let MaxCharacters = 20
+let kBLEService_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+let kBLE_Characteristic_uuid_Tx: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+let kBLE_Characteristic_uuid_Rx: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+let MaxCharacters: Int = 20
 
-let BLEService_UUID = CBUUID(string: kBLEService_UUID)
-let BLE_Characteristic_uuid_Tx = CBUUID(string: kBLE_Characteristic_uuid_Tx)//(Property = Write without response)
-let BLE_Characteristic_uuid_Rx = CBUUID(string: kBLE_Characteristic_uuid_Rx)// (Property = Read/Notify)
+let BLEService_UUID: CBUUID = CBUUID(string: kBLEService_UUID)
+let BLE_Characteristic_uuid_Tx: CBUUID = CBUUID(string: kBLE_Characteristic_uuid_Tx)//(Property = Write without response)
+let BLE_Characteristic_uuid_Rx: CBUUID = CBUUID(string: kBLE_Characteristic_uuid_Rx)// (Property = Read/Notify)
 
-let notConnected = "Not Connected"
+// String constants
+let connected: String = "Connected"
+let notConnected: String = "Not Connected"
+let yes: String = "Yes"
+let no: String = "No"
+
 /// Present a message to the user (automatically done on the main thread)
-func showAlertMessage(presenter: UIViewController, title: String, message: String) {
+func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     
-    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-    executeOnMainThread {
-        presenter.present(alert, animated: true, completion: nil)
+    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: handler))
+    executeOnMainThread { [weak presenter] in
+        presenter?.present(alert, animated: true, completion: nil)
     }
 }
 

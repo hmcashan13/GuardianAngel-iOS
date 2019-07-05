@@ -9,23 +9,25 @@
 import UIKit
 import CoreBluetooth
 
-extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
+extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, BluetoothSettingsDelegate {
+
+    
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
-        guard let isScan = centralManager?.isScanning, !isUartConnected && !isScan else { return }
+        guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }
         print("Now Background Scanning...")
         
         // In order to perform background scanning, we must request a particular service
-        let cbUUID1 = CBUUID(string: "00000001-1212-EFDE-1523-785FEABCD123")
-        let cbUUID2 = CBUUID(string: kBLEService_UUID)
-        let cbUUID3 = CBUUID(string: kBLE_Characteristic_uuid_Rx)
-        let cbUUID4 = CBUUID(string: kBLE_Characteristic_uuid_Tx)
-        let cbArray = [cbUUID1,cbUUID2,cbUUID3,cbUUID4]
+        let cbUUID1: CBUUID = CBUUID(string: "00000001-1212-EFDE-1523-785FEABCD123")
+        let cbUUID2: CBUUID = CBUUID(string: kBLEService_UUID)
+        let cbUUID3: CBUUID = CBUUID(string: kBLE_Characteristic_uuid_Rx)
+        let cbUUID4: CBUUID = CBUUID(string: kBLE_Characteristic_uuid_Tx)
+        let cbArray: [CBUUID] = [cbUUID1,cbUUID2,cbUUID3,cbUUID4]
         // Start scanning
         centralManager?.scanForPeripherals(withServices: cbArray, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
         
         // Setup timer to stop scanning
-        let timer = CustomTimer(timeInterval: 30) {
+        let timer: CustomTimer = CustomTimer(timeInterval: 30) {
             self.stopScan()
         }
         timer.start()
@@ -33,21 +35,36 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     
     /// Scan for bluetooth peripherals in the foreground
     @objc func foregroundScan() {
-        guard let isScan = centralManager?.isScanning, !isUartConnected && !isScan else { return }
+        guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }
         print("Now Foreground Scanning...")
         // Start scanning
         centralManager?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
         
         // Setup timer to stop scanning
-        let timer = CustomTimer(timeInterval: 30) {
+        let timer: CustomTimer = CustomTimer(timeInterval: 30) {
             self.stopScan()
         }
         timer.start()
     }
     
+    // Disconnect from UART
+    func disconnect() {
+        guard let peripheral = selectedPeripheral else { return }
+        centralManager?.cancelPeripheralConnection(peripheral)
+        // Set State
+        connectionState = .notConnected
+        isBeaconConnected = false
+        // Setup UI
+        executeOnMainThread { [weak self] in
+            self?.tempStatusLabelField.text = notConnected
+            self?.beaconStatusLabelField.text = notConnected
+            self?.activeStatusLabelField.text = no
+        }
+    }
+    
     /// Stop scanning for bluetooth devices
     func stopScan() {
-        self.centralManager?.stopScan()
+        centralManager?.stopScan()
     }
     
     /// Restart bluetooth manager
@@ -59,7 +76,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     
     // Discovered peripheral
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        guard peripheral.identifier == UART_UUID && !isUartConnected else { return }
+        guard peripheral.identifier == UART_UUID && connectionState == .notConnected else { return }
         selectedPeripheral = peripheral
         //Connect to peripheral
         centralManager?.connect(peripheral, options: nil)
@@ -70,13 +87,14 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
         stopScan()
         if AppDelegate.isDebugging {
-            sendConnectedLocalNotification()
+            print("Connected")
+            sendNotification(description: "Connected")
         }
         // Modify state
-        isUartConnected = true
+        connectionState = .connected
         // Setup UI
-        executeOnMainThread {
-            self.setTitleConnected()
+        executeOnMainThread { [weak self] in
+            self?.setTitleConnected()
         }
         //Discovery callback
         peripheral.delegate = self
@@ -92,7 +110,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services, error == nil else {
             // Show error message
-            showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion")
+            showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: nil)
             return
         }
         //We need to discover the all characteristic
@@ -108,7 +126,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         guard let characteristics = service.characteristics, error == nil else {
             // Show error message
-            showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion")
+            showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: nil)
             return
         }
         
@@ -123,94 +141,94 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 // We can return after calling CBPeripheral.setNotifyValue because CBPeripheralDelegate's
                 // didUpdateNotificationStateForCharacteristic method will be called automatically
                 peripheral.readValue(for: characteristic)
-                print("Rx Characteristic: \(characteristic.uuid)")
+                print("Tx Characteristic: \(characteristic.uuid)")
             }
             peripheral.discoverDescriptors(for: characteristic)
         }
     }
     // Getting Values from UART
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        
-        if characteristic == rxCharacteristic {
-            if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue) {
-                let uartValue = ASCIIstring
-                //print("Device Location: \(String(describing: device.locationString()))")
-                //print("Value Recieved: \((uartValue as String))")
-                executeOnMainThread {
-                    // Hide spinners
-                    self.hideTempSpinner()
-                    self.hideWeightSpinner()
-                }
-                
-                let parsedUartValues = uartValue.components(separatedBy: " ")
-                var parsedTempString: String = ""
-                var parsedWeightString: String = ""
-                if uartValue == "" {
-                    print("No data")
-                    parsedTempString = notConnected
-                    parsedWeightString = "No"
-                } else {
-                    let tempString = parsedUartValues[0]
-                    let weightString = parsedUartValues[1]
-                    let parseTemp = try! NSRegularExpression(pattern: "T=", options: NSRegularExpression.Options.caseInsensitive)
-                    parsedTempString = parseTemp.stringByReplacingMatches(in: tempString, options: [], range: NSRange(0..<tempString.count), withTemplate: "")
-                    let parseWeight = try! NSRegularExpression(pattern: "W=", options: NSRegularExpression.Options.caseInsensitive)
-                    parsedWeightString = parseWeight.stringByReplacingMatches(in: weightString, options: [], range: NSRange(0..<weightString.count), withTemplate: "")
-                }
-                let convertedTemp: String = convertTempString(parsedTempString)
-                var tempWithDegree: String = ""
-                print("temperature: \(convertedTemp)˚F")
-                if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
-                    tempWithDegree = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
-                } else {
-                    tempWithDegree = notConnected
-                }
-
-                let temp = Int(convertedTemp)
-                let weight = Int(parsedWeightString)
-                
-                var weightText = ""
-                if let weight = weight, weight < 3000 {
-                    weightText = "Yes"
-                    isWeightDetected = true
-                } else {
-                    weightText = "No"
-                    isWeightDetected = false
-                }
-                // Setup UI
-                executeOnMainThread {
-                    self.tempStatusLabelField.text = tempWithDegree
-                    self.activeStatusLabelField.text = weightText
-                }
-                // Send temperature notification
-                if let temp = temp, temp > maxTemp && isWeightDetected && AppDelegate.is_temp_enabled {
-                    sendTemperatureLocalNotification()
-                }
+        if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue), characteristic == rxCharacteristic {
+            let parsedData: (String,String) = parseData(ASCIIstring)
+            // Setup UI
+            executeOnMainThread { [weak self] in
+                self?.hideTempSpinner()
+                self?.hideWeightSpinner()
+                self?.tempStatusLabelField.text = parsedData.0
+                self?.activeStatusLabelField.text = parsedData.1
             }
         }
     }
     
+    private func parseData(_ data: NSString) -> (String, String) {
+        //print("Device Location: \(String(describing: device.locationString()))")
+        //print("Value Recieved: \((uartValue as String))")
+        let parsedUartValues: [String] = data.components(separatedBy: " ")
+        var parsedTempString: String = ""
+        var parsedWeightString: String = ""
+        if data == "" {
+            print("No data")
+            parsedTempString = notConnected
+            parsedWeightString = no
+        } else {
+            let tempString: String = parsedUartValues[0]
+            let weightString: String = parsedUartValues[1]
+            let parseTemp: NSRegularExpression = try! NSRegularExpression(pattern: "T=", options: NSRegularExpression.Options.caseInsensitive)
+            parsedTempString = parseTemp.stringByReplacingMatches(in: tempString, options: [], range: NSRange(0..<tempString.count), withTemplate: "")
+            let parseWeight: NSRegularExpression = try! NSRegularExpression(pattern: "W=", options: NSRegularExpression.Options.caseInsensitive)
+            parsedWeightString = parseWeight.stringByReplacingMatches(in: weightString, options: [], range: NSRange(0..<weightString.count), withTemplate: "")
+        }
+        let convertedTemp: String = convertTempString(parsedTempString)
+        var tempWithDegree: String = ""
+        print("temperature: \(convertedTemp)˚F")
+        if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
+            tempWithDegree = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
+        } else {
+            tempWithDegree = notConnected
+        }
+        
+        let temp: Int? = Int(convertedTemp)
+        let weight: Int? = Int(parsedWeightString)
+        
+        var weightText: String = ""
+        if let weight = weight, weight < 3000 {
+            weightText = yes
+            isWeightDetected = true
+        } else {
+            weightText = no
+            isWeightDetected = false
+        }
+        // Send temperature notification only if weight is detected
+        if let temp = temp, temp > maxTemp && isWeightDetected && AppDelegate.is_temp_enabled {
+            sendTemperatureNotification()
+        }
+        return (tempWithDegree,weightText)
+    }
+    
     // Disconnected from peripheral
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("Disconnected")
         // Modify state
-        isUartConnected = false
+        connectionState = .notConnected
         // Setup UI
-        executeOnMainThread {
+        executeOnMainThread { [weak self] in
+            guard let self = self else { return }
             self.tempStatusLabelField.text = notConnected
             self.beaconStatusLabelField.text = notConnected
-            self.activeStatusLabelField.text = "No"
+            self.activeStatusLabelField.text = no
             self.setTitleDisconnected()
         }
         
-        // Reconnect to UART
-        backgroundScan()
+        if isBeaconConnected {
+            // Reconnect to UART only if we are in the region
+            backgroundScan()
+        }
         
         if AppDelegate.isDebugging {
-            sendDisconnectedLocalNotification()
+             print("Disconnected")
+            sendNotification(description: "Disconnected")
         } else if isWeightDetected {
-            // Send
-            sendTooFarLocalNotification()
+            // Only send notification if weight is detected
+            sendTooFarNotification()
         }
         
     }
@@ -218,14 +236,15 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     // Bluetooth is disabled
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state != CBManagerState.poweredOn {
-            executeOnMainThread {
-                // Setup UI
+            // Setup UI
+            executeOnMainThread { [weak self] in
+                guard let self = self else { return }
                 self.hideTempSpinner()
                 self.hideBeaconSpinner()
                 self.hideWeightSpinner()
                 self.setTitleDisconnected()
                 // Show error message
-                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on")
+                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on", handler: nil)
             }
         }
     }
@@ -234,14 +253,17 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         if error != nil {
             // Modify state
-            isUartConnected = false
+            connectionState = .notConnected
             // Setup UI
-            executeOnMainThread {
+            executeOnMainThread { [weak self] in
+                guard let self = self else { return }
                 self.hideTempSpinner()
                 self.hideWeightSpinner()
                 self.setTitleDisconnected()
                 // Show error message
-                showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion")
+                showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: { [weak self] _ in
+                    self?.backgroundScan()
+                })
             }
         }
     }

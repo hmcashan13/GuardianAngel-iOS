@@ -8,10 +8,16 @@
 
 import UIKit
 
+protocol BluetoothSettingsDelegate: AnyObject {
+    func backgroundScan()
+    func disconnect()
+}
+
 class SettingsViewController: UITableViewController, UINavigationControllerDelegate {
+    weak var delegate: BluetoothSettingsDelegate?
     
-    let cellNames = ["Adjust Temperature Sensor","Disconnect From Cushion"]
-    let cellID = "cellID"
+    private let cellNames = ["Adjust Temperature Sensor","Disconnect From Cushion"]
+    private let cellID = "cellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +31,14 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         
         tableView.tableFooterView = UIView(frame: .zero)
+        
+        
     }
     @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
     
     // MARK: TableView
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellNames.count
     }
@@ -53,23 +60,29 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.row == 0 {
+        switch indexPath.row {
+        case 0:
             adjustTemp()
-        }
-        if indexPath.row == 1 {
+        case 1:
+            reconnect()
+        default:
             disconnect()
         }
     }
-    // MARK: Functions
     
+    // MARK: Functions
     // 1
-    func adjustTemp() {
+    private func adjustTemp() {
         let tempVC = TemperatureAdjustViewController()
         self.navigationController?.pushViewController(tempVC, animated: true)
     }
-    
     // 2
-    func disconnect() {
-        
+    private func reconnect() {
+        delegate?.backgroundScan()
+    }
+    
+    // 3
+    private func disconnect() {
+        delegate?.disconnect()
     }
 }

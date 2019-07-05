@@ -14,25 +14,31 @@ import WhatsNewKit
 
 class DeviceViewController: UIViewController {
     // Beacon properties
-    let beaconRegion = CLBeaconRegion(
+    let beaconRegion: CLBeaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
         major: 0,
         minor: 0,
         identifier: "Guardian")
-    let beaconRegion2 = CLBeaconRegion(
+    let beaconRegion2: CLBeaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!,
         major: 0,
         minor: 0,
         identifier: "Guardian")
-    var proximity = notConnected
+    var proximity: String = notConnected
     var isBeaconConnected: Bool = false
     var locationManager: CLLocationManager?
     
     // UART properties
-    let UART_UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")
-    let UART_UUID2 = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")
-    var rxCharacteristic : CBCharacteristic?
-    var isUartConnected: Bool = false
+    enum ConnectionState {
+        case connected
+        case notConnected
+        case connecting
+        case tempNotActive
+    }
+    let UART_UUID: UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")!
+    let UART_UUID2: UUID = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")!
+    var rxCharacteristic: CBCharacteristic?
+    var connectionState:ConnectionState = .notConnected
     var centralManager: CBCentralManager?
     var selectedPeripheral: CBPeripheral?
     var isWeightDetected: Bool = false
@@ -79,6 +85,13 @@ class DeviceViewController: UIViewController {
         startBeaconAndUart()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if connectionState == .notConnected {
+            backgroundScan()
+        }
+    }
+    
     /// Disconnect from uart and beacon bluetooth devices
     func disconnectEverything() {
         // Disconnect from UART devices
@@ -87,6 +100,20 @@ class DeviceViewController: UIViewController {
         // Stop ranging all beacons
         if let rangedRegions = locationManager?.rangedRegions as? Set<CLBeaconRegion> {
             rangedRegions.forEach((locationManager?.stopRangingBeacons)!)
+        }
+    }
+    
+    // TODO: setup UI through this function
+    func setupUI(_ connectionState: ConnectionState) {
+        switch connectionState {
+        case .connected:
+            print("connected")
+        case .notConnected:
+            print("not connected")
+        case .connecting:
+            print("connecting")
+        case .tempNotActive:
+            print("temp not active")
         }
     }
     
@@ -170,7 +197,7 @@ class DeviceViewController: UIViewController {
     /// Shows status of the weight readings
     let activeStatusLabelField: UILabel = {
         let tf = UILabel()
-        tf.text = "No"
+        tf.text = no
         tf.textAlignment = .right
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
@@ -311,8 +338,8 @@ class DeviceViewController: UIViewController {
         if !temp_loadingView.isAnimating && !tempStatusLabelField.isHidden {
             temp_loadingView.startAnimating()
             tempStatusLabelField.isHidden = true
-            let timer = CustomTimer(timeInterval: 20) {
-                self.hideTempSpinner()
+            let timer = CustomTimer(timeInterval: 20) { [weak self] in
+                self?.hideTempSpinner()
             }
             timer.start()
         }
@@ -329,8 +356,8 @@ class DeviceViewController: UIViewController {
         if !beacon_loadingView.isAnimating && !beaconStatusLabelField.isHidden {
             beacon_loadingView.startAnimating()
             beaconStatusLabelField.isHidden = true
-            let timer = CustomTimer(timeInterval: 20) {
-                self.hideBeaconSpinner()
+            let timer = CustomTimer(timeInterval: 20) { [weak self] in
+                self?.hideBeaconSpinner()
             }
             timer.start()
         }
@@ -347,8 +374,8 @@ class DeviceViewController: UIViewController {
         if !weight_loadingView.isAnimating && !activeStatusLabelField.isHidden {
             weight_loadingView.startAnimating()
             activeStatusLabelField.isHidden = true
-            let timer = CustomTimer(timeInterval: 20) {
-                self.hideWeightSpinner()
+            let timer = CustomTimer(timeInterval: 20) { [weak self] in
+                self?.hideWeightSpinner()
             }
             timer.start()
         }
@@ -421,6 +448,6 @@ class DeviceViewController: UIViewController {
             configuration: configuration
         )
         
-        self.present(whatsNewViewController, animated: true)
+        present(whatsNewViewController, animated: true)
     }
 }

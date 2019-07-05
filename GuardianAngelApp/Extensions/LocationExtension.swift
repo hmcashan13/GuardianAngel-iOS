@@ -35,14 +35,16 @@ extension DeviceViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if AppDelegate.isDebugging {
             print("Entered region")
-            sendEnteredRegionLocalNotification()
+            sendNotification(description: "Entered Region")
         }
         // Modify state
         isBeaconConnected = true
         // Setup UI
         showBeaconSpinner()
-        // Start UART
-        backgroundScan()
+        // Connect to UART
+        if connectionState == .notConnected {
+            backgroundScan()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
@@ -50,22 +52,25 @@ extension DeviceViewController: CLLocationManagerDelegate {
         // Modify state
         isBeaconConnected = false
         // Setup UI
-        beaconStatusLabelField.text = "Not Connected"
+        executeOnMainThread { [weak self] in
+            self?.beaconStatusLabelField.text = notConnected
+        }
         // No matter what we want to stop scanning
         stopScan()
         
-        // Send notificaiton
-        guard !isUartConnected else { return }
         if AppDelegate.isDebugging {
-            print("Left region")
-            sendTooFarLocalNotification()
+            print("Left Region")
+            sendNotification(description: "Left Region")
         } 
     }
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if let beacon = beacons.first {
-            if let isScan = centralManager?.isScanning, !isUartConnected && !isScan {
+            // Only displaying proximity info if we are connected to UART
+            guard connectionState == .connected else {
+                // attempting to reconnect because we should be close enough to device
                 backgroundScan()
+                return
             }
             let distance = beacon.accuracy
             switch distance {
@@ -86,7 +91,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
             isBeaconConnected = true
             // Setup UI
             hideBeaconSpinner()
-            if isUartConnected {
+            if connectionState == .connected {
                 beaconStatusLabelField.text = proximity
             }
         }

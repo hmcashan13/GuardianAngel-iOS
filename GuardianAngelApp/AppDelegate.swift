@@ -21,11 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    static let serverKey = "AAAALZyy9Lo:APA91bFQbTtU4Q2JvXf60VSPvt-PErt-R70wloezBqjKX4p97IRIj-ED2a6_LOb_5dNRlADOwoFOGE9XveX-50-50cJT0xe_m_aXF2COqQw0baCqWqT1_wUKtuS8LJE4DvIQ4Qq4fj02"
+    //static let serverKey = "AAAALZyy9Lo:APA91bFQbTtU4Q2JvXf60VSPvt-PErt-R70wloezBqjKX4p97IRIj-ED2a6_LOb_5dNRlADOwoFOGE9XveX-50-50cJT0xe_m_aXF2COqQw0baCqWqT1_wUKtuS8LJE4DvIQ4Qq4fj02"
     
-    static let notificationURL = "https://fcm.googleapis.com/fcm/send"
+    //static let notificationURL = "https://fcm.googleapis.com/fcm/send"
     
-    static let isDebugging = true
+    static let isDebugging = false
     
     // Init temperature user settings
     static var farenheit_celsius = true
