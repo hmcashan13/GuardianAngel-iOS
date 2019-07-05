@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "Postage_Icons-10-512 copy.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "grid@2x.png",
       "scale" : "2x"
     },
     {

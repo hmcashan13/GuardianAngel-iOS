@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "fahrenheit_celsius.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "ribbon@2x.png",
       "scale" : "2x"
     },
     {

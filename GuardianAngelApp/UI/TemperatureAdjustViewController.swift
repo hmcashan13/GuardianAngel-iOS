@@ -174,56 +174,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         sliderLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -20).isActive=true
     }
     
-    @objc func showTempInfo() {
-        let whatsNew = WhatsNew(
-            title: "Adjust Temperature Settings Info",
-            items: [
-                WhatsNew.Item(
-                    title: "Temp Sensor On/Off Section:",
-                    subtitle: "While this is on, you will temperature data from the cushion and notifications from the app. Otherwise you will not receive either of these things",
-                    image: UIImage(named: "setup")
-                ),
-                WhatsNew.Item(
-                    title: "Farenheit or Celsius Section:",
-                    subtitle: "Sets the temperature to Farenheit or Celsius",
-                    image: UIImage(named: "proximity")
-                ),
-                WhatsNew.Item(
-                    title: "Max Temperature Section:",
-                    subtitle: "The temperature that will trigger you to receive notifications from the app. This can be adjusted using the slider below",
-                    image: UIImage(named: "temp copy")
-                ),
-                WhatsNew.Item(
-                    title: "Questions?",
-                    subtitle: "Email us at support@guardianangelcushion.com",
-                    image: UIImage(named: "question")
-                )
-            ]
-        )
-        
-        let myTheme = WhatsNewViewController.Theme { configuration in
-            configuration.titleView.titleColor = .white
-            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
-            configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
-            configuration.itemsView.titleColor = .white
-            configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
-            configuration.itemsView.subtitleColor = .white
-            configuration.completionButton.title = "Go Back"
-            configuration.completionButton.backgroundColor = .white
-            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
-        }
-        
-        let configuration = WhatsNewViewController.Configuration(
-            theme: myTheme
-        )
-        
-        let whatsNewViewController = WhatsNewViewController(
-            whatsNew: whatsNew,
-            configuration: configuration
-        )
-        
-        self.present(whatsNewViewController, animated: true)
-    }
+    
     
     @objc func farenheitOrCelsius() {
         let farenheit_celsius = AppDelegate.farenheit_celsius
@@ -263,6 +214,57 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         }
         AppDelegate.max_temp = farenheitIntValue
         defaults.set(farenheitIntValue, forKey: max_temp_key)
+    }
+    
+    @objc func showTempInfo() {
+        let whatsNew = WhatsNew(
+            title: "Adjust Temperature Settings Info",
+            items: [
+                WhatsNew.Item(
+                    title: "Temp Sensor On/Off Section:",
+                    subtitle: "While this is on, you will temperature data from the cushion and notifications from the app. Otherwise you will not receive either of these things",
+                    image: UIImage(named: "setup")
+                ),
+                WhatsNew.Item(
+                    title: "Farenheit or Celsius Section:",
+                    subtitle: "Sets the temperature to Farenheit or Celsius",
+                    image: UIImage(named: "fahrenheit_celsius")
+                ),
+                WhatsNew.Item(
+                    title: "Max Temperature Section:",
+                    subtitle: "The temperature that will trigger you to receive notifications from the app. This can be adjusted using the slider below",
+                    image: UIImage(named: "temp")
+                ),
+                WhatsNew.Item(
+                    title: "Questions?",
+                    subtitle: "Email us at support@guardianangelcushion.com",
+                    image: UIImage(named: "question")
+                )
+            ]
+        )
+        
+        let myTheme = WhatsNewViewController.Theme { configuration in
+            configuration.titleView.titleColor = .white
+            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
+            configuration.itemsView.titleColor = .white
+            configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
+            configuration.itemsView.subtitleColor = .white
+            configuration.completionButton.title = "Go Back"
+            configuration.completionButton.backgroundColor = .white
+            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        }
+        
+        let configuration = WhatsNewViewController.Configuration(
+            theme: myTheme
+        )
+        
+        let whatsNewViewController = WhatsNewViewController(
+            whatsNew: whatsNew,
+            configuration: configuration
+        )
+        
+        self.present(whatsNewViewController, animated: true)
     }
 }
 

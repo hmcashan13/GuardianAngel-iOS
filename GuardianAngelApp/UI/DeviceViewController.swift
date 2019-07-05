@@ -54,7 +54,7 @@ class DeviceViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.black
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showInfo), for: .touchUpInside)
+        infoButton.addTarget(self, action: #selector(showDeviceInfo), for: .touchUpInside)
         let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
         navigationItem.leftBarButtonItem = infoBarButtonItem
         
@@ -103,20 +103,6 @@ class DeviceViewController: UIViewController {
         }
     }
     
-    // TODO: setup UI through this function
-    func setupUI(_ connectionState: ConnectionState) {
-        switch connectionState {
-        case .connected:
-            print("connected")
-        case .notConnected:
-            print("not connected")
-        case .connecting:
-            print("connecting")
-        case .tempNotActive:
-            print("temp not active")
-        }
-    }
-    
     @objc func goToSettings() {
         let settingsViewController = SettingsViewController()
         let navController = UINavigationController(rootViewController: settingsViewController)
@@ -136,13 +122,13 @@ class DeviceViewController: UIViewController {
     }()
     
     // Loading views
-    let title_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-    let temp_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-    let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
-    let weight_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    private let title_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    private let temp_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    private let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    private let weight_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
     /// Contains all of the labels that shows the Bluetooth information
-    let inputsContainerView: UIView = {
+    private let inputsContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -152,7 +138,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Temp label
-    let tempTextLabelField: UILabel = {
+    private let tempTextLabelField: UILabel = {
         let tf = UILabel()
         tf.text = "Temperature:"
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -160,7 +146,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Proximity label
-    let beaconTextLabelField: UILabel = {
+    private let beaconTextLabelField: UILabel = {
         let tf = UILabel()
         tf.text = "Proximity from Cushion:"
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -168,7 +154,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Weight label
-    let activeTextLabelField: UILabel = {
+    private let activeTextLabelField: UILabel = {
         let tf = UILabel()
         tf.text = "Device Active?"
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -176,8 +162,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Shows status of the temperature readings
-    let
-    tempStatusLabelField: UILabel = {
+    private let tempStatusLabelField: UILabel = {
         let tf = UILabel()
         tf.text = notConnected
         tf.textAlignment = .right
@@ -186,7 +171,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Shows status of the beacon readings
-    let beaconStatusLabelField: UILabel = {
+    private let beaconStatusLabelField: UILabel = {
         let tf = UILabel()
         tf.text = notConnected
         tf.textAlignment = .right
@@ -195,7 +180,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Shows status of the weight readings
-    let activeStatusLabelField: UILabel = {
+    private let activeStatusLabelField: UILabel = {
         let tf = UILabel()
         tf.text = no
         tf.textAlignment = .right
@@ -204,7 +189,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Seperator Field 1
-    let tempSeperatorView: UIView = {
+    private let tempSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -212,7 +197,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Seperator Field 2
-    let weightSeperatorView: UIView = {
+    private let weightSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -220,7 +205,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Sets up the UI for the Device page
-    func setupDeviceContainerView() {
+    private func setupDeviceContainerView() {
         // add subviews to view
         view.addSubview(logoImageView)
         view.addSubview(inputsContainerView)
@@ -319,6 +304,31 @@ class DeviceViewController: UIViewController {
         weightSeperatorView.heightAnchor.constraint(equalToConstant: 1).isActive=true
     }
     
+    // MARK: UI adjustment functions
+    func adjustTemperature(_ newTemp: String) {
+        tempStatusLabelField.text = newTemp
+    }
+    
+    func adjustBeaconStatus(_ beaconStatus: String) {
+        beaconStatusLabelField.text = beaconStatus
+    }
+    
+    func adjustActiveStatus(_ isWeight: Bool) {
+        activeTextLabelField.text = isWeight ? yes : no
+    }
+    
+    func setTitleConnected() {
+        navigationItem.title = "Connected"
+    }
+    
+    func setTitleDisconnected() {
+        navigationItem.title = "Disconnected"
+    }
+    
+    func setTitleConnecting() {
+        navigationItem.title = "Connecting"
+    }
+    
     // MARK: Loading view functions
     func showTitleSpinner() {
         if !title_loadingView.isAnimating {
@@ -388,26 +398,15 @@ class DeviceViewController: UIViewController {
         }
     }
     
-    func setTitleConnected() {
-        navigationItem.title = "Connected"
-    }
-    
-    func setTitleDisconnected() {
-        navigationItem.title = "Disconnected"
-    }
-    
-    func setTitleConnecting() {
-        navigationItem.title = "Connecting"
-    }
-    
-    @objc func showInfo() {
+    // MARK: Info Button Setup
+    @objc func showDeviceInfo() {
         let whatsNew = WhatsNew(
-            title: "Information about the App",
+            title: "Information about the Device",
             items: [
                 WhatsNew.Item(
                     title: "Temperature Section:",
                     subtitle: "The temperature calculated by the smart cushion",
-                    image: UIImage(named: "temp copy")
+                    image: UIImage(named: "temp")
                 ),
                 WhatsNew.Item(
                     title: "Proximity from Cushion Section:",

@@ -53,7 +53,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
         isBeaconConnected = false
         // Setup UI
         executeOnMainThread { [weak self] in
-            self?.beaconStatusLabelField.text = notConnected
+            self?.adjustBeaconStatus(notConnected)
         }
         // No matter what we want to stop scanning
         stopScan()
@@ -92,7 +92,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
             // Setup UI
             hideBeaconSpinner()
             if connectionState == .connected {
-                beaconStatusLabelField.text = proximity
+                adjustBeaconStatus(proximity)
             }
         }
     }

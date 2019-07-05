@@ -56,9 +56,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
         isBeaconConnected = false
         // Setup UI
         executeOnMainThread { [weak self] in
-            self?.tempStatusLabelField.text = notConnected
-            self?.beaconStatusLabelField.text = notConnected
-            self?.activeStatusLabelField.text = no
+            self?.adjustTemperature(notConnected)
+            self?.adjustBeaconStatus(notConnected)
+            self?.adjustActiveStatus(false)
         }
     }
     
@@ -149,18 +149,18 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
     // Getting Values from UART
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue), characteristic == rxCharacteristic {
-            let parsedData: (String,String) = parseData(ASCIIstring)
+            let parsedData: (String,Bool) = parseData(ASCIIstring)
             // Setup UI
             executeOnMainThread { [weak self] in
                 self?.hideTempSpinner()
                 self?.hideWeightSpinner()
-                self?.tempStatusLabelField.text = parsedData.0
-                self?.activeStatusLabelField.text = parsedData.1
+                self?.adjustTemperature(parsedData.0)
+                self?.adjustActiveStatus(parsedData.1)
             }
         }
     }
     
-    private func parseData(_ data: NSString) -> (String, String) {
+    private func parseData(_ data: NSString) -> (String, Bool) {
         //print("Device Location: \(String(describing: device.locationString()))")
         //print("Value Recieved: \((uartValue as String))")
         let parsedUartValues: [String] = data.components(separatedBy: " ")
@@ -192,17 +192,15 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
         
         var weightText: String = ""
         if let weight = weight, weight < 3000 {
-            weightText = yes
             isWeightDetected = true
         } else {
-            weightText = no
             isWeightDetected = false
         }
         // Send temperature notification only if weight is detected
         if let temp = temp, temp > maxTemp && isWeightDetected && AppDelegate.is_temp_enabled {
             sendTemperatureNotification()
         }
-        return (tempWithDegree,weightText)
+        return (tempWithDegree,isWeightDetected)
     }
     
     // Disconnected from peripheral
@@ -212,9 +210,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
         // Setup UI
         executeOnMainThread { [weak self] in
             guard let self = self else { return }
-            self.tempStatusLabelField.text = notConnected
-            self.beaconStatusLabelField.text = notConnected
-            self.activeStatusLabelField.text = no
+            self.adjustTemperature(notConnected)
+            self.adjustBeaconStatus(notConnected)
+            self.adjustActiveStatus(false)
             self.setTitleDisconnected()
         }
         

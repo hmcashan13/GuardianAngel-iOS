@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let isDebugging = false
     
+    private let standardUserDefaults: [String:Any] = [farenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
     // Init temperature user settings
     static var farenheit_celsius = true
     static var meters_feet = true
@@ -40,13 +41,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         registerForPushNotifications()
 
         //Navigation and root VC setup
-        let viewController = DeviceViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let deviceViewController = DeviceViewController()
+        let gpsViewController = GPSViewController()
+        deviceViewController.tabBarItem = UITabBarItem(title: "Device", image: UIImage(named: "device"), tag: 0)
+        gpsViewController.tabBarItem = UITabBarItem(title: "GPS", image: UIImage(named: "gps"), tag: 1)
+        let controllers = [deviceViewController, gpsViewController]
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = navigationController
-        self.window?.makeKeyAndVisible()
+        self.window?.rootViewController = tabBarController
+        //self.window?.rootViewController = navigationController
+        //self.window?.makeKeyAndVisible()
         
         // Set temperature user settings
+        UserDefaults.standard.register(defaults:standardUserDefaults)
         AppDelegate.farenheit_celsius = defaults.bool(forKey: farenheit_celsius_key)
         AppDelegate.meters_feet = defaults.bool(forKey: meters_feet_key)
         AppDelegate.is_temp_enabled = defaults.bool(forKey: is_temp_enabled_key)
