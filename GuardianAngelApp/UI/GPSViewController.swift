@@ -14,17 +14,21 @@ class GPSViewController: UIViewController {
         super.viewDidLoad()
         // Setup UI
         title = "GPS Tracker"
-        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showGPSInfo), for: .touchUpInside)
-        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
-        navigationItem.leftBarButtonItem = infoBarButtonItem
+//        let infoButton = UIButton(type: .infoLight)
+//        infoButton.addTarget(self, action: #selector(showGPSInfo), for: .touchUpInside)
+//        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action:#selector(logout))
+    }
+    
+    @objc func logout() {
+        // TODO: bring back auth logic
     }
 
     @objc func showGPSInfo() {
         let whatsNew = WhatsNew(
-            title: "Information about the GPS",
+            title: "Information about GPS",
             items: [
                 WhatsNew.Item(
                     title: "Temperature Section:",
@@ -51,14 +55,14 @@ class GPSViewController: UIViewController {
         
         let myTheme = WhatsNewViewController.Theme { configuration in
             configuration.titleView.titleColor = .white
-            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.backgroundColor = standardColor
             configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
             configuration.itemsView.titleColor = .white
             configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
             configuration.itemsView.subtitleColor = .white
             configuration.completionButton.title = "Go Back"
             configuration.completionButton.backgroundColor = .white
-            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.completionButton.titleColor = standardColor
         }
         
         let configuration = WhatsNewViewController.Configuration(

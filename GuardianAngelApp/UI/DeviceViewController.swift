@@ -47,16 +47,12 @@ class DeviceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Setup UI
-        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         
         setupDeviceContainerView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.black
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showDeviceInfo), for: .touchUpInside)
-        let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
-        navigationItem.leftBarButtonItem = infoBarButtonItem
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
         
         showTempSpinner()
         showWeightSpinner()
@@ -110,6 +106,10 @@ class DeviceViewController: UIViewController {
             self.present(navController, animated: true, completion: nil)
         }
     }
+    
+    @objc func logout() {
+        //TODO: bring back auth logic
+    }
     // MARK: UI properties and setup
     /// Logo on Device page
     lazy var logoImageView: UIImageView = {
@@ -137,8 +137,24 @@ class DeviceViewController: UIViewController {
         return view
     }()
     
+    /// Cushion Identifier Label
+    private let deviceIdentifierLabel: UILabel = {
+        let tf = UILabel()
+        tf.text = "Cushion 1"
+        tf.font = UIFont.boldSystemFont(ofSize: 18)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    private let infoButton: UIButton = {
+        let infoButton = UIButton(type: .infoDark)
+        infoButton.addTarget(self, action: #selector(showDeviceInfo), for: .touchUpInside)
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        return infoButton
+    }()
+    
     /// Temp label
-    private let tempTextLabelField: UILabel = {
+    private let tempTextLabel: UILabel = {
         let tf = UILabel()
         tf.text = "Temperature:"
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -146,7 +162,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Proximity label
-    private let beaconTextLabelField: UILabel = {
+    private let beaconTextLabel: UILabel = {
         let tf = UILabel()
         tf.text = "Proximity from Cushion:"
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -154,7 +170,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Weight label
-    private let activeTextLabelField: UILabel = {
+    private let activeTextLabel: UILabel = {
         let tf = UILabel()
         tf.text = "Device Active?"
         tf.translatesAutoresizingMaskIntoConstraints = false
@@ -162,7 +178,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Shows status of the temperature readings
-    private let tempStatusLabelField: UILabel = {
+    private let tempStatusLabel: UILabel = {
         let tf = UILabel()
         tf.text = notConnected
         tf.textAlignment = .right
@@ -171,7 +187,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Shows status of the beacon readings
-    private let beaconStatusLabelField: UILabel = {
+    private let beaconStatusLabel: UILabel = {
         let tf = UILabel()
         tf.text = notConnected
         tf.textAlignment = .right
@@ -180,7 +196,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Shows status of the weight readings
-    private let activeStatusLabelField: UILabel = {
+    private let activeStatusLabel: UILabel = {
         let tf = UILabel()
         tf.text = no
         tf.textAlignment = .right
@@ -189,7 +205,7 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Seperator Field 1
-    private let tempSeperatorView: UIView = {
+    private let identifierSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -197,6 +213,14 @@ class DeviceViewController: UIViewController {
     }()
     
     /// Seperator Field 2
+    private let tempSeperatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    /// Seperator Field 3
     private let weightSeperatorView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
@@ -212,27 +236,32 @@ class DeviceViewController: UIViewController {
 
         // Setup constraints of logo image view
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
-        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 37).isActive=true
-        logoImageView.widthAnchor.constraint(equalToConstant: 100).isActive=true
-        logoImageView.heightAnchor.constraint(equalToConstant: 100).isActive=true
+        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor , constant: 10).isActive=true
+        logoImageView.widthAnchor.constraint(equalToConstant: 90).isActive=true
+        logoImageView.heightAnchor.constraint(equalToConstant: 90).isActive=true
         
         //setup constraints of container view
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
-        inputsContainerView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 30).isActive=true
+        inputsContainerView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 20).isActive=true
         inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24).isActive=true
-        inputsContainerView.heightAnchor.constraint(equalToConstant: 150).isActive=true
+        inputsContainerView.heightAnchor.constraint(equalToConstant: 180).isActive=true
     
-        // add text fields to container view
-        inputsContainerView.addSubview(tempTextLabelField)
-        inputsContainerView.addSubview(activeTextLabelField)
-        inputsContainerView.addSubview(beaconTextLabelField)
+        // add identifier and info fields {
+        inputsContainerView.addSubview(deviceIdentifierLabel)
+        inputsContainerView.addSubview(infoButton)
+        
+        // add text labels to container view
+        inputsContainerView.addSubview(tempTextLabel)
+        inputsContainerView.addSubview(activeTextLabel)
+        inputsContainerView.addSubview(beaconTextLabel)
         
         // add status labels to container view
-        inputsContainerView.addSubview(tempStatusLabelField)
-        inputsContainerView.addSubview(activeStatusLabelField)
-        inputsContainerView.addSubview(beaconStatusLabelField)
+        inputsContainerView.addSubview(tempStatusLabel)
+        inputsContainerView.addSubview(activeStatusLabel)
+        inputsContainerView.addSubview(beaconStatusLabel)
         
         // add seperator views to container view
+        inputsContainerView.addSubview(identifierSeperatorView)
         inputsContainerView.addSubview(tempSeperatorView)
         inputsContainerView.addSubview(weightSeperatorView)
         
@@ -241,80 +270,97 @@ class DeviceViewController: UIViewController {
         inputsContainerView.addSubview(beacon_loadingView)
         inputsContainerView.addSubview(weight_loadingView)
         
-        //setup constraints for name text field
-        tempTextLabelField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
-        tempTextLabelField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive=true
-        tempTextLabelField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
-        tempTextLabelField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
-        //setup constraints for beacon text field
-        beaconTextLabelField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
-        beaconTextLabelField.topAnchor.constraint(equalTo: tempTextLabelField.bottomAnchor).isActive=true
-        beaconTextLabelField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
-        beaconTextLabelField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
-        //setup constraints for weight text field
-        activeTextLabelField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
-        activeTextLabelField.topAnchor.constraint(equalTo: beaconTextLabelField.bottomAnchor).isActive=true
-        activeTextLabelField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
-        activeTextLabelField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
+        // setup constraints for identifier label
+        deviceIdentifierLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
+        deviceIdentifierLabel.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: 2).isActive=true
+        deviceIdentifierLabel.widthAnchor.constraint(equalToConstant: 100).isActive=true
+        deviceIdentifierLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
-        //setup constraints for temp status text field
-        tempStatusLabelField.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
-        tempStatusLabelField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive=true
-        tempStatusLabelField.widthAnchor.constraint(equalToConstant: 120).isActive=true
-        tempStatusLabelField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
-        //setup constraints for beacon status text field
-        beaconStatusLabelField.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
-        beaconStatusLabelField.topAnchor.constraint(equalTo: tempStatusLabelField.bottomAnchor).isActive=true
-        beaconStatusLabelField.widthAnchor.constraint(equalToConstant: 120).isActive=true
-        beaconStatusLabelField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
-        //setup constraints for weight status text field
-        activeStatusLabelField.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
-        activeStatusLabelField.topAnchor.constraint(equalTo: beaconStatusLabelField.bottomAnchor).isActive=true
-        activeStatusLabelField.widthAnchor.constraint(equalToConstant: 120).isActive=true
-        activeStatusLabelField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
+        // setup constraints for text labels
+        tempTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
+        tempTextLabel.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor).isActive=true
+        tempTextLabel.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
+        tempTextLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
-        //setup constarints for temp loading view
+        beaconTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
+        beaconTextLabel.topAnchor.constraint(equalTo: tempTextLabel.bottomAnchor).isActive=true
+        beaconTextLabel.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
+        beaconTextLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        activeTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
+        activeTextLabel.topAnchor.constraint(equalTo: beaconTextLabel.bottomAnchor).isActive=true
+        activeTextLabel.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
+        activeTextLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        // setup constraints for info button
+        infoButton.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor).isActive=true
+        infoButton.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive=true
+        infoButton.widthAnchor.constraint(equalToConstant: 50).isActive=true
+        infoButton.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        // setup constraints for status labels
+        tempStatusLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
+        tempStatusLabel.topAnchor.constraint(equalTo: infoButton.bottomAnchor).isActive=true
+        tempStatusLabel.widthAnchor.constraint(equalToConstant: 120).isActive=true
+        tempStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        beaconStatusLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
+        beaconStatusLabel.topAnchor.constraint(equalTo: tempStatusLabel.bottomAnchor).isActive=true
+        beaconStatusLabel.widthAnchor.constraint(equalToConstant: 120).isActive=true
+        beaconStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+    
+        activeStatusLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
+        activeStatusLabel.topAnchor.constraint(equalTo: beaconStatusLabel.bottomAnchor).isActive=true
+        activeStatusLabel.widthAnchor.constraint(equalToConstant: 120).isActive=true
+        activeStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        // setup constarints for loading views
         temp_loadingView.translatesAutoresizingMaskIntoConstraints = false
         temp_loadingView.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: 35).isActive=true
-        temp_loadingView.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive=true
+        temp_loadingView.topAnchor.constraint(equalTo: infoButton.bottomAnchor).isActive=true
         temp_loadingView.widthAnchor.constraint(equalToConstant: 120).isActive=true
-        temp_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
-        //setup constarints for beacon loading view
+        temp_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
         beacon_loadingView.translatesAutoresizingMaskIntoConstraints = false
         beacon_loadingView.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: 35).isActive=true
-        beacon_loadingView.topAnchor.constraint(equalTo: tempStatusLabelField.bottomAnchor).isActive=true
+        beacon_loadingView.topAnchor.constraint(equalTo: tempStatusLabel.bottomAnchor).isActive=true
         beacon_loadingView.widthAnchor.constraint(equalToConstant: 120).isActive=true
-        beacon_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
-        //setup constarints for weight loading view
+        beacon_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
         weight_loadingView.translatesAutoresizingMaskIntoConstraints = false
         weight_loadingView.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: 35).isActive=true
-        weight_loadingView.topAnchor.constraint(equalTo: beaconStatusLabelField.bottomAnchor).isActive=true
+        weight_loadingView.topAnchor.constraint(equalTo: beaconStatusLabel.bottomAnchor).isActive=true
         weight_loadingView.widthAnchor.constraint(equalToConstant: 120).isActive=true
-        weight_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive=true
+        weight_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
-        //setup constraints for temp seperator field
+        // setup constraints for seperator fields
+        identifierSeperatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive=true
+        identifierSeperatorView.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor, constant: -3).isActive=true
+        identifierSeperatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
+        identifierSeperatorView.heightAnchor.constraint(equalToConstant: 3).isActive=true
+
         tempSeperatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive=true
-        tempSeperatorView.topAnchor.constraint(equalTo: tempTextLabelField.bottomAnchor).isActive=true
+        tempSeperatorView.topAnchor.constraint(equalTo: tempTextLabel.bottomAnchor).isActive=true
         tempSeperatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
         tempSeperatorView.heightAnchor.constraint(equalToConstant: 1).isActive=true
-        //setup constraints for weight seperator field
+        
         weightSeperatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive=true
-        weightSeperatorView.topAnchor.constraint(equalTo: beaconTextLabelField.bottomAnchor).isActive=true
+        weightSeperatorView.topAnchor.constraint(equalTo: beaconTextLabel.bottomAnchor).isActive=true
         weightSeperatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
         weightSeperatorView.heightAnchor.constraint(equalToConstant: 1).isActive=true
     }
     
     // MARK: UI adjustment functions
     func adjustTemperature(_ newTemp: String) {
-        tempStatusLabelField.text = newTemp
+        tempStatusLabel.text = newTemp
     }
     
     func adjustBeaconStatus(_ beaconStatus: String) {
-        beaconStatusLabelField.text = beaconStatus
+        beaconStatusLabel.text = beaconStatus
     }
     
     func adjustActiveStatus(_ isWeight: Bool) {
-        activeTextLabelField.text = isWeight ? yes : no
+        activeStatusLabel.text = isWeight ? yes : no
     }
     
     func setTitleConnected() {
@@ -345,9 +391,9 @@ class DeviceViewController: UIViewController {
     }
     
     func showTempSpinner() {
-        if !temp_loadingView.isAnimating && !tempStatusLabelField.isHidden {
+        if !temp_loadingView.isAnimating && !tempStatusLabel.isHidden {
             temp_loadingView.startAnimating()
-            tempStatusLabelField.isHidden = true
+            tempStatusLabel.isHidden = true
             let timer = CustomTimer(timeInterval: 20) { [weak self] in
                 self?.hideTempSpinner()
             }
@@ -356,16 +402,16 @@ class DeviceViewController: UIViewController {
     }
     
     func hideTempSpinner()  {
-        if temp_loadingView.isAnimating && tempStatusLabelField.isHidden {
+        if temp_loadingView.isAnimating && tempStatusLabel.isHidden {
             temp_loadingView.stopAnimating()
-            tempStatusLabelField.isHidden = false
+            tempStatusLabel.isHidden = false
         }
     }
     
     func showBeaconSpinner() {
-        if !beacon_loadingView.isAnimating && !beaconStatusLabelField.isHidden {
+        if !beacon_loadingView.isAnimating && !beaconStatusLabel.isHidden {
             beacon_loadingView.startAnimating()
-            beaconStatusLabelField.isHidden = true
+            beaconStatusLabel.isHidden = true
             let timer = CustomTimer(timeInterval: 20) { [weak self] in
                 self?.hideBeaconSpinner()
             }
@@ -374,16 +420,16 @@ class DeviceViewController: UIViewController {
     }
     
     func hideBeaconSpinner() {
-        if beacon_loadingView.isAnimating && beaconStatusLabelField.isHidden {
+        if beacon_loadingView.isAnimating && beaconStatusLabel.isHidden {
             beacon_loadingView.stopAnimating()
-            beaconStatusLabelField.isHidden = false
+            beaconStatusLabel.isHidden = false
         }
     }
     
     func showWeightSpinner() {
-        if !weight_loadingView.isAnimating && !activeStatusLabelField.isHidden {
+        if !weight_loadingView.isAnimating && !activeStatusLabel.isHidden {
             weight_loadingView.startAnimating()
-            activeStatusLabelField.isHidden = true
+            activeStatusLabel.isHidden = true
             let timer = CustomTimer(timeInterval: 20) { [weak self] in
                 self?.hideWeightSpinner()
             }
@@ -392,16 +438,16 @@ class DeviceViewController: UIViewController {
     }
     
     func hideWeightSpinner() {
-        if weight_loadingView.isAnimating && activeStatusLabelField.isHidden {
+        if weight_loadingView.isAnimating && activeStatusLabel.isHidden {
             weight_loadingView.stopAnimating()
-            activeStatusLabelField.isHidden = false
+            activeStatusLabel.isHidden = false
         }
     }
     
     // MARK: Info Button Setup
     @objc func showDeviceInfo() {
         let whatsNew = WhatsNew(
-            title: "Information about the Device",
+            title: "Information about Device",
             items: [
                 WhatsNew.Item(
                     title: "Temperature Section:",

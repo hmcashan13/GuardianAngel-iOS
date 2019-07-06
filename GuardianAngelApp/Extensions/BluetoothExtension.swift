@@ -163,34 +163,33 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
     private func parseData(_ data: NSString) -> (String, Bool) {
         //print("Device Location: \(String(describing: device.locationString()))")
         //print("Value Recieved: \((uartValue as String))")
-        let parsedUartValues: [String] = data.components(separatedBy: " ")
-        var parsedTempString: String = ""
-        var parsedWeightString: String = ""
-        if data == "" {
-            print("No data")
-            parsedTempString = notConnected
-            parsedWeightString = no
+        let uartValues: [String] = data.components(separatedBy: " ")
+        var tempString: String = ""
+        var weightString: String = ""
+        var temp: Int?
+        var weight: Int?
+        if data == "" || !AppDelegate.is_temp_enabled {
+            tempString = notConnected
         } else {
-            let tempString: String = parsedUartValues[0]
-            let weightString: String = parsedUartValues[1]
-            let parseTemp: NSRegularExpression = try! NSRegularExpression(pattern: "T=", options: NSRegularExpression.Options.caseInsensitive)
-            parsedTempString = parseTemp.stringByReplacingMatches(in: tempString, options: [], range: NSRange(0..<tempString.count), withTemplate: "")
-            let parseWeight: NSRegularExpression = try! NSRegularExpression(pattern: "W=", options: NSRegularExpression.Options.caseInsensitive)
-            parsedWeightString = parseWeight.stringByReplacingMatches(in: weightString, options: [], range: NSRange(0..<weightString.count), withTemplate: "")
+            var rawTempString: String = uartValues[0]
+            let rawWeightString: String = uartValues[1]
+            let removeT: NSRegularExpression = try! NSRegularExpression(pattern: "T=", options: NSRegularExpression.Options.caseInsensitive)
+            rawTempString = removeT.stringByReplacingMatches(in: rawTempString, options: [], range: NSRange(0..<rawTempString.count), withTemplate: "")
+            let removeComma: NSRegularExpression = try! NSRegularExpression(pattern: ",", options: NSRegularExpression.Options.caseInsensitive)
+            tempString = removeComma.stringByReplacingMatches(in: rawTempString, options: [], range: NSRange(0..<rawTempString.count), withTemplate: ".")
+            let removeW: NSRegularExpression = try! NSRegularExpression(pattern: "W=", options: NSRegularExpression.Options.caseInsensitive)
+            weightString = removeW.stringByReplacingMatches(in: rawWeightString, options: [], range: NSRange(0..<rawWeightString.count), withTemplate: "")
+            temp = Int(tempString)
+            weight = Int(weightString)
+            if let convertedTemp = tempString.celsiusToFarenheit() {
+                tempString = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : "\(tempString)˚C"
+            } else {
+                tempString = notConnected
+            }
+            
         }
-        let convertedTemp: String = convertTempString(parsedTempString)
-        var tempWithDegree: String = ""
-        print("temperature: \(convertedTemp)˚F")
-        if parsedTempString != "invalid" && AppDelegate.is_temp_enabled {
-            tempWithDegree = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : convertedTemp.farenheitToCelsius()
-        } else {
-            tempWithDegree = notConnected
-        }
+        print("temperature: \(tempString)")
         
-        let temp: Int? = Int(convertedTemp)
-        let weight: Int? = Int(parsedWeightString)
-        
-        var weightText: String = ""
         if let weight = weight, weight < 3000 {
             isWeightDetected = true
         } else {
@@ -200,7 +199,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
         if let temp = temp, temp > maxTemp && isWeightDetected && AppDelegate.is_temp_enabled {
             sendTemperatureNotification()
         }
-        return (tempWithDegree,isWeightDetected)
+        return (tempString,isWeightDetected)
     }
     
     // Disconnected from peripheral

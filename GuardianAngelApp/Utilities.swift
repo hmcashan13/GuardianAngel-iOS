@@ -24,6 +24,9 @@ let notConnected: String = "Not Connected"
 let yes: String = "Yes"
 let no: String = "No"
 
+let standardColor: UIColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+let seperatorColor: UIColor = UIColor.rgb(red: 220, green: 91, blue: 151)
+
 /// Present a message to the user (automatically done on the main thread)
 func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -36,8 +39,8 @@ func showAlertMessage(presenter: UIViewController, title: String, message: Strin
 }
 
 func convertTempString(_ temperature: String) -> String {
-    guard let temp = Double(temperature) else { return "" }
-    let convertedTemp = Int(temp / 21.5)
+    guard let celsiusTemp: Double = Double(temperature) else { return "" }
+    let convertedTemp: Int = Int(celsiusTemp * 9/5) + 32
     return String(convertedTemp)
 }
 
@@ -54,7 +57,7 @@ func executeOnMainThread(completion: @escaping () -> Void) {
 
 class CustomTimer {
     typealias Update = ()->Void
-    var timer:Timer?
+    var timer: Timer?
     var count: Int = 0
     var update: Update?
     let timeInterval: TimeInterval
@@ -67,7 +70,7 @@ class CustomTimer {
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: false)
     }
     func stop(){
-        if let timer = timer {
+        if let timer: Timer = timer {
             timer.invalidate()
         }
     }

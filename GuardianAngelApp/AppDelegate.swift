@@ -29,10 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private let standardUserDefaults: [String:Any] = [farenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
     // Init temperature user settings
-    static var farenheit_celsius = true
-    static var meters_feet = true
-    static var is_temp_enabled = true
-    static var max_temp = 85
+    static var farenheit_celsius: Bool = true
+    static var meters_feet: Bool = true
+    static var is_temp_enabled: Bool = true
+    static var max_temp: Int = 85
 
     let defaults = UserDefaults.standard
     

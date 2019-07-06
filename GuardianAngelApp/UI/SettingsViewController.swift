@@ -24,7 +24,7 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
         
         navigationItem.title = "Settings"
         
-        view.backgroundColor = UIColor(displayP3Red: 0.698, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
@@ -54,7 +54,7 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
             cell.accessoryType = .disclosureIndicator
         }
         cell.textLabel?.textColor = UIColor.white
-        cell.backgroundColor = UIColor(displayP3Red: 0.698, green: 0.4, blue: 1.0, alpha: 1.0)
+        cell.backgroundColor = standardColor
         return cell
     }
     

@@ -21,7 +21,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         super.viewDidLoad()
         
         navigationItem.title = "Adjust Temperature Sensor"
-        view.backgroundColor = UIColor(displayP3Red: 0.698, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         let infoButton = UIButton(type: .infoLight)
         infoButton.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
         let infoBarButtonItem = UIBarButtonItem(customView: infoButton)
@@ -59,7 +59,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     let seperatorView1: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(red: 220, green: 91, blue: 151)
+        view.backgroundColor = seperatorColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -82,7 +82,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     let seperatorView2: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.rgb(red: 220, green: 91, blue: 151)
+        view.backgroundColor = seperatorColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -245,14 +245,14 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         
         let myTheme = WhatsNewViewController.Theme { configuration in
             configuration.titleView.titleColor = .white
-            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.backgroundColor = standardColor
             configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
             configuration.itemsView.titleColor = .white
             configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
             configuration.itemsView.subtitleColor = .white
             configuration.completionButton.title = "Go Back"
             configuration.completionButton.backgroundColor = .white
-            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.completionButton.titleColor = standardColor
         }
         
         let configuration = WhatsNewViewController.Configuration(
@@ -269,15 +269,17 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
 }
 
 extension String {
-    func farenheitToCelsius() -> String {
-        guard let tempString = Int(self) else { return "invalid" }
-        let converted = String((tempString - 32)*5/9)
-        return "\(converted)˚C"
+    func farenheitToCelsius() -> String? {
+        guard let fahrenheitTemp = Double(self) else { return nil }
+        let roundedTemp: Int = Int((fahrenheitTemp - 32)*5/9)
+        let celsiusTemp: String = String(roundedTemp)
+        return "\(celsiusTemp)"
     }
     
-    func celsiusToFarenheit() -> String {
-        guard let tempString = Int(self) else { return "invalid" }
-        let converted = String(tempString * 9/5 + 32)
-        return "\(converted)˚F"
+    func celsiusToFarenheit() -> String? {
+        guard let celsiusTemp: Double = Double(self) else { return nil }
+        let roundedTemp: Int = Int(celsiusTemp * 9/5 + 32)
+        let fahrenheitTemp: String = String(roundedTemp)
+        return "\(fahrenheitTemp)"
     }
 }

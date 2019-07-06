@@ -17,13 +17,13 @@
 		E70B92622176E34F00B4AE8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */; };
 		E70B92782176E34F00B4AE8B /* GuardianAngelAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */; };
 		E72EACE522CD905D007246C1 /* GPSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE422CD905D007246C1 /* GPSViewController.swift */; };
+		E72EACE722D0404E007246C1 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE622D0404E007246C1 /* ColorExtension.swift */; };
 		E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D887217BE79A00A0A627 /* NotificationExtension.swift */; };
 		E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D889217BED1800A0A627 /* BluetoothExtension.swift */; };
 		E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D88D217BF22300A0A627 /* SettingsViewController.swift */; };
 		E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D890217BF6A600A0A627 /* DeviceViewController.swift */; };
 		E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D894217C0B5F00A0A627 /* ImageExtension.swift */; };
 		E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AF28D2198B48700E7BC6C /* LocationExtension.swift */; };
-		E7801713217A839B00108D31 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7801712217A839B00108D31 /* ColorExtension.swift */; };
 		E7C22EF7218417360071FE8E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C22EF6218417350071FE8E /* SnapshotHelper.swift */; };
 		F26A6A15643B40D47EFA5644 /* Pods_GuardianAngelApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ABF8BB08EF8347FEEC3293 /* Pods_GuardianAngelApp.framework */; };
 /* End PBXBuildFile section */
@@ -58,6 +58,7 @@
 		E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardianAngelAppUITests.swift; sourceTree = "<group>"; };
 		E70B92792176E35000B4AE8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E72EACE422CD905D007246C1 /* GPSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSViewController.swift; sourceTree = "<group>"; };
+		E72EACE622D0404E007246C1 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E753D887217BE79A00A0A627 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		E753D889217BED1800A0A627 /* BluetoothExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothExtension.swift; sourceTree = "<group>"; };
 		E753D88D217BF22300A0A627 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -65,7 +66,6 @@
 		E753D894217C0B5F00A0A627 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		E753D898217CEE4500A0A627 /* GuardianAngelApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GuardianAngelApp.entitlements; sourceTree = "<group>"; };
 		E77AF28D2198B48700E7BC6C /* LocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtension.swift; sourceTree = "<group>"; };
-		E7801712217A839B00108D31 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		E7C22EF6218417350071FE8E /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		F639254028761EFA81E9CD15 /* Pods-GuardianAngelAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,7 +183,7 @@
 				E753D889217BED1800A0A627 /* BluetoothExtension.swift */,
 				E77AF28D2198B48700E7BC6C /* LocationExtension.swift */,
 				E753D887217BE79A00A0A627 /* NotificationExtension.swift */,
-				E7801712217A839B00108D31 /* ColorExtension.swift */,
+				E72EACE622D0404E007246C1 /* ColorExtension.swift */,
 				E753D894217C0B5F00A0A627 /* ImageExtension.swift */,
 			);
 			path = Extensions;
@@ -442,8 +442,8 @@
 				E72EACE522CD905D007246C1 /* GPSViewController.swift in Sources */,
 				E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */,
 				E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */,
-				E7801713217A839B00108D31 /* ColorExtension.swift in Sources */,
 				E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */,
+				E72EACE722D0404E007246C1 /* ColorExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
