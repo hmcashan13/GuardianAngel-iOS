@@ -1,12 +1,92 @@
 PODS:
+  - FBSDKCoreKit (5.2.0):
+    - FBSDKCoreKit/Basics (= 5.2.0)
+    - FBSDKCoreKit/Core (= 5.2.0)
+  - FBSDKCoreKit/Basics (5.2.0)
+  - FBSDKCoreKit/Core (5.2.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.2.0):
+    - FBSDKCoreKit (~> 5.0)
+  - Firebase/CoreOnly (6.3.0):
+    - FirebaseCore (= 6.0.3)
+  - Firebase/Database (6.3.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 6.0.0)
+  - Firebase/Storage (6.3.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 3.2.1)
+  - FirebaseAuth (6.1.2):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseAuthInterop (1.0.0)
+  - FirebaseCore (6.0.3):
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/Logger (~> 6.0)
+  - FirebaseDatabase (6.0.0):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - leveldb-library (~> 1.18)
+  - FirebaseStorage (3.2.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleSignIn (4.4.0):
+    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
+    - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleToolboxForMac/DebugUtils (2.2.1):
+    - GoogleToolboxForMac/Defines (= 2.2.1)
+  - GoogleToolboxForMac/Defines (2.2.1)
+  - GoogleToolboxForMac/NSDictionary+URLArguments (2.2.1):
+    - GoogleToolboxForMac/DebugUtils (= 2.2.1)
+    - GoogleToolboxForMac/Defines (= 2.2.1)
+    - GoogleToolboxForMac/NSString+URLArguments (= 2.2.1)
+  - GoogleToolboxForMac/NSString+URLArguments (2.2.1)
+  - GoogleUtilities/AppDelegateSwizzler (6.2.1):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.2.1)
+  - GoogleUtilities/Logger (6.2.1):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/Network (6.2.1):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/NSData+zlib
+    - GoogleUtilities/Reachability
+  - GoogleUtilities/NSData+zlib (6.2.1)
+  - GoogleUtilities/Reachability (6.2.1):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.2.2)
+  - leveldb-library (1.20)
   - WhatsNewKit (1.1.2)
 
 DEPENDENCIES:
+  - FBSDKLoginKit
+  - Firebase/Database
+  - Firebase/Storage
+  - FirebaseAuth
+  - GoogleSignIn
   - WhatsNewKit
 
 SPEC CHECKSUMS:
+  FBSDKCoreKit: fd37d65447ef93255191dd5ded4f63955d23f8aa
+  FBSDKLoginKit: b814ebf853e7b28592eab4d24b458a89b3f8d69e
+  Firebase: 8432d732974498afd5987e9001a05f90f1a3d625
+  FirebaseAuth: 7fa2cc010b93770831a4e7a60651b52c3b8d111a
+  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
+  FirebaseCore: 68f8a7f50cdae542715d4e86afa37c4067217dcb
+  FirebaseDatabase: f48e067716864be2b855cf716b927ef375d6cfa0
+  FirebaseStorage: 926d41552072b9fee67aa645760f05f87b7ce604
+  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
+  GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
+  GoogleUtilities: c7a0b08bda3bf808be823ed151f0e28ac6866e71
+  GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
+  leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   WhatsNewKit: caa478dd9efc4d501c2e4f33f5f59e0b90cbb3cb
 
-PODFILE CHECKSUM: 843171fb48783095f92bbcea472c6bcdc33b46a5
+PODFILE CHECKSUM: 23babcae170e6ce6e287e0bedddde8c9b5a6ae86
 
 COCOAPODS: 1.4.0

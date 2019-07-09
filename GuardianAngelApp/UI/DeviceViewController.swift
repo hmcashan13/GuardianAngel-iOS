@@ -11,6 +11,12 @@ import CoreBluetooth
 import UserNotifications
 import CoreLocation
 import WhatsNewKit
+import FirebaseAuth
+import FirebaseDatabase
+import FBSDKLoginKit
+import GoogleSignIn
+
+
 
 class DeviceViewController: UIViewController {
     // Beacon properties
@@ -35,14 +41,18 @@ class DeviceViewController: UIViewController {
         case connecting
         case tempNotActive
     }
-    let UART_UUID: UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")!
-    let UART_UUID2: UUID = UUID(uuidString: "F0B6C05F-15A0-9F38-BBD9-5E117CF7DC7A")!
+    let ble_Service_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+    let ble_Characteristic_TX: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+    let ble_Characteristic_RX: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+    let uart_UUID: UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")!
     var rxCharacteristic: CBCharacteristic?
     var connectionState:ConnectionState = .notConnected
     var centralManager: CBCentralManager?
-    var selectedPeripheral: CBPeripheral?
+    var selectedPeripherals: [CBPeripheral]? = []
     var isWeightDetected: Bool = false
-    var maxTemp: Int = 80
+    
+    // Auth property
+    var isLoggedIn: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +67,7 @@ class DeviceViewController: UIViewController {
         showTempSpinner()
         showWeightSpinner()
         showBeaconSpinner()
-        setTitleConnecting()
+        setConnectionStatus(.connecting)
         
         // Setup Notifications
         let center = UNUserNotificationCenter.current()
@@ -77,26 +87,121 @@ class DeviceViewController: UIViewController {
         // Check if we are connected when we foreground
         NotificationCenter.default.addObserver(self, selector: #selector(foregroundScan), name: UIApplication.willEnterForegroundNotification, object: nil)
         
-        // Connect to cushion
-        startBeaconAndUart()
+        // Setup Google Sign in delegate
+        GIDSignIn.sharedInstance().delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if connectionState == .notConnected {
-            backgroundScan()
+        
+        checkIfUserLoggedIn()
+    }
+    
+    private func checkIfUserLoggedIn() {
+        showTitleSpinner()
+        checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
+            self?.isLoggedIn = authStatus
+            if authStatus {
+                if self?.connectionState == .notConnected {
+                    self?.backgroundScan()
+                    self?.startBeacon()
+                }
+            } else {
+                self?.logout()
+            }
+        })
+    }
+    
+    //MARK: Login/logout
+    /// Logs the user out and brings to Login page if logged off, otherwise user stays on Device page
+    private func checkIfUserLoggedIn(completion: @escaping ((Bool) -> Void)) {
+        if let currentUser = Auth.auth().currentUser, let name = currentUser.displayName, let email = currentUser.email {
+            //Logged in with Firebase or Google
+            // Setup UI
+            navigationItem.title = name
+            hideTitleSpinner()
+            // Setup user
+            let uid = currentUser.uid
+            AppDelegate.user = LocalUser(id: uid, name: name, email: email)
+            // TODO: Figure out what is being done here
+            Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { success in
+                print("response from server: ", success)
+                if let dict = success.value as? [String: AnyObject] {
+                    print("user is logged in: ", dict)
+                    // TODO: handle creation of user
+                }
+                completion(true)
+            })
+        } else if AccessToken.isCurrentAccessTokenActive {
+            guard let accessToken = AccessToken.current else {
+                completion(false)
+                return
+            }
+            //Logged in with Facebook
+            let req = GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: accessToken.tokenString, version: nil, httpMethod: HTTPMethod(rawValue: "GET"))
+            
+            req.start { [weak self] (connection, result, error) in
+                if let error = error {
+                    print("Facebook error: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    print("Facebook result: \(result.debugDescription)")
+                    guard let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else { return }
+                    // Setup UI
+                    self?.navigationItem.title = name
+                    self?.hideTitleSpinner()
+                    // Setup user
+                    AppDelegate.user = LocalUser(id: id, name: name, email: email)
+                    completion(true)
+                }
+            }
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+            completion(false)
+        } else {
+            //Not logged in
+            completion(false)
+        }
+    }
+    
+    @objc func logout() {
+        disconnectEverything()
+        AppDelegate.user = nil
+        presentLoginPage()
+        if Auth.auth().currentUser?.uid != nil {
+            // Logged in with Firebase or Google
+            if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+                // Logout of Google
+                shared.signOut()
+            }
+            // Logout of Firebase
+            do {
+                try Auth.auth().signOut()
+            } catch let logoutError {
+                print(logoutError)
+            }
+        } else if AccessToken.isCurrentAccessTokenActive {
+            // Logout of Facebook
+            let loginManager = LoginManager()
+            loginManager.logOut()
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+            // Logout of Google
+            shared.signOut()
+        }
+    }
+    
+    private func presentLoginPage() {
+        let loginViewController = LoginViewController()
+        let navController = UINavigationController(rootViewController: loginViewController)
+        DispatchQueue.main.async {
+            self.present(navController, animated: true)
         }
     }
     
     /// Disconnect from uart and beacon bluetooth devices
     func disconnectEverything() {
-        // Disconnect from UART devices
-        guard let peripheral = selectedPeripheral else { return }
-        centralManager?.cancelPeripheralConnection(peripheral)
-        // Stop ranging all beacons
-        if let rangedRegions = locationManager?.rangedRegions as? Set<CLBeaconRegion> {
-            rangedRegions.forEach((locationManager?.stopRangingBeacons)!)
-        }
+        // Disconnect from UART and Beacon
+        disconnectBeacon()
+        disconnectDevice()
     }
     
     @objc func goToSettings() {
@@ -106,15 +211,12 @@ class DeviceViewController: UIViewController {
             self.present(navController, animated: true, completion: nil)
         }
     }
-    
-    @objc func logout() {
-        //TODO: bring back auth logic
-    }
+
     // MARK: UI properties and setup
     /// Logo on Device page
-    lazy var logoImageView: UIImageView = {
+    private let logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "GUARDIAN ANGEL - LOGO 2 - white/")
+        imageView.image = UIImage(named: "logo_white")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         
@@ -140,8 +242,17 @@ class DeviceViewController: UIViewController {
     /// Cushion Identifier Label
     private let deviceIdentifierLabel: UILabel = {
         let tf = UILabel()
-        tf.text = "Cushion 1"
+        tf.text = "Cushion 1:"
         tf.font = UIFont.boldSystemFont(ofSize: 18)
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    private let deviceConnectionStatusLabel: UILabel = {
+        let tf = UILabel()
+        tf.text = "Disconnected"
+        tf.textColor = .red
+        tf.font = UIFont.systemFont(ofSize: 16)
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -172,7 +283,7 @@ class DeviceViewController: UIViewController {
     /// Weight label
     private let activeTextLabel: UILabel = {
         let tf = UILabel()
-        tf.text = "Device Active?"
+        tf.text = "Weight Detected?"
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
@@ -207,7 +318,7 @@ class DeviceViewController: UIViewController {
     /// Seperator Field 1
     private let identifierSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -215,7 +326,7 @@ class DeviceViewController: UIViewController {
     /// Seperator Field 2
     private let tempSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -223,7 +334,7 @@ class DeviceViewController: UIViewController {
     /// Seperator Field 3
     private let weightSeperatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = standardColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -248,6 +359,7 @@ class DeviceViewController: UIViewController {
     
         // add identifier and info fields {
         inputsContainerView.addSubview(deviceIdentifierLabel)
+        inputsContainerView.addSubview(deviceConnectionStatusLabel)
         inputsContainerView.addSubview(infoButton)
         
         // add text labels to container view
@@ -272,9 +384,21 @@ class DeviceViewController: UIViewController {
         
         // setup constraints for identifier label
         deviceIdentifierLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
-        deviceIdentifierLabel.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: 2).isActive=true
+        deviceIdentifierLabel.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -5).isActive=true
         deviceIdentifierLabel.widthAnchor.constraint(equalToConstant: 100).isActive=true
         deviceIdentifierLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        // setup constraints for connection status label
+        deviceConnectionStatusLabel.leftAnchor.constraint(equalTo: deviceIdentifierLabel.rightAnchor, constant: -5).isActive=true
+        deviceConnectionStatusLabel.topAnchor.constraint(equalTo: deviceIdentifierLabel.topAnchor).isActive=true
+        deviceConnectionStatusLabel.widthAnchor.constraint(equalToConstant: 200).isActive=true
+        deviceConnectionStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        // setup constraints for info button
+        infoButton.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor).isActive=true
+        infoButton.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -6).isActive=true
+        infoButton.widthAnchor.constraint(equalToConstant: 50).isActive=true
+        infoButton.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
         // setup constraints for text labels
         tempTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
@@ -288,15 +412,9 @@ class DeviceViewController: UIViewController {
         beaconTextLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
         activeTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
-        activeTextLabel.topAnchor.constraint(equalTo: beaconTextLabel.bottomAnchor).isActive=true
+        activeTextLabel.topAnchor.constraint(equalTo: beaconTextLabel.bottomAnchor,constant: 2).isActive=true
         activeTextLabel.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
         activeTextLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
-        
-        // setup constraints for info button
-        infoButton.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor).isActive=true
-        infoButton.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive=true
-        infoButton.widthAnchor.constraint(equalToConstant: 50).isActive=true
-        infoButton.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
         // setup constraints for status labels
         tempStatusLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
@@ -310,7 +428,7 @@ class DeviceViewController: UIViewController {
         beaconStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
     
         activeStatusLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
-        activeStatusLabel.topAnchor.constraint(equalTo: beaconStatusLabel.bottomAnchor).isActive=true
+        activeStatusLabel.topAnchor.constraint(equalTo: beaconStatusLabel.bottomAnchor, constant: 3).isActive=true
         activeStatusLabel.widthAnchor.constraint(equalToConstant: 120).isActive=true
         activeStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
@@ -329,13 +447,13 @@ class DeviceViewController: UIViewController {
         
         weight_loadingView.translatesAutoresizingMaskIntoConstraints = false
         weight_loadingView.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: 35).isActive=true
-        weight_loadingView.topAnchor.constraint(equalTo: beaconStatusLabel.bottomAnchor).isActive=true
+        weight_loadingView.topAnchor.constraint(equalTo: beaconStatusLabel.bottomAnchor, constant: 3).isActive=true
         weight_loadingView.widthAnchor.constraint(equalToConstant: 120).isActive=true
         weight_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
         // setup constraints for seperator fields
         identifierSeperatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive=true
-        identifierSeperatorView.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor, constant: -3).isActive=true
+        identifierSeperatorView.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor, constant: -5).isActive=true
         identifierSeperatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive=true
         identifierSeperatorView.heightAnchor.constraint(equalToConstant: 3).isActive=true
 
@@ -363,16 +481,25 @@ class DeviceViewController: UIViewController {
         activeStatusLabel.text = isWeight ? yes : no
     }
     
-    func setTitleConnected() {
-        navigationItem.title = "Connected"
-    }
-    
-    func setTitleDisconnected() {
-        navigationItem.title = "Disconnected"
-    }
-    
-    func setTitleConnecting() {
-        navigationItem.title = "Connecting"
+    func setConnectionStatus(_ connectionState: ConnectionState) {
+        if connectionState == .connected {
+            deviceConnectionStatusLabel.text = "Connected"
+            deviceConnectionStatusLabel.textColor = .whatsNewKitGreen
+        } else if connectionState == .connecting {
+            deviceConnectionStatusLabel.text = "Connecting"
+            deviceConnectionStatusLabel.textColor = .orange
+            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
+                if self?.connectionState == .connected {
+                    self?.setConnectionStatus(.connected)
+                } else {
+                    self?.setConnectionStatus(.notConnected)
+                }
+            }
+            timer.start()
+        } else {
+            deviceConnectionStatusLabel.text = "Disconnected"
+            deviceConnectionStatusLabel.textColor = .red
+        }
     }
     
     // MARK: Loading view functions
@@ -394,7 +521,7 @@ class DeviceViewController: UIViewController {
         if !temp_loadingView.isAnimating && !tempStatusLabel.isHidden {
             temp_loadingView.startAnimating()
             tempStatusLabel.isHidden = true
-            let timer = CustomTimer(timeInterval: 20) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
                 self?.hideTempSpinner()
             }
             timer.start()
@@ -412,7 +539,7 @@ class DeviceViewController: UIViewController {
         if !beacon_loadingView.isAnimating && !beaconStatusLabel.isHidden {
             beacon_loadingView.startAnimating()
             beaconStatusLabel.isHidden = true
-            let timer = CustomTimer(timeInterval: 20) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
                 self?.hideBeaconSpinner()
             }
             timer.start()
@@ -430,7 +557,7 @@ class DeviceViewController: UIViewController {
         if !weight_loadingView.isAnimating && !activeStatusLabel.isHidden {
             weight_loadingView.startAnimating()
             activeStatusLabel.isHidden = true
-            let timer = CustomTimer(timeInterval: 20) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
                 self?.hideWeightSpinner()
             }
             timer.start()
@@ -450,6 +577,11 @@ class DeviceViewController: UIViewController {
             title: "Information about Device",
             items: [
                 WhatsNew.Item(
+                    title: "",
+                    subtitle: "Note: Connecting to multiple cushions is possible",
+                    image: nil
+                ),
+                WhatsNew.Item(
                     title: "Temperature Section:",
                     subtitle: "The temperature calculated by the smart cushion",
                     image: UIImage(named: "temp")
@@ -460,7 +592,7 @@ class DeviceViewController: UIViewController {
                     image: UIImage(named: "proximity")
                 ),
                 WhatsNew.Item(
-                    title: "Device Active Section:",
+                    title: "Weight Detected Section:",
                     subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
                     image: UIImage(named: "setup")
                 ),
@@ -474,14 +606,14 @@ class DeviceViewController: UIViewController {
 
         let myTheme = WhatsNewViewController.Theme { configuration in
             configuration.titleView.titleColor = .white
-            configuration.backgroundColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.backgroundColor = standardColor
             configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
             configuration.itemsView.titleColor = .white
             configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
             configuration.itemsView.subtitleColor = .white
             configuration.completionButton.title = "Go Back"
             configuration.completionButton.backgroundColor = .white
-            configuration.completionButton.titleColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
+            configuration.completionButton.titleColor = standardColor
         }
         
         let configuration = WhatsNewViewController.Configuration(
@@ -494,5 +626,37 @@ class DeviceViewController: UIViewController {
         )
         
         present(whatsNewViewController, animated: true)
+    }
+}
+
+extension DeviceViewController: GIDSignInDelegate {
+    // Google sign-in delegate methods
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
+              withError error: Error!) {
+        print("Successfully logged into Google", user.debugDescription)
+        
+        if error != nil {
+            print("Error signing into Google: ", error.debugDescription)
+            return
+        }
+        guard let idToken = user.authentication.idToken else { return }
+        guard let accessToken = user.authentication.accessToken else { return }
+        let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        
+        Auth.auth().signIn(with: credentials, completion: { (result, error) in
+            if let err = error {
+                print("Failed to create a Firebase User with Google account: ", err)
+                return
+            }
+            let user = result?.user
+            guard let uid = user?.uid, let name = user?.displayName, let email = user?.email else { return }
+            AppDelegate.user = LocalUser(id: uid, name: name, email: email)
+        })
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
+              withError error: Error!) {
+        // Perform any operations when the user disconnects from app here.
+        // ...
     }
 }

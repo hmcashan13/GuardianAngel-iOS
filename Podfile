@@ -13,5 +13,10 @@ target 'GuardianAngelApp' do
   end
 
   pod 'WhatsNewKit'
+  pod 'FirebaseAuth'
+  pod 'Firebase/Storage'
+  pod 'Firebase/Database'   
+  pod 'FBSDKLoginKit'
+  pod 'GoogleSignIn'
 
 end

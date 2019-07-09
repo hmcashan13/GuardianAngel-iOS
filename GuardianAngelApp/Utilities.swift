@@ -9,23 +9,17 @@
 import UIKit
 import CoreBluetooth
 
-let kBLEService_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-let kBLE_Characteristic_uuid_Tx: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
-let kBLE_Characteristic_uuid_Rx: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
-let MaxCharacters: Int = 20
-
-let BLEService_UUID: CBUUID = CBUUID(string: kBLEService_UUID)
-let BLE_Characteristic_uuid_Tx: CBUUID = CBUUID(string: kBLE_Characteristic_uuid_Tx)//(Property = Write without response)
-let BLE_Characteristic_uuid_Rx: CBUUID = CBUUID(string: kBLE_Characteristic_uuid_Rx)// (Property = Read/Notify)
-
 // String constants
 let connected: String = "Connected"
 let notConnected: String = "Not Connected"
 let yes: String = "Yes"
 let no: String = "No"
 
-let standardColor: UIColor = UIColor(displayP3Red: 0.7, green: 0.4, blue: 1.0, alpha: 1.0)
-let seperatorColor: UIColor = UIColor.rgb(red: 220, green: 91, blue: 151)
+// Timer constants
+let spinnerTime: TimeInterval = 20.0
+
+// Custom Colors
+let standardColor: UIColor = UIColor.init(red: 150/255, green: 135/255, blue: 200/255, alpha: 1)
 
 /// Present a message to the user (automatically done on the main thread)
 func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {

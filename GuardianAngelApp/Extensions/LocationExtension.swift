@@ -13,10 +13,15 @@ extension DeviceViewController: CLLocationManagerDelegate {
         locationManager?.stopRangingBeacons(in: beaconRegion)
     }
     
-    @objc func startBeaconAndUart() {
+    @objc func startBeacon() {
         if !isBeaconConnected {
             locationManager?.startMonitoring(for: beaconRegion)
         }
+    }
+    
+    func disconnectBeacon() {
+        locationManager?.stopMonitoring(for: beaconRegion)
+        locationManager?.stopRangingBeacons(in: beaconRegion)
     }
     
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
@@ -25,11 +30,10 @@ extension DeviceViewController: CLLocationManagerDelegate {
                 print("Beacon Region is not valid")
                 return
             }
+            isBeaconConnected = true
             // Start ranging beacon
             manager.startRangingBeacons(in: region)
         }
-        // Start UART
-        backgroundScan()
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
@@ -40,7 +44,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
         // Modify state
         isBeaconConnected = true
         // Setup UI
-        showBeaconSpinner()
+//        showBeaconSpinner()
         // Connect to UART
         if connectionState == .notConnected {
             backgroundScan()
@@ -69,7 +73,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
             // Only displaying proximity info if we are connected to UART
             guard connectionState == .connected else {
                 // attempting to reconnect because we should be close enough to device
-                backgroundScan()
+                if isLoggedIn { backgroundScan() }
                 return
             }
             let distance = beacon.accuracy
@@ -87,10 +91,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
             }
             print("beacon distance: \(distance)m")
             
-            // Modify state
-            isBeaconConnected = true
             // Setup UI
-            hideBeaconSpinner()
             if connectionState == .connected {
                 adjustBeaconStatus(proximity)
             }

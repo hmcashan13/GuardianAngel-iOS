@@ -17,7 +17,15 @@
 		E70B92622176E34F00B4AE8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */; };
 		E70B92782176E34F00B4AE8B /* GuardianAngelAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */; };
 		E72EACE522CD905D007246C1 /* GPSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE422CD905D007246C1 /* GPSViewController.swift */; };
-		E72EACE722D0404E007246C1 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE622D0404E007246C1 /* ColorExtension.swift */; };
+		E72EACE922D0DAA9007246C1 /* GPSAdjustViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE822D0DAA9007246C1 /* GPSAdjustViewController.swift */; };
+		E72EACEB22D101F5007246C1 /* CushionAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACEA22D101F5007246C1 /* CushionAnnotation.swift */; };
+		E72EACED22D10950007246C1 /* CushionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACEC22D10950007246C1 /* CushionMapView.swift */; };
+		E72EACF322D11B10007246C1 /* ActionButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF222D11B10007246C1 /* ActionButtonItem.swift */; };
+		E72EACF522D11B17007246C1 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF422D11B17007246C1 /* ActionButton.swift */; };
+		E72EACF722D122DC007246C1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF622D122DC007246C1 /* LoginViewController.swift */; };
+		E72EACF922D122E4007246C1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF822D122E4007246C1 /* RegisterViewController.swift */; };
+		E72EACFC22D1283C007246C1 /* LocalUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACFB22D1283C007246C1 /* LocalUser.swift */; };
+		E72EACFE22D14831007246C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E72EACFD22D14831007246C1 /* GoogleService-Info.plist */; };
 		E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D887217BE79A00A0A627 /* NotificationExtension.swift */; };
 		E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D889217BED1800A0A627 /* BluetoothExtension.swift */; };
 		E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D88D217BF22300A0A627 /* SettingsViewController.swift */; };
@@ -58,7 +66,15 @@
 		E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardianAngelAppUITests.swift; sourceTree = "<group>"; };
 		E70B92792176E35000B4AE8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E72EACE422CD905D007246C1 /* GPSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSViewController.swift; sourceTree = "<group>"; };
-		E72EACE622D0404E007246C1 /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		E72EACE822D0DAA9007246C1 /* GPSAdjustViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSAdjustViewController.swift; sourceTree = "<group>"; };
+		E72EACEA22D101F5007246C1 /* CushionAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CushionAnnotation.swift; sourceTree = "<group>"; };
+		E72EACEC22D10950007246C1 /* CushionMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CushionMapView.swift; sourceTree = "<group>"; };
+		E72EACF222D11B10007246C1 /* ActionButtonItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonItem.swift; sourceTree = "<group>"; };
+		E72EACF422D11B17007246C1 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		E72EACF622D122DC007246C1 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		E72EACF822D122E4007246C1 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		E72EACFB22D1283C007246C1 /* LocalUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalUser.swift; sourceTree = "<group>"; };
+		E72EACFD22D14831007246C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E753D887217BE79A00A0A627 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		E753D889217BED1800A0A627 /* BluetoothExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothExtension.swift; sourceTree = "<group>"; };
 		E753D88D217BF22300A0A627 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +160,7 @@
 				E70B92632176E34F00B4AE8B /* Info.plist */,
 				E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */,
 				E70B925B2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld */,
+				E72EACFD22D14831007246C1 /* GoogleService-Info.plist */,
 			);
 			path = GuardianAngelApp;
 			sourceTree = "<group>";
@@ -166,13 +183,45 @@
 			path = GuardianAngelAppUITests;
 			sourceTree = "<group>";
 		};
+		E72EACEE22D10978007246C1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E753D88D217BF22300A0A627 /* SettingsViewController.swift */,
+				E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */,
+				E72EACE822D0DAA9007246C1 /* GPSAdjustViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E72EACEF22D10999007246C1 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				E72EACF222D11B10007246C1 /* ActionButtonItem.swift */,
+				E72EACF422D11B17007246C1 /* ActionButton.swift */,
+				E72EACEA22D101F5007246C1 /* CushionAnnotation.swift */,
+				E72EACEC22D10950007246C1 /* CushionMapView.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		E72EACFA22D12342007246C1 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E72EACF622D122DC007246C1 /* LoginViewController.swift */,
+				E72EACF822D122E4007246C1 /* RegisterViewController.swift */,
+				E72EACFB22D1283C007246C1 /* LocalUser.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		E746F7C72291B11F0044CDD6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				E753D890217BF6A600A0A627 /* DeviceViewController.swift */,
 				E72EACE422CD905D007246C1 /* GPSViewController.swift */,
-				E753D88D217BF22300A0A627 /* SettingsViewController.swift */,
-				E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */,
+				E72EACFA22D12342007246C1 /* Auth */,
+				E72EACEF22D10999007246C1 /* Map */,
+				E72EACEE22D10978007246C1 /* Settings */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -183,7 +232,6 @@
 				E753D889217BED1800A0A627 /* BluetoothExtension.swift */,
 				E77AF28D2198B48700E7BC6C /* LocationExtension.swift */,
 				E753D887217BE79A00A0A627 /* NotificationExtension.swift */,
-				E72EACE622D0404E007246C1 /* ColorExtension.swift */,
 				E753D894217C0B5F00A0A627 /* ImageExtension.swift */,
 			);
 			path = Extensions;
@@ -250,6 +298,9 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -287,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E70B92622176E34F00B4AE8B /* LaunchScreen.storyboard in Resources */,
+				E72EACFE22D14831007246C1 /* GoogleService-Info.plist in Resources */,
 				E70B925F2176E34F00B4AE8B /* Assets.xcassets in Resources */,
 				E70B925A2176E34E00B4AE8B /* Main.storyboard in Resources */,
 			);
@@ -311,13 +363,25 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/WhatsNewKit/WhatsNewKit.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WhatsNewKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -354,11 +418,14 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources.sh",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -433,17 +500,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				E702BC8A2193BB5E002A7BF8 /* TemperatureAdjustViewController.swift in Sources */,
+				E72EACED22D10950007246C1 /* CushionMapView.swift in Sources */,
 				E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */,
+				E72EACEB22D101F5007246C1 /* CushionAnnotation.swift in Sources */,
 				E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */,
 				E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */,
+				E72EACF322D11B10007246C1 /* ActionButtonItem.swift in Sources */,
+				E72EACF522D11B17007246C1 /* ActionButton.swift in Sources */,
 				E70AB614227DDF57003F71BF /* Utilities.swift in Sources */,
+				E72EACF922D122E4007246C1 /* RegisterViewController.swift in Sources */,
 				E70B925D2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld in Sources */,
 				E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */,
 				E72EACE522CD905D007246C1 /* GPSViewController.swift in Sources */,
+				E72EACE922D0DAA9007246C1 /* GPSAdjustViewController.swift in Sources */,
+				E72EACFC22D1283C007246C1 /* LocalUser.swift in Sources */,
+				E72EACF722D122DC007246C1 /* LoginViewController.swift in Sources */,
 				E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */,
 				E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */,
 				E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */,
-				E72EACE722D0404E007246C1 /* ColorExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
