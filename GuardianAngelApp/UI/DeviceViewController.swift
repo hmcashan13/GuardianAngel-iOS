@@ -64,6 +64,7 @@ class DeviceViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
         
+        showTitleSpinner()
         showTempSpinner()
         showWeightSpinner()
         showBeaconSpinner()
@@ -98,7 +99,6 @@ class DeviceViewController: UIViewController {
     }
     
     private func checkIfUserLoggedIn() {
-        showTitleSpinner()
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
             self?.isLoggedIn = authStatus
             if authStatus {
@@ -259,7 +259,7 @@ class DeviceViewController: UIViewController {
     
     private let infoButton: UIButton = {
         let infoButton = UIButton(type: .infoDark)
-        infoButton.addTarget(self, action: #selector(showDeviceInfo), for: .touchUpInside)
+        infoButton.addTarget(self, action: #selector(showDeviceInfoView), for: .touchUpInside)
         infoButton.translatesAutoresizingMaskIntoConstraints = false
         return infoButton
     }()
@@ -572,7 +572,7 @@ class DeviceViewController: UIViewController {
     }
     
     // MARK: Info Button Setup
-    @objc func showDeviceInfo() {
+    @objc func showDeviceInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about Device",
             items: [

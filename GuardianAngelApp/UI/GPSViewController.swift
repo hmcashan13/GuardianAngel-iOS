@@ -31,6 +31,9 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
         
         setupMap()
         setupLocationButtons()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(determineMyCurrentLocation), name: UIApplication.willEnterForegroundNotification
+            , object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -139,7 +142,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
     
     private let infoButton: UIButton = {
         let infoButton = UIButton(type: .infoDark)
-        infoButton.addTarget(self, action: #selector(showGPSInfo), for: .touchUpInside)
+        infoButton.addTarget(self, action: #selector(showGPSInfoView), for: .touchUpInside)
         infoButton.translatesAutoresizingMaskIntoConstraints = false
         return infoButton
     }()
@@ -190,7 +193,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
         actionButton.action = { button in button.toggleMenu()}
     }
     
-    private func determineMyCurrentLocation() {
+    @objc func determineMyCurrentLocation() {
         locationManager = CLLocationManager()
         locationManager?.delegate = self
         locationManager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -225,7 +228,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
         // TODO: show error message
     }
 
-    @objc func showGPSInfo() {
+    @objc func showGPSInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about GPS",
             items: [
