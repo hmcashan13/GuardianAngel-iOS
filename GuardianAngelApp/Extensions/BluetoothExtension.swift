@@ -143,20 +143,20 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, 
             peripheral.discoverDescriptors(for: characteristic)
         }
         // Setup UI
-        executeOnMainThread { [weak self] in
-            self?.setConnectionStatus(.connected)
-            self?.hideTempSpinner()
-            self?.hideBeaconSpinner()
-            self?.hideWeightSpinner()
+        let timer = CustomTimer(timeInterval: 3) {
+            executeOnMainThread { [weak self] in
+                self?.setConnectionStatus(.connected)
+                self?.hideTempSpinner()
+                self?.hideBeaconSpinner()
+                self?.hideWeightSpinner()
+            }
         }
+        timer.start()
     }
     // Getting Values from UART
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue), characteristic == rxCharacteristic {
             let parsedData: (String,Bool) = parseData(ASCIIstring)
-            if !isBeaconConnected {
-                
-            }
             // Setup UI 
             executeOnMainThread { [weak self] in
                 self?.adjustTemperature(parsedData.0)

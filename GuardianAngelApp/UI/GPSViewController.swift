@@ -32,7 +32,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
         setupMap()
         setupLocationButtons()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(determineMyCurrentLocation), name: UIApplication.willEnterForegroundNotification
+        NotificationCenter.default.addObserver(self, selector: #selector(determineCushionLocation), name: UIApplication.willEnterForegroundNotification
             , object: nil)
     }
     
@@ -45,7 +45,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
     private func checkIfUserLoggedIn() {
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
             if authStatus {
-                self?.determineMyCurrentLocation()
+                self?.determineCushionLocation()
             } else {
                 self?.logout()
             }
@@ -183,9 +183,9 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
     
     // TODO: make this work
     private func setupLocationButtons() {
-        let currentLocationButton = ActionButtonItem(title: "Go to Current Location", image: UIImage(named: "refreshButton"))
+        let currentLocationButton = ActionButtonItem(title: "Go to My Location", image: UIImage(named: "proximity"))
         currentLocationButton.action = { item in self.view.backgroundColor = UIColor.red }
-        let cushionLocationButton = ActionButtonItem(title: "Go to Cushion Location", image: UIImage(named: "gear"))
+        let cushionLocationButton = ActionButtonItem(title: "Go to Cushion Location", image: UIImage(named: "gps"))
         cushionLocationButton.action = { item in self.view.backgroundColor = UIColor.blue }
         actionButton = ActionButton(attachedToView: mapView, items: [currentLocationButton, cushionLocationButton])
         actionButton.setTitle("+", forState: UIControl.State())
@@ -193,7 +193,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
         actionButton.action = { button in button.toggleMenu()}
     }
     
-    @objc func determineMyCurrentLocation() {
+    @objc func determineCushionLocation() {
         locationManager = CLLocationManager()
         locationManager?.delegate = self
         locationManager?.desiredAccuracy = kCLLocationAccuracyBest
