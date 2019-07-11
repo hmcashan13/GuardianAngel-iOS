@@ -19,18 +19,30 @@ let no: String = "No"
 let spinnerTime: TimeInterval = 20.0
 
 // Custom Colors
-let standardColor: UIColor = UIColor.init(red: 150/255, green: 135/255, blue: 200/255, alpha: 1)
+let standardColor: UIColor = UIColor(red: 150/255, green: 135/255, blue: 200/255, alpha: 1)
+
+/// Present a message to the user (automatically done on the main thread)
+func showAlertMessageWithRetry(presenter: UIViewController, title: String, message: String, cancelHandler: ((UIAlertAction) -> Void)?, retryHandler: ((UIAlertAction) -> Void)?) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: cancelHandler))
+    alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: retryHandler))
+    executeOnMainThread { [weak presenter] in
+        presenter?.present(alert, animated: true, completion: nil)
+    }
+}
 
 /// Present a message to the user (automatically done on the main thread)
 func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-    alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: handler))
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: handler))
+
     executeOnMainThread { [weak presenter] in
         presenter?.present(alert, animated: true, completion: nil)
     }
 }
+
 
 func convertTempString(_ temperature: String) -> String {
     guard let celsiusTemp: Double = Double(temperature) else { return "" }

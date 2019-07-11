@@ -151,8 +151,8 @@
 			isa = PBXGroup;
 			children = (
 				E753D898217CEE4500A0A627 /* GuardianAngelApp.entitlements */,
-				E70AB613227DDF57003F71BF /* Utilities.swift */,
 				E70B92542176E34E00B4AE8B /* AppDelegate.swift */,
+				E70AB613227DDF57003F71BF /* Utilities.swift */,
 				E746F7C72291B11F0044CDD6 /* UI */,
 				E753D88F217BF23600A0A627 /* Extensions */,
 				E70B92582176E34E00B4AE8B /* Main.storyboard */,
