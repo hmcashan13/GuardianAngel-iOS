@@ -200,7 +200,7 @@ class DeviceViewController: UIViewController {
 
         // Setup constraints of logo image view
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive=true
-        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 37).isActive=true
+        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 37).isActive=true
         logoImageView.widthAnchor.constraint(equalToConstant: 100).isActive=true
         logoImageView.heightAnchor.constraint(equalToConstant: 100).isActive=true
         
@@ -386,11 +386,6 @@ class DeviceViewController: UIViewController {
                     title: "Proximity from Cushion Section:",
                     subtitle: "Provides information about the proximity of the user from the smart cushion",
                     image: UIImage(named: "proximity")
-                ),
-                WhatsNew.Item(
-                    title: "Device Active Section:",
-                    subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
-                    image: UIImage(named: "setup")
                 ),
                 WhatsNew.Item(
                     title: "Questions?",
