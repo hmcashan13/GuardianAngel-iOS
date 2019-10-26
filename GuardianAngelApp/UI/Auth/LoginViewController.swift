@@ -196,7 +196,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     
     private func setupFacebookLoginButton() {
         // Setup read permissions for Facebook login
-//        facebookLoginButton.readPermissions = ["public_profile", "email"];
+        facebookLoginButton.permissions = ["public_profile", "email"]
         // Setup UI
         view.addSubview(facebookLoginButton)
         facebookLoginButton.translatesAutoresizingMaskIntoConstraints = false

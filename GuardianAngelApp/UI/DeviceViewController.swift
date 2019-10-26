@@ -45,7 +45,12 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     var isWeightDetected: Bool = false
     
     // Auth property
-    var isLoggedIn: Bool = true
+    var isLoggedIn: AuthState = .loggedOut
+    enum AuthState {
+        case loggedIn
+        case loggingIn
+        case loggedOut
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,9 +98,10 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     }
     
     private func checkIfUserLoggedIn() {
+        isLoggedIn = .loggingIn
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
             self?.isLoggedIn = authStatus
-            if authStatus {
+            if authStatus == .loggedIn {
                 if self?.connectionState == .notConnected {
                     self?.backgroundScan()
                     self?.startBeacon()
@@ -108,7 +114,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     
     //MARK: Login/logout
     /// Logs the user out and brings to Login page if logged off, otherwise user stays on Device page
-    private func checkIfUserLoggedIn(completion: @escaping ((Bool) -> Void)) {
+    private func checkIfUserLoggedIn(completion: @escaping ((AuthState) -> Void)) {
         if let currentUser = Auth.auth().currentUser, let name = currentUser.displayName, let email = currentUser.email {
             //Logged in with Firebase or Google
             // Setup UI
@@ -124,11 +130,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                     print("user is logged in: ", dict)
                     // TODO: handle creation of user
                 }
-                completion(true)
+                completion(.loggedIn)
             })
         } else if AccessToken.isCurrentAccessTokenActive {
             guard let accessToken = AccessToken.current else {
-                completion(false)
+                completion(.loggedOut)
                 return
             }
             //Logged in with Facebook
@@ -137,7 +143,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             req.start { [weak self] (connection, result, error) in
                 if let error = error {
                     print("Facebook error: \(error.localizedDescription)")
-                    completion(false)
+                    completion(.loggedOut)
                 } else {
                     print("Facebook result: \(result.debugDescription)")
                     guard let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else { return }
@@ -146,14 +152,14 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                     self?.hideTitleSpinner()
                     // Setup user
                     AppDelegate.user = LocalUser(id: id, name: name, email: email)
-                    completion(true)
+                    completion(.loggedIn)
                 }
             }
         } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
-            completion(false)
+            completion(.loggedOut)
         } else {
             //Not logged in
-            completion(false)
+            completion(.loggedOut)
         }
     }
     
@@ -183,7 +189,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         }
     }
     
-    private func presentLoginPage() {
+    func presentLoginPage() {
         let loginViewController = LoginViewController()
         let navController = UINavigationController(rootViewController: loginViewController)
         DispatchQueue.main.async {

@@ -73,7 +73,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
             // Only displaying proximity info if we are connected to UART
             guard connectionState == .connected else {
                 // attempting to reconnect because we should be close enough to device
-                if isLoggedIn { backgroundScan() }
+                if isLoggedIn == .loggedIn { backgroundScan() }
                 return
             }
             let distance = beacon.accuracy

@@ -33,6 +33,16 @@ func showAlertMessageWithRetry(presenter: UIViewController, title: String, messa
 }
 
 /// Present a message to the user (automatically done on the main thread)
+func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?, completion: (() -> Void)?) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: handler))
+
+    executeOnMainThread { [weak presenter] in
+        presenter?.present(alert, animated: true, completion: completion)
+    }
+}
+
 func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     

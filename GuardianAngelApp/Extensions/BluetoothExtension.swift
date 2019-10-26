@@ -245,8 +245,12 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 self.hideTempSpinner()
                 self.hideBeaconSpinner()
                 self.hideWeightSpinner()
-                // Show error message
-                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on", handler: nil)
+                // Show error message only if logged in
+                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on", handler: { _ in
+                    if self.isLoggedIn == .loggedOut {
+                        self.presentLoginPage()
+                    }
+                }, completion: nil)
             }
         }
     }
