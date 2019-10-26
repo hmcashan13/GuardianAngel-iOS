@@ -8,15 +8,16 @@
 
 import UIKit
 
-protocol BluetoothSettingsDelegate: AnyObject {
+protocol SettingsDelegate: AnyObject {
     func backgroundScan()
     func disconnectDevice()
+    func logout()
 }
 
 class SettingsViewController: UITableViewController, UINavigationControllerDelegate {
-    weak var delegate: BluetoothSettingsDelegate?
+    weak var delegate: SettingsDelegate?
     
-    private let cellNames = ["Adjust Temperature Sensor","Adjust GPS Tracker", "Reconnect to Cushion", "Disconnect From Cushion"]
+    private let cellNames = ["Adjust Temperature Sensor","Adjust GPS Tracker", "Reconnect to Cushion", "Disconnect From Cushion", "Logout"]
     private let cellID = "cellID"
     
     override func viewDidLoad() {
@@ -31,8 +32,6 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         
         tableView.tableFooterView = UIView(frame: .zero)
-        
-        
     }
     @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
@@ -70,10 +69,11 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
             reconnectDevice()
         case 3:
             disconnectDevice()
+        case 4:
+            logout()
         default:
             print("nothing")
         }
-        
     }
     
     // MARK: TableView Functions
@@ -95,5 +95,10 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
     // 4
     private func disconnectDevice() {
         delegate?.disconnectDevice()
+    }
+    // 5
+    private func logout() {
+        delegate?.logout()
+        handleCancel()
     }
 }

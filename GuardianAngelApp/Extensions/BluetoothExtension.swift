@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 
 // TODO: do we need both CBPeripheralDelegate and CBCentralManagerDelegate?
-extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate, BluetoothSettingsDelegate {
+extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
         guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }

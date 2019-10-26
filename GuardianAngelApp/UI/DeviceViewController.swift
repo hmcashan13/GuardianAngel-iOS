@@ -16,17 +16,10 @@ import FirebaseDatabase
 import FBSDKLoginKit
 import GoogleSignIn
 
-
-
-class DeviceViewController: UIViewController {
+class DeviceViewController: UIViewController, SettingsDelegate {
     // Beacon properties
     let beaconRegion: CLBeaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
-        major: 0,
-        minor: 0,
-        identifier: "Guardian")
-    let beaconRegion2: CLBeaconRegion = CLBeaconRegion(
-        proximityUUID: UUID(uuidString:"E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!,
         major: 0,
         minor: 0,
         identifier: "Guardian")
@@ -62,7 +55,7 @@ class DeviceViewController: UIViewController {
         setupDeviceContainerView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
         
         showTitleSpinner()
         showTempSpinner()
@@ -90,6 +83,7 @@ class DeviceViewController: UIViewController {
         
         // Setup Google Sign in delegate
         GIDSignIn.sharedInstance().delegate = self
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -163,7 +157,7 @@ class DeviceViewController: UIViewController {
         }
     }
     
-    @objc func logout() {
+    func logout() {
         disconnectEverything()
         AppDelegate.user = nil
         presentLoginPage()
@@ -206,6 +200,7 @@ class DeviceViewController: UIViewController {
     
     @objc func goToSettings() {
         let settingsViewController = SettingsViewController()
+        settingsViewController.delegate = self
         let navController = UINavigationController(rootViewController: settingsViewController)
         DispatchQueue.main.async {
             self.present(navController, animated: true, completion: nil)
@@ -360,7 +355,6 @@ class DeviceViewController: UIViewController {
         // add identifier and info fields {
         inputsContainerView.addSubview(deviceIdentifierLabel)
         inputsContainerView.addSubview(deviceConnectionStatusLabel)
-        inputsContainerView.addSubview(infoButton)
         
         // add text labels to container view
         inputsContainerView.addSubview(tempTextLabel)
@@ -394,12 +388,6 @@ class DeviceViewController: UIViewController {
         deviceConnectionStatusLabel.widthAnchor.constraint(equalToConstant: 200).isActive=true
         deviceConnectionStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
-        // setup constraints for info button
-        infoButton.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor).isActive=true
-        infoButton.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -6).isActive=true
-        infoButton.widthAnchor.constraint(equalToConstant: 50).isActive=true
-        infoButton.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
-        
         // setup constraints for text labels
         tempTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
         tempTextLabel.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor).isActive=true
@@ -418,7 +406,7 @@ class DeviceViewController: UIViewController {
         
         // setup constraints for status labels
         tempStatusLabel.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -12).isActive=true
-        tempStatusLabel.topAnchor.constraint(equalTo: infoButton.bottomAnchor).isActive=true
+        tempStatusLabel.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor).isActive=true
         tempStatusLabel.widthAnchor.constraint(equalToConstant: 120).isActive=true
         tempStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         
@@ -435,7 +423,7 @@ class DeviceViewController: UIViewController {
         // setup constarints for loading views
         temp_loadingView.translatesAutoresizingMaskIntoConstraints = false
         temp_loadingView.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: 35).isActive=true
-        temp_loadingView.topAnchor.constraint(equalTo: infoButton.bottomAnchor).isActive=true
+        temp_loadingView.topAnchor.constraint(equalTo: deviceIdentifierLabel.bottomAnchor).isActive=true
         temp_loadingView.widthAnchor.constraint(equalToConstant: 120).isActive=true
         temp_loadingView.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
         

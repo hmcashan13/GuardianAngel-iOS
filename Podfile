@@ -13,6 +13,7 @@ target 'GuardianAngelApp' do
   end
 
   pod 'WhatsNewKit'
+  #pod 'RxSwift'
   pod 'FirebaseAuth'
   pod 'Firebase/Storage'
   pod 'Firebase/Database'   
