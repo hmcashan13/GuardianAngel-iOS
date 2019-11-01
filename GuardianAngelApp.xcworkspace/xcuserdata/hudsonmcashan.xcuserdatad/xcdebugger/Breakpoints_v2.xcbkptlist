@@ -24,16 +24,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "35ED3F5B-997A-4DFC-A3E0-3E1C50D065B0"
+            uuid = "77997012-2F95-4F23-B6E4-F9E28E3773C7"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GuardianAngelApp/UI/Auth/LoginViewController.swift"
+            filePath = "GuardianAngelApp/UI/DeviceViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
-            landmarkName = "checkIfUserLoggedIn()"
+            startingLineNumber = "124"
+            endingLineNumber = "124"
+            landmarkName = "checkIfUserLoggedIn(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

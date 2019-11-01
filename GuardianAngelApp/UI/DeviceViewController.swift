@@ -16,7 +16,10 @@ import FirebaseDatabase
 import FBSDKLoginKit
 import GoogleSignIn
 
-class DeviceViewController: UIViewController, SettingsDelegate {
+class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
+    
+
+    
     // Beacon properties
     let beaconRegion: CLBeaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
@@ -107,6 +110,8 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                     self?.startBeacon()
                 }
             } else {
+                self?.navigationItem.title = "Not Logged In"
+                self?.hideTitleSpinner()
                 self?.logout()
             }
         })
@@ -146,6 +151,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                     completion(.loggedOut)
                 } else {
                     print("Facebook result: \(result.debugDescription)")
+                    // TODO: handle failure
                     guard let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else { return }
                     // Setup UI
                     self?.navigationItem.title = name
@@ -156,7 +162,8 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                 }
             }
         } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
-            completion(.loggedOut)
+            shared.signInSilently()
+            completion(.loggedIn)
         } else {
             //Not logged in
             completion(.loggedOut)
@@ -191,6 +198,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     
     func presentLoginPage() {
         let loginViewController = LoginViewController()
+        loginViewController.delegate = self
         let navController = UINavigationController(rootViewController: loginViewController)
         DispatchQueue.main.async {
             self.present(navController, animated: true)
@@ -211,6 +219,10 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         DispatchQueue.main.async {
             self.present(navController, animated: true, completion: nil)
         }
+    }
+    
+    func setTitle(_ title: String) {
+        self.navigationItem.title = "\(title)"
     }
 
     // MARK: UI properties and setup
@@ -633,6 +645,15 @@ extension DeviceViewController: GIDSignInDelegate {
             print("Error signing into Google: ", error.debugDescription)
             return
         }
+        guard let id = user?.userID, let profile = user?.profile, let name = profile.name, let email = profile.email else { return }
+        AppDelegate.user = LocalUser(id: id, name: name, email: email)
+        executeOnMainThread { [weak self] in
+            // Setup UI
+            self?.navigationItem.title = name
+            self?.hideTitleSpinner()
+        }
+        // Setup user
+        AppDelegate.user = LocalUser(id: id, name: name, email: email)
         guard let idToken = user.authentication.idToken else { return }
         guard let accessToken = user.authentication.accessToken else { return }
         let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
@@ -642,9 +663,6 @@ extension DeviceViewController: GIDSignInDelegate {
                 print("Failed to create a Firebase User with Google account: ", err)
                 return
             }
-            let user = result?.user
-            guard let uid = user?.uid, let name = user?.displayName, let email = user?.email else { return }
-            AppDelegate.user = LocalUser(id: uid, name: name, email: email)
         })
     }
     

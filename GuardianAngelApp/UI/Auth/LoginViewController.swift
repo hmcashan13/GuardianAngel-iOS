@@ -12,7 +12,11 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import GoogleSignIn
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate {
+protocol LoginDelegate: AnyObject {
+    func setTitle(_ title: String)
+}
+class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate {
+    weak var delegate: LoginDelegate?
     let logoContainerView: UIView = {
         let view = UIView()
     
@@ -214,7 +218,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         googleLoginButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
         googleLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         googleLoginButton.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: 20).isActive = true
-        
         googleLoginButton.addTarget(self, action: #selector(loginWithGoogle), for: .touchUpInside)
         googleLoginButton.setImage(UIImage(named: "btn_google_light_normal_ios"), for: .normal)
         googleLoginButton.setTitle("    Login with Google   ", for: .normal)
@@ -223,13 +226,25 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         googleLoginButton.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
         googleLoginButton.layer.cornerRadius = 3
         // Setup Google sign-in delegate
-        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance()?.delegate = self
+        GIDSignIn.sharedInstance()?.uiDelegate = self
     }
     
     @objc func loginWithGoogle() {
-        GIDSignIn.sharedInstance()?.signIn()
+        guard let signIn = GIDSignIn.sharedInstance() else {
+            showAlertMessage(presenter: self, title: "Login Error", message: "There was a problem logging in with Google", handler: nil)
+            return
+        }
+        signIn.signIn()
     }
-    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        self.presentingViewController?.children[0].navigationItem.title = "test"
+        if let name = user?.profile?.name, let email = user?.profile?.email {
+            delegate?.setTitle(name)
+            AppDelegate.user = LocalUser(id: user.userID, name: name, email: email)
+        }
+        self.dismiss(animated: true, completion:nil)
+    }
     private func setupRegisterButton() {
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
