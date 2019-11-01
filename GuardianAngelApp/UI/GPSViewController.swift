@@ -14,7 +14,17 @@ import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
 
-class GPSViewController: UIViewController, CLLocationManagerDelegate {
+class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDelegate, LoginDelegate {
+    
+    // TODO: have these methods be optional to implement?
+    func backgroundScan() {}
+    
+    func disconnectDevice() {}
+    
+    func setTitle(_ title: String) {
+        self.navigationItem.title = title
+    }
+    
     var locationManager:CLLocationManager?
     let mapView = MKMapView()
     let regionRadius: CLLocationDistance = 4000
@@ -27,7 +37,8 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
         view.backgroundColor = standardColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action:#selector(logout))
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action:#selector())
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
         
         setupMap()
         setupLocationButtons()
@@ -126,6 +137,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
     
     private func presentLoginPage() {
         let loginViewController = LoginViewController()
+        loginViewController.delegate = self
         let navController = UINavigationController(rootViewController: loginViewController)
         DispatchQueue.main.async {
             self.present(navController, animated: true)
@@ -134,6 +146,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate {
     
     @objc func goToSettings() {
         let settingsViewController = SettingsViewController()
+        settingsViewController.delegate = self
         let navController = UINavigationController(rootViewController: settingsViewController)
         DispatchQueue.main.async {
             self.present(navController, animated: true, completion: nil)

@@ -17,9 +17,6 @@ import FBSDKLoginKit
 import GoogleSignIn
 
 class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
-    
-
-    
     // Beacon properties
     let beaconRegion: CLBeaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
@@ -222,7 +219,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
     }
     
     func setTitle(_ title: String) {
-        self.navigationItem.title = "\(title)"
+        self.navigationItem.title = title
     }
 
     // MARK: UI properties and setup
