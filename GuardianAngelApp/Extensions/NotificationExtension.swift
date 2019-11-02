@@ -8,7 +8,7 @@
 
 import Foundation
 import UserNotifications
-
+/// Notification Extension 
 extension DeviceViewController: UNUserNotificationCenterDelegate {
     /// Set up the ability to send local notifications
     func setupNotification() {

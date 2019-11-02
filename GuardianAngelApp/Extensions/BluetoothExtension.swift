@@ -9,8 +9,13 @@
 import UIKit
 import CoreBluetooth
 
-// TODO: do we need both CBPeripheralDelegate and CBCentralManagerDelegate?
+let ble_Service_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+let ble_Characteristic_TX: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+let ble_Characteristic_RX: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+let uart_UUID: UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")!
+// Bluetooth Extension that handles UART connection
 extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
+    // MARK: Bluetooth Helper Methods
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
         guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }
@@ -74,6 +79,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         centralManagerDidUpdateState(manager)
     }
     
+    // MARK: Central Manager Delegate Methods
     // Discovered peripheral
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
         guard peripheral.identifier == uart_UUID && connectionState == .notConnected && peripheral.state == .disconnected else { return }
@@ -100,7 +106,74 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         peripheral.discoverServices([BLEService_UUID])
     }
 
+    // Disconnected from peripheral
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+          // Modify state
+          connectionState = .notConnected
+          // Setup UI
+          executeOnMainThread { [weak self] in
+              guard let self = self else { return }
+              self.adjustTemperature(notConnected)
+              self.adjustBeaconStatus(notConnected)
+              self.adjustActiveStatus(false)
+              self.setConnectionStatus(.notConnected)
+          }
+          
+          if isBeaconConnected {
+              // Reconnect to UART only if we are in the region
+              backgroundScan()
+          }
+          
+          if AppDelegate.isDebugging {
+               print("Disconnected")
+              sendNotification(description: "Disconnected")
+          } else if isWeightDetected {
+              // Only send notification if weight is detected
+              sendTooFarNotification()
+          }
+          
+      }
+      
+    // Bluetooth is disabled
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state != CBManagerState.poweredOn {
+          // Setup UI
+          executeOnMainThread { [weak self] in
+              guard let self = self else { return }
+              self.setConnectionStatus(.notConnected)
+              self.hideTempSpinner()
+              self.hideBeaconSpinner()
+              self.hideWeightSpinner()
+              // Show error message only if logged in
+              showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on", handler: { _ in
+                  if self.isLoggedIn == .loggedOut {
+                      self.presentLoginPage()
+                  }
+              }, completion: nil)
+          }
+        }
+    }
+
+    // Connection failed
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+          if error != nil {
+              // Modify state
+              connectionState = .notConnected
+              // Setup UI
+              executeOnMainThread { [weak self] in
+                  guard let self = self else { return }
+                  self.setConnectionStatus(.notConnected)
+                  self.hideTempSpinner()
+                  self.hideWeightSpinner()
+                  // Show error message
+                  showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: { [weak self] _ in
+                      self?.backgroundScan()
+                  })
+              }
+          }
+      }
     
+    // MARK: Peripheral Delegate Methods
     /*
      Invoked when you discover the peripheral’s available services.
      This method is invoked when your app calls the discoverServices(_:) method. If the services of the peripheral are successfully discovered, you can access them through the peripheral’s services property. If successful, the error parameter is nil. If unsuccessful, the error parameter returns the cause of the failure.
@@ -153,7 +226,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         }
         timer.start()
     }
-    // Getting Values from UART
+    /// Getting Data from UART
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue), characteristic == rxCharacteristic {
             let parsedData: (String,Bool) = parseData(ASCIIstring)
@@ -164,7 +237,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             }
         }
     }
-    
+    /// Parsing Data from UART
     private func parseData(_ data: NSString) -> (String, Bool) {
         //print("Device Location: \(String(describing: device.locationString()))")
         //print("Value Recieved: \((uartValue as String))")
@@ -207,71 +280,6 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         return (tempString,isWeightDetected)
     }
     
-    // Disconnected from peripheral
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        // Modify state
-        connectionState = .notConnected
-        // Setup UI
-        executeOnMainThread { [weak self] in
-            guard let self = self else { return }
-            self.adjustTemperature(notConnected)
-            self.adjustBeaconStatus(notConnected)
-            self.adjustActiveStatus(false)
-            self.setConnectionStatus(.notConnected)
-        }
-        
-        if isBeaconConnected {
-            // Reconnect to UART only if we are in the region
-            backgroundScan()
-        }
-        
-        if AppDelegate.isDebugging {
-             print("Disconnected")
-            sendNotification(description: "Disconnected")
-        } else if isWeightDetected {
-            // Only send notification if weight is detected
-            sendTooFarNotification()
-        }
-        
-    }
-    
-    // Bluetooth is disabled
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if central.state != CBManagerState.poweredOn {
-            // Setup UI
-            executeOnMainThread { [weak self] in
-                guard let self = self else { return }
-                self.setConnectionStatus(.notConnected)
-                self.hideTempSpinner()
-                self.hideBeaconSpinner()
-                self.hideWeightSpinner()
-                // Show error message only if logged in
-                showAlertMessage(presenter: self, title: "Bluetooth is not enabled", message: "Make sure that your Bluetooth is turned on", handler: { _ in
-                    if self.isLoggedIn == .loggedOut {
-                        self.presentLoginPage()
-                    }
-                }, completion: nil)
-            }
-        }
-    }
-    
-    // Connection failed
-    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        if error != nil {
-            // Modify state
-            connectionState = .notConnected
-            // Setup UI
-            executeOnMainThread { [weak self] in
-                guard let self = self else { return }
-                self.setConnectionStatus(.notConnected)
-                self.hideTempSpinner()
-                self.hideWeightSpinner()
-                // Show error message
-                showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: { [weak self] _ in
-                    self?.backgroundScan()
-                })
-            }
-        }
-    }
+  
 }
 

@@ -8,22 +8,26 @@
 
 import CoreLocation
 
+// Location extension responsible for handling Beacon connection
 extension DeviceViewController: CLLocationManagerDelegate {
-    @objc func stopBeacon() {
+    // MARK: Beacon Helper Methods
+    /// Stop ranging beacon
+    @objc func stopRangingBeacon() {
         locationManager?.stopRangingBeacons(in: beaconRegion)
     }
-    
+    /// Start ranging beacon
     @objc func startBeacon() {
         if !isBeaconConnected {
             locationManager?.startMonitoring(for: beaconRegion)
         }
     }
-    
-    func disconnectBeacon() {
+    /// Stop ranging and monitoring beacon
+    func stopRangingAndMonitoringBeacon() {
         locationManager?.stopMonitoring(for: beaconRegion)
         locationManager?.stopRangingBeacons(in: beaconRegion)
     }
     
+    // MARK: Location Manager Delegate Methods
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         if CLLocationManager.isRangingAvailable() {
             guard let region = region as? CLBeaconRegion else {

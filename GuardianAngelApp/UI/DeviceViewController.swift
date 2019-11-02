@@ -16,7 +16,7 @@ import FirebaseDatabase
 import FBSDKLoginKit
 import GoogleSignIn
 
-class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
+class DeviceViewController: UIViewController, SettingsDelegate {
     // Beacon properties
     let beaconRegion: CLBeaconRegion = CLBeaconRegion(
         proximityUUID: UUID(uuidString:"01122334-4556-6778-899A-ABBCCDDEEFF0")!,
@@ -34,17 +34,13 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         case connecting
         case tempNotActive
     }
-    let ble_Service_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-    let ble_Characteristic_TX: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
-    let ble_Characteristic_RX: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
-    let uart_UUID: UUID = UUID(uuidString: "8519BF04-6C36-4B4A-4182-A2764CE2E05A")!
     var rxCharacteristic: CBCharacteristic?
     var connectionState:ConnectionState = .notConnected
     var centralManager: CBCentralManager?
     var selectedPeripherals: [CBPeripheral]? = []
     var isWeightDetected: Bool = false
     
-    // Auth property
+    // Auth properties
     var isLoggedIn: AuthState = .loggedOut
     enum AuthState {
         case loggedIn
@@ -97,6 +93,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         checkIfUserLoggedIn()
     }
     
+    //MARK: Authentication Methods
     private func checkIfUserLoggedIn() {
         isLoggedIn = .loggingIn
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
@@ -114,7 +111,6 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         })
     }
     
-    //MARK: Login/logout
     /// Logs the user out and brings to Login page if logged off, otherwise user stays on Device page
     private func checkIfUserLoggedIn(completion: @escaping ((AuthState) -> Void)) {
         if let currentUser = Auth.auth().currentUser, let name = currentUser.displayName, let email = currentUser.email {
@@ -181,7 +177,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
             do {
                 try Auth.auth().signOut()
             } catch let logoutError {
-                print(logoutError)
+                print("Logout error: ", logoutError)
             }
         } else if AccessToken.isCurrentAccessTokenActive {
             // Logout of Facebook
@@ -205,7 +201,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
     /// Disconnect from uart and beacon bluetooth devices
     func disconnectEverything() {
         // Disconnect from UART and Beacon
-        disconnectBeacon()
+        stopRangingAndMonitoringBeacon()
         disconnectDevice()
     }
     
@@ -217,12 +213,8 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
             self.present(navController, animated: true, completion: nil)
         }
     }
-    
-    func setTitle(_ title: String) {
-        self.navigationItem.title = title
-    }
 
-    // MARK: UI properties and setup
+    // MARK: UI Properties
     /// Logo on Device page
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -233,7 +225,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         return imageView
     }()
     
-    // Loading views
+    // Loading Views
     private let title_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     private let temp_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     private let beacon_loadingView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
@@ -349,6 +341,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         return view
     }()
     
+    // MARK: UI Setup Methods
     /// Sets up the UI for the Device page
     private func setupDeviceContainerView() {
         // add subviews to view
@@ -471,7 +464,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         weightSeperatorView.heightAnchor.constraint(equalToConstant: 1).isActive=true
     }
     
-    // MARK: UI adjustment functions
+    // UI Adjustment Methods
     func adjustTemperature(_ newTemp: String) {
         tempStatusLabel.text = newTemp
     }
@@ -505,7 +498,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         }
     }
     
-    // MARK: Loading view functions
+    // Loading View Methods
     func showTitleSpinner() {
         if !title_loadingView.isAnimating {
             self.navigationItem.titleView = title_loadingView
@@ -574,7 +567,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         }
     }
     
-    // MARK: Info Button Setup
+    /// Info Button Setup
     @objc func showDeviceInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about Device",
@@ -631,7 +624,7 @@ class DeviceViewController: UIViewController, SettingsDelegate, LoginDelegate {
         present(whatsNewViewController, animated: true)
     }
 }
-
+// MARK: Google SignIn Delegate Methods
 extension DeviceViewController: GIDSignInDelegate {
     // Google sign-in delegate methods
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
@@ -667,5 +660,11 @@ extension DeviceViewController: GIDSignInDelegate {
               withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
         // ...
+    }
+}
+// MARK: Login Delegate Method
+extension DeviceViewController: LoginDelegate {
+    func setTitle(_ title: String) {
+        self.navigationItem.title = title
     }
 }

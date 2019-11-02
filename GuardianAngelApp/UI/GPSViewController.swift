@@ -15,16 +15,6 @@ import FBSDKLoginKit
 import GoogleSignIn
 
 class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDelegate, LoginDelegate {
-    
-    // TODO: have these methods be optional to implement?
-    func backgroundScan() {}
-    
-    func disconnectDevice() {}
-    
-    func setTitle(_ title: String) {
-        self.navigationItem.title = title
-    }
-    
     var locationManager:CLLocationManager?
     let mapView = MKMapView()
     let regionRadius: CLLocationDistance = 4000
@@ -37,7 +27,6 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         view.backgroundColor = standardColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action:#selector())
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
         
         setupMap()
@@ -53,6 +42,41 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         checkIfUserLoggedIn()
     }
     
+    // MARK: Setup UI
+    @objc func goToSettings() {
+        let settingsViewController = SettingsViewController()
+        settingsViewController.delegate = self
+        let navController = UINavigationController(rootViewController: settingsViewController)
+        DispatchQueue.main.async {
+            self.present(navController, animated: true, completion: nil)
+        }
+    }
+    
+    private let infoButton: UIButton = {
+        let infoButton = UIButton(type: .infoDark)
+        infoButton.addTarget(self, action: #selector(showGPSInfoView), for: .touchUpInside)
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        return infoButton
+    }()
+    
+    private func setupMap() {
+        // Setup UI properties
+        mapView.mapType = MKMapType.standard
+        mapView.isZoomEnabled = true
+        mapView.isScrollEnabled = true
+        mapView.showsUserLocation = true
+        mapView.showsScale = true
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+    
+        view.addSubview(mapView)
+        
+        // Setup UI constraints
+        mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive=true
+        mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive=true
+        mapView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive=true
+    }
+    
+    // MARK: Authentication Methods
     private func checkIfUserLoggedIn() {
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
             if authStatus {
@@ -110,7 +134,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     }
     
     @objc func logout() {
-//        disconnectEverything()
+        disconnectDevice()
         AppDelegate.user = nil
         presentLoginPage()
         if Auth.auth().currentUser != nil {
@@ -144,37 +168,14 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         }
     }
     
-    @objc func goToSettings() {
-        let settingsViewController = SettingsViewController()
-        settingsViewController.delegate = self
-        let navController = UINavigationController(rootViewController: settingsViewController)
-        DispatchQueue.main.async {
-            self.present(navController, animated: true, completion: nil)
-        }
-    }
+    // MARK: Settings Delegate Methods
+    // TODO: have these methods be optional to implement?
+    func backgroundScan() {}
     
-    private let infoButton: UIButton = {
-        let infoButton = UIButton(type: .infoDark)
-        infoButton.addTarget(self, action: #selector(showGPSInfoView), for: .touchUpInside)
-        infoButton.translatesAutoresizingMaskIntoConstraints = false
-        return infoButton
-    }()
+    func disconnectDevice() {}
     
-    private func setupMap() {
-        // Setup UI properties
-        mapView.mapType = MKMapType.standard
-        mapView.isZoomEnabled = true
-        mapView.isScrollEnabled = true
-        mapView.showsUserLocation = true
-        mapView.showsScale = true
-        mapView.translatesAutoresizingMaskIntoConstraints = false
-    
-        view.addSubview(mapView)
-        
-        // Setup UI constraints
-        mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive=true
-        mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive=true
-        mapView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive=true
+    func setTitle(_ title: String) {
+        self.navigationItem.title = title
     }
     
     // MARK: Loading view functions
@@ -194,6 +195,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
 //        }
     }
     
+    // MARK: Location Helper Methods
     // TODO: make this work
     private func setupLocationButtons() {
         let currentLocationButton = ActionButtonItem(title: "Go to My Location", image: UIImage(named: "proximity"))
@@ -216,7 +218,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
             locationManager?.startUpdatingLocation()
         }
     }
-    
+    // MARK: Location Manager Delegate Methods
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let userLocation:CLLocation = locations[0] as CLLocation
         // Call stopUpdatingLocation() to stop listening for location updates,
@@ -241,6 +243,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         // TODO: show error message
     }
 
+    /// Present Info page for GPS page
     @objc func showGPSInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about GPS",
