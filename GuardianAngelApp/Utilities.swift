@@ -9,29 +9,54 @@
 import UIKit
 import CoreBluetooth
 
-let kBLEService_UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-let kBLE_Characteristic_uuid_Tx = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
-let kBLE_Characteristic_uuid_Rx = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
-let MaxCharacters = 20
+// String constants
+let connected: String = "Connected"
+let notConnected: String = "Not Connected"
+let yes: String = "Yes"
+let no: String = "No"
 
-let BLEService_UUID = CBUUID(string: kBLEService_UUID)
-let BLE_Characteristic_uuid_Tx = CBUUID(string: kBLE_Characteristic_uuid_Tx)//(Property = Write without response)
-let BLE_Characteristic_uuid_Rx = CBUUID(string: kBLE_Characteristic_uuid_Rx)// (Property = Read/Notify)
+// Timer constants
+let spinnerTime: TimeInterval = 20.0
 
-let notConnected = "Not Connected"
+// Custom Colors
+let standardColor: UIColor = UIColor(red: 150/255, green: 135/255, blue: 200/255, alpha: 1)
+
 /// Present a message to the user (automatically done on the main thread)
-func showAlertMessage(presenter: UIViewController, title: String, message: String) {
+func showAlertMessageWithRetry(presenter: UIViewController, title: String, message: String, cancelHandler: ((UIAlertAction) -> Void)?, retryHandler: ((UIAlertAction) -> Void)?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     
-    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-    executeOnMainThread {
-        presenter.present(alert, animated: true, completion: nil)
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: cancelHandler))
+    alert.addAction(UIAlertAction(title: "Retry", style: .default, handler: retryHandler))
+    executeOnMainThread { [weak presenter] in
+        presenter?.present(alert, animated: true, completion: nil)
     }
 }
 
+/// Present a message to the user (automatically done on the main thread)
+func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?, completion: (() -> Void)?) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: handler))
+
+    executeOnMainThread { [weak presenter] in
+        presenter?.present(alert, animated: true, completion: completion)
+    }
+}
+
+func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: handler))
+
+    executeOnMainThread { [weak presenter] in
+        presenter?.present(alert, animated: true, completion: nil)
+    }
+}
+
+
 func convertTempString(_ temperature: String) -> String {
-    guard let temp = Double(temperature) else { return "" }
-    let convertedTemp = Int(temp / 21.5)
+    guard let celsiusTemp: Double = Double(temperature) else { return "" }
+    let convertedTemp: Int = Int(celsiusTemp * 9/5) + 32
     return String(convertedTemp)
 }
 
@@ -48,7 +73,7 @@ func executeOnMainThread(completion: @escaping () -> Void) {
 
 class CustomTimer {
     typealias Update = ()->Void
-    var timer:Timer?
+    var timer: Timer?
     var count: Int = 0
     var update: Update?
     let timeInterval: TimeInterval
@@ -61,7 +86,7 @@ class CustomTimer {
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: false)
     }
     func stop(){
-        if let timer = timer {
+        if let timer: Timer = timer {
             timer.invalidate()
         }
     }

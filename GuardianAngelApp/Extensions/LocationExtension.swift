@@ -8,41 +8,51 @@
 
 import CoreLocation
 
+// Location extension responsible for handling Beacon connection
 extension DeviceViewController: CLLocationManagerDelegate {
-    @objc func stopBeacon() {
+    // MARK: Beacon Helper Methods
+    /// Stop ranging beacon
+    @objc func stopRangingBeacon() {
         locationManager?.stopRangingBeacons(in: beaconRegion)
     }
-    
-    @objc func startBeaconAndUart() {
+    /// Start ranging beacon
+    @objc func startBeacon() {
         if !isBeaconConnected {
             locationManager?.startMonitoring(for: beaconRegion)
         }
     }
+    /// Stop ranging and monitoring beacon
+    func stopRangingAndMonitoringBeacon() {
+        locationManager?.stopMonitoring(for: beaconRegion)
+        locationManager?.stopRangingBeacons(in: beaconRegion)
+    }
     
+    // MARK: Location Manager Delegate Methods
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         if CLLocationManager.isRangingAvailable() {
             guard let region = region as? CLBeaconRegion else {
                 print("Beacon Region is not valid")
                 return
             }
+            isBeaconConnected = true
             // Start ranging beacon
             manager.startRangingBeacons(in: region)
         }
-        // Start UART
-        backgroundScan()
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         if AppDelegate.isDebugging {
             print("Entered region")
-            sendEnteredRegionLocalNotification()
+            sendNotification(description: "Entered Region")
         }
         // Modify state
         isBeaconConnected = true
         // Setup UI
-        showBeaconSpinner()
-        // Start UART
-        backgroundScan()
+//        showBeaconSpinner()
+        // Connect to UART
+        if connectionState == .notConnected {
+            backgroundScan()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
@@ -50,22 +60,25 @@ extension DeviceViewController: CLLocationManagerDelegate {
         // Modify state
         isBeaconConnected = false
         // Setup UI
-        beaconStatusLabelField.text = "Not Connected"
+        executeOnMainThread { [weak self] in
+            self?.adjustBeaconStatus(notConnected)
+        }
         // No matter what we want to stop scanning
         stopScan()
         
-        // Send notificaiton
-        guard !isUartConnected else { return }
         if AppDelegate.isDebugging {
-            print("Left region")
-            sendTooFarLocalNotification()
+            print("Left Region")
+            sendNotification(description: "Left Region")
         } 
     }
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         if let beacon = beacons.first {
-            if let isScan = centralManager?.isScanning, !isUartConnected && !isScan {
-                backgroundScan()
+            // Only displaying proximity info if we are connected to UART
+            guard connectionState == .connected else {
+                // attempting to reconnect because we should be close enough to device
+                if isLoggedIn == .loggedIn { backgroundScan() }
+                return
             }
             let distance = beacon.accuracy
             switch distance {
@@ -82,12 +95,9 @@ extension DeviceViewController: CLLocationManagerDelegate {
             }
             print("beacon distance: \(distance)m")
             
-            // Modify state
-            isBeaconConnected = true
             // Setup UI
-            hideBeaconSpinner()
-            if isUartConnected {
-                beaconStatusLabelField.text = proximity
+            if connectionState == .connected {
+                adjustBeaconStatus(proximity)
             }
         }
     }

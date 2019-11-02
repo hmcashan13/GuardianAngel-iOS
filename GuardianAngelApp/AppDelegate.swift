@@ -8,45 +8,60 @@
 
 import UIKit
 import UserNotifications
-
+import Firebase
+import GoogleSignIn
 
 // User Default keys
-let farenheit_celsius_key = "farenheit_celsius_key"
-let meters_feet_key = "meters_feet_key"
-let is_temp_enabled_key = "is_temp_enabled_key"
-let max_temp_key = "max_temp_key"
+let farenheit_celsius_key: String = "farenheit_celsius_key"
+let meters_feet_key: String = "meters_feet_key"
+let is_temp_enabled_key: String = "is_temp_enabled_key"
+let max_temp_key: String = "max_temp_key"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
-    
-    static let serverKey = "AAAALZyy9Lo:APA91bFQbTtU4Q2JvXf60VSPvt-PErt-R70wloezBqjKX4p97IRIj-ED2a6_LOb_5dNRlADOwoFOGE9XveX-50-50cJT0xe_m_aXF2COqQw0baCqWqT1_wUKtuS8LJE4DvIQ4Qq4fj02"
-    
-    static let notificationURL = "https://fcm.googleapis.com/fcm/send"
-    
-    static let isDebugging = true
-    
-    // Init temperature user settings
-    static var farenheit_celsius = true
-    static var meters_feet = true
-    static var is_temp_enabled = true
-    static var max_temp = 85
 
+    //static let serverKey = "AAAALZyy9Lo:APA91bFQbTtU4Q2JvXf60VSPvt-PErt-R70wloezBqjKX4p97IRIj-ED2a6_LOb_5dNRlADOwoFOGE9XveX-50-50cJT0xe_m_aXF2COqQw0baCqWqT1_wUKtuS8LJE4DvIQ4Qq4fj02"
+    
+    //static let notificationURL = "https://fcm.googleapis.com/fcm/send"
+    
+    static let isDebugging: Bool = true
+    
+    private let standardUserDefaults: [String:Any] = [farenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
+    // Init temperature user settings
+    static var farenheit_celsius: Bool = true
+    static var meters_feet: Bool = true
+    static var is_temp_enabled: Bool = true
+    static var max_temp: Int = 85
+
+    static var user: LocalUser?
+    
     let defaults = UserDefaults.standard
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Remote notification Setup
         registerForPushNotifications()
 
+        // Firebase Setup
+        FirebaseApp.configure()
+        
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        
         //Navigation and root VC setup
-        let viewController = DeviceViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let deviceViewController = DeviceViewController()
+        let gpsViewController = GPSViewController()
+        deviceViewController.tabBarItem = UITabBarItem(title: "Device", image: UIImage(named: "device"), tag: 0)
+        gpsViewController.tabBarItem = UITabBarItem(title: "GPS", image: UIImage(named: "gps"), tag: 1)
+        let controllers = [deviceViewController, gpsViewController]
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = navigationController
-        self.window?.makeKeyAndVisible()
+        self.window?.rootViewController = tabBarController
+        //self.window?.rootViewController = navigationController
+        //self.window?.makeKeyAndVisible()
         
         // Set temperature user settings
+        UserDefaults.standard.register(defaults:standardUserDefaults)
         AppDelegate.farenheit_celsius = defaults.bool(forKey: farenheit_celsius_key)
         AppDelegate.meters_feet = defaults.bool(forKey: meters_feet_key)
         AppDelegate.is_temp_enabled = defaults.bool(forKey: is_temp_enabled_key)
