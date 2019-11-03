@@ -27,9 +27,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         view.backgroundColor = standardColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(goToGPSInfoView), for: .touchUpInside)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(goToGPSInfoView))
         
         setupMap()
         setupLocationButtons()

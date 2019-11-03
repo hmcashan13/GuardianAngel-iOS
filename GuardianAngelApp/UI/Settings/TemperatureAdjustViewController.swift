@@ -21,9 +21,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         super.viewDidLoad()
         
         navigationItem.title = "Adjust Temperature Sensor"
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(goToTempInfo), for: .touchUpInside)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(goToTempInfo))
         view.backgroundColor = standardColor
         setupUIConstraints()
     }

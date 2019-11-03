@@ -56,10 +56,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         setupDeviceContainerView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-        
-        let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(goToDeviceInfoView), for: .touchUpInside)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(goToDeviceInfoView))
         
         showTitleSpinner()
         showTempSpinner()
@@ -263,6 +260,13 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         tf.font = UIFont.systemFont(ofSize: 16)
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
+    }()
+    
+    private let infoButton: UIButton = {
+        let infoButton = UIButton(type: .infoDark)
+        infoButton.addTarget(self, action: #selector(goToDeviceInfoView), for: .touchUpInside)
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        return infoButton
     }()
     
     /// Temp label
