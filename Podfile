@@ -17,7 +17,8 @@ target 'GuardianAngelApp' do
   pod 'FirebaseAuth'
   pod 'Firebase/Storage'
   pod 'Firebase/Database'   
-  pod 'FBSDKLoginKit'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
   pod 'GoogleSignIn'
 
 end

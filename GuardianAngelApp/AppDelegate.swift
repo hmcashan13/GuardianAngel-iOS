@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import Firebase
 import GoogleSignIn
+import FacebookCore
 
 // User Default keys
 let farenheit_celsius_key: String = "farenheit_celsius_key"
@@ -27,9 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //static let serverKey = "AAAALZyy9Lo:APA91bFQbTtU4Q2JvXf60VSPvt-PErt-R70wloezBqjKX4p97IRIj-ED2a6_LOb_5dNRlADOwoFOGE9XveX-50-50cJT0xe_m_aXF2COqQw0baCqWqT1_wUKtuS8LJE4DvIQ4Qq4fj02"
     
     //static let notificationURL = "https://fcm.googleapis.com/fcm/send"
-    
-    
-    
+
     private let standardUserDefaults: [String:Any] = [farenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
     // Init temperature user settings
     static var farenheit_celsius: Bool = true
@@ -45,10 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Remote notification Setup
         registerForPushNotifications()
 
-        // Firebase Setup
+        // Firebase/Google Setup
         FirebaseApp.configure()
-        
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        
+        // Facebook Setup
+        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         //Navigation and root VC setup
         let deviceViewController = DeviceViewController()
@@ -94,7 +95,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print("Notification settings: \(settings)")
                 }
                 guard settings.authorizationStatus == .authorized else { return }
-                UIApplication.shared.registerForRemoteNotifications()
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             }
         }
     }
@@ -124,7 +127,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         defaults.set(AppDelegate.max_temp, forKey: max_temp_key)
     }
     
-    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        ApplicationDelegate.shared.application(app, open: url, options: options)
+        return true
+    }
 }
-
-

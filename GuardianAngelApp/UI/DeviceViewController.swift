@@ -136,6 +136,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                 return
             }
             //Logged in with Facebook
+            // TODO: setup FacebookCore and FacebookLogin API
             let req = GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: accessToken.tokenString, version: nil, httpMethod: HTTPMethod(rawValue: "GET"))
             
             req.start { [weak self] (connection, result, error) in
@@ -155,8 +156,8 @@ class DeviceViewController: UIViewController, SettingsDelegate {
                     completion(.loggedIn)
                 }
             }
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
-            shared.signInSilently()
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
+            shared.restorePreviousSignIn()
             completion(.loggedIn)
         } else {
             //Not logged in
@@ -170,7 +171,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         presentLoginPage()
         if Auth.auth().currentUser?.uid != nil {
             // Logged in with Firebase or Google
-            if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+            if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
                 // Logout of Google
                 shared.signOut()
             }
@@ -185,7 +186,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             // Logout of Facebook
             let loginManager = LoginManager()
             loginManager.logOut()
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
             // Logout of Google
             shared.signOut()
         }
@@ -193,7 +194,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     
     func presentLoginPage() {
         let loginViewController = LoginViewController()
-        loginViewController.delegate = self
+        loginViewController.loginDelegate = self
         let navController = UINavigationController(rootViewController: loginViewController)
         DispatchQueue.main.async {
             self.present(navController, animated: true)

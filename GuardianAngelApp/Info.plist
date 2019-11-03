@@ -41,8 +41,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>10</string>
 	<key>FacebookAppID</key>
 	<string>815014198865670</string>
 	<key>FacebookDisplayName</key>
@@ -59,11 +57,11 @@
 	<key>NSB</key>
 	<string></string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>"We need to monitor the temperature of your car for the safety of your baby"</string>
+	<string>&quot;We need to monitor the temperature of your car for the safety of your baby&quot;</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>"We need to monitor your location to be able to monitor your proximity to your baby"</string>
+	<string>&quot;We need to monitor your location to be able to monitor your proximity to your baby&quot;</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>"We need to monitor your location to be able to monitor your proximity to your baby"</string>
+	<string>&quot;We need to monitor your location to be able to monitor your proximity to your baby&quot;</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
@@ -88,5 +86,16 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>10</string>
+	<key>LSApplicationCategoryType</key>
+	<string>
+&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;
+&lt;array&gt;
+  &lt;string&gt;fbapi&lt;/string&gt;
+  &lt;string&gt;fb-messenger-share-api&lt;/string&gt;
+  &lt;string&gt;fbauth2&lt;/string&gt;
+  &lt;string&gt;fbshareextension&lt;/string&gt;
+&lt;/array&gt;</string>
 </dict>
 </plist>

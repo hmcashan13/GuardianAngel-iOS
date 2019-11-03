@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreBluetooth
-
+// TODO: [CoreBluetooth] API MISUSE: <CBCentralManager: 0x6000030db2c0> can only accept this command while in the powered on state
 let ble_Service_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 let ble_Characteristic_TX: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 let ble_Characteristic_RX: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"

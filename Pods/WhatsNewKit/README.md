@@ -4,7 +4,7 @@
 
 <p align="center">
    <a href="https://developer.apple.com/swift/">
-      <img src="https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat" alt="Swift 4.1">
+      <img src="https://img.shields.io/badge/Swift-5.0-orange.svg?style=flat" alt="Swift 5.0">
    </a>
    <a href="https://travis-ci.com/SvenTiigi/WhatsNewKit">
       <img src="https://travis-ci.com/SvenTiigi/WhatsNewKit.svg?branch=master" alt="Build Status">
@@ -39,7 +39,7 @@
 <br/>
 
 <p align="center">
-   <img width="600" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/WhatsNewKit.gif" alt="Example">
+   <img width="600" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/WhatsNewKit.gif" alt="Demo">
 </p>
 
 ## Features
@@ -53,6 +53,10 @@
 
 The example Application is an excellent way to see `WhatsNewKit` in action. You get a brief look of the available configuration options and how they affect the look and feel of the `WhatsNewViewController`. Simply open the `WhatsNewKit.xcodeproj` and run the `WhatsNewKit-Example` scheme.
 
+<p align="center">
+<img width="80%" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/ExampleApp.png" alt="Example App">
+</p>
+
 ## Installation
 
 ### CocoaPods
@@ -61,7 +65,7 @@ WhatsNewKit is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```bash
-pod 'WhatsNewKit', '~> 1.0.0'
+pod 'WhatsNewKit'
 ```
 
 ### Carthage
@@ -71,12 +75,22 @@ pod 'WhatsNewKit', '~> 1.0.0'
 To integrate WhatsNewKit into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "SvenTiigi/WhatsNewKit" ~> 1.0.0
+github "SvenTiigi/WhatsNewKit"
 ```
 
 Run `carthage update --platform iOS` to build the framework and drag the built `WhatsNewKit.framework` into your Xcode project. 
 
-On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase” and add the Framework path as mentioned in [Carthage Getting started Step 4, 5 and 6](https://github.com/Carthage/Carthage/blob/master/README.md)
+On your application targets’ “Build Phases” settings tab, click the “+” icon and choose “New Run Script Phase” and add the Framework path as mentioned in [Carthage Getting started Step 4, 5 and 6](https://github.com/Carthage/Carthage/blob/master/README.md#if-youre-building-for-ios-tvos-or-watchos)
+
+### Swift Package Manager
+
+To integrate using Apple's [Swift Package Manager](https://swift.org/package-manager/), add the following as a dependency to your `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/SvenTiigi/WhatsNewKit.git", from: "1.3.0")
+]
+```
 
 ### Manually
 
@@ -88,6 +102,8 @@ The following first usage description shows the easiest way of presenting your n
 > 👨‍💻 Please see the [Advanced](https://github.com/SvenTiigi/WhatsNewKit#advanced) section for further configuration options and features.
 
 ```swift
+import WhatsNewKit
+
 // Initialize WhatsNew
 let whatsNew = WhatsNew(
     // The Title
@@ -97,12 +113,12 @@ let whatsNew = WhatsNew(
         WhatsNew.Item(
             title: "Installation",
             subtitle: "You can install WhatsNewKit via CocoaPods or Carthage",
-            image: .init(named: "installation")
+            image: UIImage(named: "installation")
         ),
         WhatsNew.Item(
             title: "Open Source",
             subtitle: "Contributions are very welcome 👨‍💻",
-            image: .init(named: "openSource")
+            image: UIImage(named: "openSource")
         )
     ]
 )
@@ -120,7 +136,7 @@ self.present(whatsNewViewController, animated: true)
 As mentioned before `WhatsNewKit` can be fully customized to your needs. The Advanced section will explain all configuration possibilities and features of `WhatsNewKit` in detail. First off it's important to understand the components of the `WhatsNewViewController` in order to customize the behaviour and `UI`-Design.
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/UILayout.jpg" width="500">
+<img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/UILayout.gif" alt="UILayout">
 </p>
 
 ### WhatsNewViewController.Configuration
@@ -145,12 +161,12 @@ let whatsNewViewController = WhatsNewViewController(
 )
 ```
 
-### Theme
+### Theme 🌄
 A [Theme](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BConfiguration.swift) allows you to group the customization of a `WhatsNewViewController.Configuration`. `WhatsNewKit` implemented predefined Themes which are available as static properties both in white and dark mode. Or you create your very own Theme to configure it to your needs.
 
-<p align="center">
-<img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/Templates.jpg" width="600">
-</p>
+| `.darkRed` | `.whiteRed`   |
+| ------------- | ------------- |
+| <p align="center"> <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/Theme_darkRed.jpg" width="70%" alt="Theme Dark Red"/> </p> | <p align="center"> <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/Theme_whiteRed.jpg" width="70%" alt="Theme White Red" /> </p>|
 
 ```swift
 // Configuration with predefined Dark Red Theme
@@ -164,8 +180,15 @@ configuration.apply(theme: .whiteRed)
 
 // Or create your own Theme and initialize a Configuration with your Theme
 let myTheme = WhatsNewViewController.Theme { configuration in
-    // Apply customizations ...
+    configuration.backgroundColor = .white
+    configuration.titleView.titleColor = .orange
+    configuration.itemsView.titleFont = .systemFont(ofSize: 17)
+    configuration.detailButton.titleColor = .orange
+    configuration.completionButton.backgroundColor = .orange
+    // ...
 }
+
+// Initialize a Configuration with your Theme
 let configuration = WhatsNewViewController.Configuration(
     theme: myTheme
 )
@@ -173,7 +196,88 @@ let configuration = WhatsNewViewController.Configuration(
 
 For a full overview of the available predefined Themes check out the [Example-Application](https://github.com/SvenTiigi/WhatsNewKit/tree/master/Example).
 
-### Animation
+#### iOS 13 Dark-Mode
+
+Use the `.red` Theme if you wish that a predefined Theme like `.darkRed` and `.whiteRed` automatically adapts to the current [UserInterfaceStyle](https://developer.apple.com/documentation/uikit/uiuserinterfacestyle).
+
+```swift
+// Configuration with predefine `red` Theme which auto adapts to the UserInterfaceStyle
+// in order to support iOS 13 Dark-Mode
+let configuration = WhatsNewViewController.Configuration(
+    theme: .red
+)
+```
+
+Dark-Mode compatible Themes: `.blue`, `.lightBlue`, `.orange`, `.purple`, `.red`, `.green` 
+
+### Layout 📐
+
+`WhatsNewKit` comes with two predefined [`ItemsView.Layouts`](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BItemsView.swift). 
+
+| Left | Centered   | Right   |
+| ------------- | ------------- | ------------- |
+| <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/LayoutDefault.png" alt="Default Layout" /> | <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/LayoutCentered.png" alt="Centered Layout" /> | <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/LayoutRight.png" alt="Right Layout" /> |
+
+```swift
+// Left Layout
+configuration.itemsView.layout = .default
+
+// Centered Layout
+configuration.itemsView.layout = .centered
+
+// Right Layout
+configuration.itemsView.layout = .right
+```
+> ☝️ In default the ItemsView layout is set to `.left`.
+
+### ContentMode 📏
+
+Setting the [`ContentMode`](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BItemsView.swift) in the `ItemsView` Configuration will adjust for how your features are arranged along the axis.
+
+| Top | Center | Fill |
+| ------------- | ------------- | ------------- |
+| <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/ContentMode_Top.jpg" alt="ContentMode Top" /> | <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/ContentMode_Center.jpg" alt="ContentMode Center" /> | <img src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/ContentMode_Fill.jpg" alt="ContentMode Fill" />
+
+```swift
+// ContentMode Top
+configuration.itemsView.contentMode = .top
+
+// ContentMode Center
+configuration.itemsView.contentMode = .center
+
+// ContentMode Fill
+configuration.itemsView.contentMode = .fill
+```
+> ☝️ In default the ItemsView ContentMode  is set to `top`.
+
+### Insets
+
+Additionally, if you wish you can modify the layout insets of the `WhatsNewViewController` components.
+
+```swift
+// Set TitleView Insets (Default values)
+configuration.titleView.insets = UIEdgeInsets(top: 50, left: 20, bottom: 15, right: 20)
+
+// Increase the CompletionButton Bottom Inset 
+configuration.completionButton.insets.bottom += 10
+```
+
+### ImageSize 
+In order to define the size of your images for each of your feature you can set an [ImageSize](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BItemsView.swift) on the `ItemsView` configuration.
+
+```swift
+// Use the original image size as it is
+configuration.itemsView.imageSize = .original
+
+// Use the preferred image size which fits perfectly :)
+configuration.itemsView.imageSize = .preferred
+
+// Use a custom height for each image
+configuration.itemsView.imageSize = .fixed(height: 25)
+```
+> ☝️ In default the ItemsView ImageSize  is set to `preferred`.
+
+### Animation 🎬
 <img align="right" width="300" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/Animations.gif" alt="Animations" />
 
 You can apply a [Animation](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BAnimation.swift) to all components of the `WhatsNewViewController` via predefined animation types. In default all Animation properties are `nil` indicating no animation should be perfomed.
@@ -203,11 +307,29 @@ If you wish to define your custom animation, simply set the `custom` enum and pa
 
 ```swift
 // Custom Animation for DetailButton
-configuration.detailButton.animation = .custom(animator: { [weak self] (view: UIView, settings: AnimatorSettings) in
+configuration.detailButton.animation = .custom(animator: { (view: UIView, settings: AnimatorSettings) in
     // view: The View to perform animation on
     // settings: Preferred duration and delay
 })
 ```
+
+### Secondary Title Color
+By setting a [SecondaryColor](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BTitleView.swift) on the TitleView you can change the color of certain characters.
+
+<img align="right" width="360" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/SecondaryColor.jpg" alt="SecondaryColor" />
+
+```swift
+// Set secondary color on TitleView Configuration
+configuration.titleView.secondaryColor = .init(
+    // The start index
+    startIndex: 0,
+    // The length of characters
+    length: 5,
+    // The secondary color to apply 
+    color: .whatsNewKitLightBlue
+)
+```
+> ☝️ In default the secondaryColor is set to `nil`.
 
 ### DetailButton
  <img width="150" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/detailButton.jpg" alt="DetailButton">
@@ -237,7 +359,7 @@ let detailButton = WhatsNewViewController.DetailButton(
 
 ### CompletionButton
  <img width="300" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/completionButton.jpg" alt="CompletionButton">
- 
+
 The [CompletionButton](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BCompletionButton.swift) struct configures the displayed title and the action when the user pressed the completion button on the `WhatsNewViewController`.
 
 | Action | Description   |
@@ -261,7 +383,8 @@ let completionButton = WhatsNewViewController.CompletionButton(
 )
 ```
 
-### HapticFeedback
+### HapticFeedback 📳
+
 You can enable on both `DetailButton` and `CompletionButton` haptic feedback when the user pressed one of these buttons. Either by setting the property or passing it to the initializer.
 
 ```swift
@@ -280,7 +403,22 @@ let completionButton = WhatsNewViewController.CompletionButton(
 ```
 > ☝️ In default the [HapticFeedback](https://github.com/SvenTiigi/WhatsNewKit/blob/master/Sources/Configuration/WhatsNewViewController%2BHapticFeedback.swift) is `nil` indicating no haptic feedback should be executed.
 
-### WhatsNewVersionStore
+### iPad Adjustments
+
+If you wish to modify the `WhatsNewViewController.Configuration` when presenting it on an iPad you can set the `padAdjustment` closure.
+
+```swift
+// Set PadAdjustment closure
+configuration.padAdjustment = { configuration in
+     // Adjust TitleView FontSize
+     configuration.titleView.titleFont = .systemFont(ofSize: 45, weight: .bold)
+     // Invoke default PadAdjustments (Adjusts Insets for iPad)
+     WhatsNewViewController.Configuration.defaultPadAdjustment(&configuration)
+}
+```
+> ☝️ In default the `WhatsNewViewController.Configuration.defaultPadAdjustment` will be invoked.
+
+### WhatsNewVersionStore 💾
 <p align="center">
    <img width="750" src="https://raw.githubusercontent.com/SvenTiigi/WhatsNewKit/gh-pages/readMeAssets/WhatsNewVersionStore.jpg" alt="WhatsNewVersionStore">
 </p>
@@ -291,10 +429,12 @@ If we speak about presenting awesome new app features we have to take care that 
 /// WhatsNewVersionStore typealias protocol composition
 public typealias WhatsNewVersionStore = WriteableWhatsNewVersionStore & ReadableWhatsNewVersionStore
 
+/// The WriteableWhatsNewVersionStore
 public protocol WriteableWhatsNewVersionStore {
     func set(version: WhatsNew.Version)
 }
 
+/// The ReadableWhatsNewVersionStore
 public protocol ReadableWhatsNewVersionStore {
     func has(version: WhatsNew.Version) -> Bool
 }
@@ -392,7 +532,7 @@ let version = WhatsNew.Version(
 )
 
 // Use a String literal
-let version = WhatsNew.Version(stringLiteral: "1.0.0")
+let version: WhatsNew.Version = "1.0.0"
 
 // Current Version in Bundle (Default)
 let version = WhatsNew.Version.current()
@@ -444,7 +584,7 @@ The `WhatsNew` struct is conform the `Codable` protocol which allows you to init
         {
             "title": "Open Source",
             "subtitle": "Contributions are very welcome 👨‍💻",
-            "image": "data:image/png;base64,R0lG42......."
+            "image": "iVBORw0KGgoA..."
         }
     ]
 }
@@ -468,6 +608,10 @@ let decoded = try? JSONDecoder().decode(WhatsNew.self, from: data)
 * [MyBridge - Open Source Swift Projects (June 2018)](https://medium.mybridge.co/swift-open-source-projects-of-the-month-v-june-2018-f9ce1239eee4)
 * [The iOS Times](http://theiostimes.com/issue-44.html)
 * [DZone](https://dzone.com/articles/this-week-in-mobile-11-june-2018)
+* [Brian Advent](https://youtu.be/zCHEpN1Wgz4)
+* [23 Amazing iOS UI Libraries written in Swift for the Past Year (v.2019)](https://medium.mybridge.co/23-amazing-ios-ui-libraries-written-in-swift-for-the-past-year-v-2019-3e5456318768)
+* [Indie iOS Focus Weekly](https://indieiosfocus.com/issues/234)
+* [5 iOS Libraries That Will Inspire Your Creativity](https://medium.com/better-programming/5-ios-libraries-that-will-inspire-your-creativity-26ee5837f9b7)
 
 ## Contributing
 Contributions are very welcome 🙌 🤓
@@ -479,7 +623,7 @@ The `WhatsNew.Item` images ([icons8-github](https://icons8.com/icon/62856/github
 
 ```
 WhatsNewKit
-Copyright (c) 2018 Sven Tiigi <sven.tiigi@gmail.com>
+Copyright (c) 2019 Sven Tiigi <sven.tiigi@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -8,15 +8,43 @@
 
 import UIKit
 import FirebaseAuth
-import FBSDKCoreKit
-import FBSDKLoginKit
+import FacebookLogin
+import FacebookCore
 import GoogleSignIn
 
 protocol LoginDelegate: AnyObject {
     func setTitle(_ title: String)
 }
-class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate {
-    weak var delegate: LoginDelegate?
+class LoginViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Setup keyboard so you can dismiss it when you tap anywhere outside of it
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        // Setup UI
+        navigationController?.isNavigationBarHidden = true
+    
+        view.backgroundColor = .white
+        
+        setupLogo()
+        setupInputFields()
+        setupFacebookLoginButton()
+        setupGoogleLoginButton()
+        setupRegisterButton()
+        setupKeyboardObservers()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if checkIfUserLoggedIn() {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    weak var loginDelegate: LoginDelegate?
     let logoContainerView: UIView = {
         let view = UIView()
     
@@ -132,33 +160,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         return .lightContent
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Setup keyboard so you can dismiss it when you tap anywhere outside of it
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-        
-        // Setup UI
-        navigationController?.isNavigationBarHidden = true
     
-        view.backgroundColor = .white
-        
-        setupLogo()
-        setupInputFields()
-        setupFacebookLoginButton()
-        setupGoogleLoginButton()
-        setupRegisterButton()
-        setupKeyboardObservers()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if checkIfUserLoggedIn() {
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
     
     private func checkIfUserLoggedIn() -> Bool {
         if let uid = Auth.auth().currentUser?.uid {
@@ -173,7 +175,7 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
                 print("Successfully logged into Firebase through Facebook")
             }
             return true
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
             // Logged in with Google
             if isDebugging {
                 print("Successfully logged into Firebase through Google")
@@ -201,22 +203,27 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         
         view.addSubview(stackView)
         stackView.anchor(top: logoContainerView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 140)
-        
     }
     
     private func setupFacebookLoginButton() {
         // Setup read permissions for Facebook login
         facebookLoginButton.permissions = ["public_profile", "email"]
+        // Setup FBLoginButton delegate
+        facebookLoginButton.delegate = self
         // Setup UI
         view.addSubview(facebookLoginButton)
         facebookLoginButton.translatesAutoresizingMaskIntoConstraints = false
-        facebookLoginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        //facebookLoginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         facebookLoginButton.widthAnchor.constraint(equalToConstant: 200).isActive = true
         facebookLoginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         facebookLoginButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 40).isActive = true
     }
     
     private func setupGoogleLoginButton() {
+        // Setup Google sign-in delegate
+        GIDSignIn.sharedInstance()?.delegate = self
+        // Setup to allow presenting of Login Web View
+        GIDSignIn.sharedInstance()?.presentingViewController = self
         //add google sign in button
         view.addSubview(googleLoginButton)
         googleLoginButton.translatesAutoresizingMaskIntoConstraints = false
@@ -231,9 +238,6 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         googleLoginButton.titleLabel?.font = UIFont(name: "Helvetica", size: 13.0)
         googleLoginButton.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
         googleLoginButton.layer.cornerRadius = 3
-        // Setup Google sign-in delegate
-        GIDSignIn.sharedInstance()?.delegate = self
-        GIDSignIn.sharedInstance()?.uiDelegate = self
     }
     
     @objc func loginWithGoogle() {
@@ -243,20 +247,62 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         }
         signIn.signIn()
     }
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        self.presentingViewController?.children[0].navigationItem.title = "test"
-        if let name = user?.profile?.name, let email = user?.profile?.email {
-            delegate?.setTitle(name)
-            AppDelegate.user = LocalUser(id: user.userID, name: name, email: email)
-        }
-        self.dismiss(animated: true, completion:nil)
-    }
+
     private func setupRegisterButton() {
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
     }
     
-    // Functions to setup dismissing keyboard when tapping outside of it
+    
+}
+
+extension LoginViewController: LoginButtonDelegate {
+    func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
+        // TODO
+    }
+    
+    func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
+        guard let result = result, let token = result.token else {
+            // TODO: Handle error
+            print("Failed logging in with Facebook")
+            return
+        }
+        let req = GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: token.tokenString, version: nil, httpMethod: HTTPMethod(rawValue: "GET"))
+
+        req.start { [weak self] (connection, result, error) in
+             if let error = error {
+                  // TODO: show error message
+                  print("Facebook error: \(error.localizedDescription)")
+              } else {
+                  print("Facebook result: \(result.debugDescription)")
+                  // TODO: handle failure
+                guard let delegate = self?.loginDelegate, let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else {
+                    return }
+                  // Setup UI
+                  delegate.setTitle(name)
+                  // Setup user
+                  AppDelegate.user = LocalUser(id: id, name: name, email: email)
+              }
+        }
+        self.dismiss(animated: true, completion:nil)
+    }
+    
+    
+}
+
+// MARK: Google SignIn Delegate Method
+extension LoginViewController: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if let name = user?.profile?.name, let email = user?.profile?.email {
+            loginDelegate?.setTitle(name)
+            AppDelegate.user = LocalUser(id: user.userID, name: name, email: email)
+        }
+        self.dismiss(animated: true, completion:nil)
+    }
+}
+
+// MARK: Functions to setup dismissing keyboard when tapping outside of it
+extension LoginViewController {
     func setupKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
@@ -285,4 +331,3 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         view.endEditing(true)
     }
 }
-

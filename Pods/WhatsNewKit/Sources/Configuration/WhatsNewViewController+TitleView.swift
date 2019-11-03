@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - TitleView
+
 public extension WhatsNewViewController {
     
     /// The TitleView
@@ -19,21 +21,73 @@ public extension WhatsNewViewController {
         /// The title color
         public var titleColor: UIColor
         
+        /// The title alignment
+        public var titleAlignment: NSTextAlignment
+        
         /// The Animation
         public var animation: Animation?
+        
+        /// The SecondaryColor
+        public var secondaryColor: SecondaryColor?
+        
+        /// The Insets
+        public var insets: UIEdgeInsets
         
         /// Default initializer
         ///
         /// - Parameters:
-        ///   - titleFont: The title font. Default value `size: 30, weight: semibold`
-        ///   - titleColor: The title color. Default value `.black`
+        ///   - titleFont: The title font. Default value `size: 35, weight: semibold`
+        ///   - titleColor: The title color. Default value `.whatsNewKitForeground`
+        ///   - titleAlignment: The title alignment. Default value `center`
         ///   - animation: The Animation. Default value `nil`
-        public init(titleFont: UIFont = .systemFont(ofSize: 30, weight: .semibold),
-                    titleColor: UIColor = .black,
-                    animation: Animation? = nil) {
+        ///   - secondaryColor: The SecondaryColor. Default value `nil`
+        ///   - insets: The UIEdgeInsets. Default value `top: 80, left: 20, bottom: 27, right: 20`
+        public init(titleFont: UIFont = .systemFont(ofSize: 35, weight: .semibold),
+                    titleColor: UIColor = .whatsNewKitForeground,
+                    titleAlignment: NSTextAlignment = .center,
+                    animation: Animation? = nil,
+                    secondaryColor: SecondaryColor? = nil,
+                    insets: UIEdgeInsets = .init(top: 80, left: 20, bottom: 27, right: 20)) {
             self.titleFont = titleFont
             self.titleColor = titleColor
+            self.titleAlignment = titleAlignment
             self.animation = animation
+            self.secondaryColor = secondaryColor
+            self.insets = insets
+        }
+        
+    }
+    
+}
+
+// MARK: - SecondaryColor
+
+public extension WhatsNewViewController.TitleView {
+    
+    /// The SecondaryColor
+    struct SecondaryColor: Equatable {
+        
+        /// The start index
+        var startIndex: Int
+        
+        /// The length
+        var length: Int
+        
+        /// The color
+        var color: UIColor
+        
+        /// Designated Initializer
+        ///
+        /// - Parameters:
+        ///   - startIndex: The start index
+        ///   - length: The length
+        ///   - color: The color
+        public init(startIndex: Int,
+                    length: Int,
+                    color: UIColor) {
+            self.startIndex = startIndex
+            self.length = length
+            self.color = color
         }
         
     }

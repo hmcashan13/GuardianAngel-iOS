@@ -125,7 +125,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
                     completion(true)
                 }
             }
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
             completion(false)
         } else {
             //Not logged in
@@ -139,7 +139,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         presentLoginPage()
         if Auth.auth().currentUser != nil {
             // Logged in with Firebase or Google
-            if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+            if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
                 // Logout of Google
                 shared.signOut()
             }
@@ -153,7 +153,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
             // Logout of Facebook
             let loginManager = LoginManager()
             loginManager.logOut()
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
+        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
             // Logout of Google
             shared.signOut()
         }
@@ -161,7 +161,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     
     private func presentLoginPage() {
         let loginViewController = LoginViewController()
-        loginViewController.delegate = self
+        loginViewController.loginDelegate = self
         let navController = UINavigationController(rootViewController: loginViewController)
         DispatchQueue.main.async {
             self.present(navController, animated: true)
