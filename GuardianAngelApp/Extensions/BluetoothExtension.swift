@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreBluetooth
-// TODO: [CoreBluetooth] API MISUSE: <CBCentralManager: 0x6000030db2c0> can only accept this command while in the powered on state
+
 let ble_Service_UUID: String = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
 let ble_Characteristic_TX: String = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 let ble_Characteristic_RX: String = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
@@ -18,7 +18,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     // MARK: Bluetooth Helper Methods
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
-        guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }
+        guard let centralManager = centralManager, centralManager.state == .poweredOn, connectionState == .notConnected && !centralManager.isScanning else { return }
         if isDebugging {
             print("Now Background Scanning...")
         }
@@ -30,7 +30,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         let cbUUID4: CBUUID = CBUUID(string: ble_Characteristic_TX)
         let cbArray: [CBUUID] = [cbUUID1,cbUUID2,cbUUID3,cbUUID4]
         // Start scanning
-        centralManager?.scanForPeripherals(withServices: cbArray, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
+        centralManager.scanForPeripherals(withServices: cbArray, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
         
         // Setup timer to stop scanning
         let timer: CustomTimer = CustomTimer(timeInterval: 30) {
