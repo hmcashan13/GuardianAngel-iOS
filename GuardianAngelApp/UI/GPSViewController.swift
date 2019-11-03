@@ -27,6 +27,8 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         view.backgroundColor = standardColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(goToGPSInfoView), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
         
         setupMap()
@@ -51,13 +53,6 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
             self.present(navController, animated: true, completion: nil)
         }
     }
-    
-    private let infoButton: UIButton = {
-        let infoButton = UIButton(type: .infoDark)
-        infoButton.addTarget(self, action: #selector(showGPSInfoView), for: .touchUpInside)
-        infoButton.translatesAutoresizingMaskIntoConstraints = false
-        return infoButton
-    }()
     
     private func setupMap() {
         // Setup UI properties
@@ -242,16 +237,16 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         // TODO: show error message
     }
-
+    // TODO: Have GPS specific info shown
     /// Present Info page for GPS page
-    @objc func showGPSInfoView() {
+    @objc func goToGPSInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about GPS",
             items: [
                 WhatsNew.Item(
                     title: "Temperature Section:",
                     subtitle: "The temperature calculated by the smart cushion",
-                    image: UIImage(named: "temp")
+                    image: UIImage(named: "temp_image")
                 ),
                 WhatsNew.Item(
                     title: "Proximity from Cushion Section:",

@@ -56,6 +56,9 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         setupDeviceContainerView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
+        
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(goToDeviceInfoView), for: .touchUpInside)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: infoButton)
         
         showTitleSpinner()
@@ -260,13 +263,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         tf.font = UIFont.systemFont(ofSize: 16)
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
-    }()
-    
-    private let infoButton: UIButton = {
-        let infoButton = UIButton(type: .infoDark)
-        infoButton.addTarget(self, action: #selector(showDeviceInfoView), for: .touchUpInside)
-        infoButton.translatesAutoresizingMaskIntoConstraints = false
-        return infoButton
     }()
     
     /// Temp label
@@ -569,21 +565,21 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             activeStatusLabel.isHidden = false
         }
     }
-    
+    // MARK: Info Page
     /// Info Button Setup
-    @objc func showDeviceInfoView() {
+    @objc func goToDeviceInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about Device",
             items: [
                 WhatsNew.Item(
                     title: "",
-                    subtitle: "Note: Connecting to multiple cushions is possible",
+                    subtitle: "   Note: Connecting to multiple cushions is possible",
                     image: nil
                 ),
                 WhatsNew.Item(
                     title: "Temperature Section:",
                     subtitle: "The temperature calculated by the smart cushion",
-                    image: UIImage(named: "temp")
+                    image: UIImage(named: "temp_image")
                 ),
                 WhatsNew.Item(
                     title: "Proximity from Cushion Section:",

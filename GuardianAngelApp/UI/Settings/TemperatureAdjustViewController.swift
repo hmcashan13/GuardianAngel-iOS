@@ -22,7 +22,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         
         navigationItem.title = "Adjust Temperature Sensor"
         let infoButton = UIButton(type: .infoLight)
-        infoButton.addTarget(self, action: #selector(showTempInfo), for: .touchUpInside)
+        infoButton.addTarget(self, action: #selector(goToTempInfo), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
         view.backgroundColor = standardColor
         setupUIConstraints()
@@ -223,7 +223,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         defaults.set(farenheitIntValue, forKey: max_temp_key)
     }
     
-    @objc func showTempInfo() {
+    @objc func goToTempInfo() {
         let whatsNew = WhatsNew(
             title: "Adjust Temperature Settings",
             items: [

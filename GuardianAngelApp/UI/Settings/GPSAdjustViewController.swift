@@ -12,7 +12,7 @@ protocol GPSSettingsDelegate: AnyObject {
     func adjustRegionRadius(_ newRadius: Int)
     func disconnectGPS()
 }
-
+// TODO: setup
 class GPSAdjustViewController: UIViewController {
 
     override func viewDidLoad() {
