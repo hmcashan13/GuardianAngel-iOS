@@ -55,7 +55,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         timer.start()
     }
     
-    // Disconnect from UART
+    /// Disconnect from UART
     func disconnectDevice() {
         guard let peripherals = selectedPeripherals else { return }
         peripherals.forEach { centralManager?.cancelPeripheralConnection($0 ) }
@@ -84,7 +84,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     }
     
     // MARK: Central Manager Delegate Methods
-    // Discovered peripheral
+    /// Discovered peripheral
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
         guard peripheral.identifier == uart_UUID && connectionState == .notConnected && peripheral.state == .disconnected else { return }
         selectedPeripherals?.append(peripheral)
@@ -95,7 +95,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         centralManager?.connect(peripheral, options: nil)
     }
     
-    // Connected to peripheral
+    /// Connected to peripheral
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
         stopScan()
@@ -112,7 +112,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         peripheral.discoverServices([BLEService_UUID])
     }
 
-    // Disconnected from peripheral
+    /// Disconnected from peripheral
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
           // Modify state
           connectionState = .notConnected
@@ -140,7 +140,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
           
       }
       
-    // Bluetooth is disabled
+    /// Bluetooth is disabled
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state != CBManagerState.poweredOn {
           // Setup UI
@@ -160,7 +160,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         }
     }
 
-    // Connection failed
+    /// Connection failed
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
           if error != nil {
               // Modify state
