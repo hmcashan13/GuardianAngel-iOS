@@ -19,6 +19,7 @@ class GPSAdjustViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Adjust GPS Tracker"
         // Do any additional setup after loading the view.
+        self.view.backgroundColor = standardColor
     }
     
 

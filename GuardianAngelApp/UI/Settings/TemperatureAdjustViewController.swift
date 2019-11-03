@@ -238,7 +238,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
                 WhatsNew.Item(
                     title: "Max Temperature Section:",
                     subtitle: "The temperature that will trigger you to receive notifications from the app. This can be adjusted using the slider below",
-                    image: UIImage(named: "temp")
+                    image: UIImage(named: "temp_image")
                 ),
                 WhatsNew.Item(
                     title: "Questions?",
