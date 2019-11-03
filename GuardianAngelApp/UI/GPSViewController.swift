@@ -31,7 +31,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         
         setupMap()
         setupLocationButtons()
-        
+        // TODO: setup gps tracking
         NotificationCenter.default.addObserver(self, selector: #selector(determineCushionLocation), name: UIApplication.willEnterForegroundNotification
             , object: nil)
     }
