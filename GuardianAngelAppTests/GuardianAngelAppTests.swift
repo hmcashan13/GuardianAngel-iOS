@@ -1,15 +1,16 @@
 //
 //  GuardianAngelAppTests.swift
-//  GuardianAngelAppTests
+//  GuardianAngelAppUITests
 //
-//  Created by Hudson Mcashan on 10/16/18.
-//  Copyright © 2018 Guardian Angel. All rights reserved.
+//  Created by Hudson Mcashan on 11/3/19.
+//  Copyright © 2019 Guardian Angel. All rights reserved.
 //
 
 import XCTest
 
 class GuardianAngelAppTests: XCTestCase {
-
+    // TODO: setup tests for bluetooth functionality
+    // TODO: setup tests for various auth methods
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

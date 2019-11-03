@@ -32,6 +32,7 @@
 		E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D890217BF6A600A0A627 /* DeviceViewController.swift */; };
 		E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D894217C0B5F00A0A627 /* ImageExtension.swift */; };
 		E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AF28D2198B48700E7BC6C /* LocationExtension.swift */; };
+		E7BD9A05236F3D1F00B556F4 /* GuardianAngelAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BD9A04236F3D1F00B556F4 /* GuardianAngelAppTests.swift */; };
 		E7C22EF7218417360071FE8E /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C22EF6218417350071FE8E /* SnapshotHelper.swift */; };
 		F26A6A15643B40D47EFA5644 /* Pods_GuardianAngelApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ABF8BB08EF8347FEEC3293 /* Pods_GuardianAngelApp.framework */; };
 /* End PBXBuildFile section */
@@ -82,6 +83,7 @@
 		E753D894217C0B5F00A0A627 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		E753D898217CEE4500A0A627 /* GuardianAngelApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GuardianAngelApp.entitlements; sourceTree = "<group>"; };
 		E77AF28D2198B48700E7BC6C /* LocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtension.swift; sourceTree = "<group>"; };
+		E7BD9A04236F3D1F00B556F4 /* GuardianAngelAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardianAngelAppTests.swift; sourceTree = "<group>"; };
 		E7C22EF6218417350071FE8E /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		F639254028761EFA81E9CD15 /* Pods-GuardianAngelAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuardianAngelAppUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuardianAngelAppUITests/Pods-GuardianAngelAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -168,6 +170,7 @@
 		E70B926B2176E34F00B4AE8B /* GuardianAngelAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				E7BD9A04236F3D1F00B556F4 /* GuardianAngelAppTests.swift */,
 				E70B926E2176E34F00B4AE8B /* Info.plist */,
 			);
 			path = GuardianAngelAppTests;
@@ -463,6 +466,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7BD9A05236F3D1F00B556F4 /* GuardianAngelAppTests.swift in Sources */,
 				E70B92782176E34F00B4AE8B /* GuardianAngelAppUITests.swift in Sources */,
 				E7C22EF7218417360071FE8E /* SnapshotHelper.swift in Sources */,
 			);
