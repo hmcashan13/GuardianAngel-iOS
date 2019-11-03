@@ -31,6 +31,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         if CLLocationManager.isRangingAvailable() {
             guard let region = region as? CLBeaconRegion else {
+                // TODO: handle error
                 print("Beacon Region is not valid")
                 return
             }
@@ -41,7 +42,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        if AppDelegate.isDebugging {
+        if isDebugging {
             print("Entered region")
             sendNotification(description: "Entered Region")
         }
@@ -56,7 +57,6 @@ extension DeviceViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        print("Adios")
         // Modify state
         isBeaconConnected = false
         // Setup UI
@@ -66,7 +66,7 @@ extension DeviceViewController: CLLocationManagerDelegate {
         // No matter what we want to stop scanning
         stopScan()
         
-        if AppDelegate.isDebugging {
+        if isDebugging {
             print("Left Region")
             sendNotification(description: "Left Region")
         } 

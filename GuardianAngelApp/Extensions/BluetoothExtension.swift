@@ -19,7 +19,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     /// Scan for bluetooth peripherals in the background
     func backgroundScan() {
         guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }
-        print("Now Background Scanning...")
+        if isDebugging {
+            print("Now Background Scanning...")
+        }
         
         // In order to perform background scanning, we must request a particular service
         let cbUUID1: CBUUID = CBUUID(string: "00000001-1212-EFDE-1523-785FEABCD123")
@@ -40,7 +42,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     /// Scan for bluetooth peripherals in the foreground
     @objc func foregroundScan() {
         guard let isScan = centralManager?.isScanning, connectionState == .notConnected && !isScan else { return }
-        print("Now Foreground Scanning...")
+        if isDebugging {
+            print("Now Foreground Scanning...")
+        }
         // Start scanning
         centralManager?.scanForPeripherals(withServices: nil, options: [CBCentralManagerScanOptionAllowDuplicatesKey:false])
         
@@ -84,7 +88,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral,advertisementData: [String : Any], rssi RSSI: NSNumber) {
         guard peripheral.identifier == uart_UUID && connectionState == .notConnected && peripheral.state == .disconnected else { return }
         selectedPeripherals?.append(peripheral)
-        print("peripheral: ",peripheral)
+        if isDebugging {
+            print("peripheral: ",peripheral)
+        }
         //Connect to peripherals
         centralManager?.connect(peripheral, options: nil)
     }
@@ -93,15 +99,15 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         //Stop Scan- We don't need to scan once we've connected to a peripheral. We got what we came for.
         stopScan()
-        if AppDelegate.isDebugging {
+        if isDebugging {
             print("Connected")
             sendNotification(description: "Connected")
         }
         // Modify state
         connectionState = .connected
-        //Discovery callback
+        // Discovery callback
         peripheral.delegate = self
-        //Only look for services that matches transmit uuid
+        // Only look for services that matches transmit uuid
         let BLEService_UUID: CBUUID = CBUUID(string: ble_Service_UUID)
         peripheral.discoverServices([BLEService_UUID])
     }
@@ -124,7 +130,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
               backgroundScan()
           }
           
-          if AppDelegate.isDebugging {
+          if isDebugging {
                print("Disconnected")
               sendNotification(description: "Disconnected")
           } else if isWeightDetected {
@@ -166,6 +172,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                   self.hideTempSpinner()
                   self.hideWeightSpinner()
                   // Show error message
+                // TODO: formatting and retry and cancel option for alert message
                   showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: { [weak self] _ in
                       self?.backgroundScan()
                   })
@@ -181,12 +188,16 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services, error == nil else {
             // Show error message
+            // TODO: retry and cancel option
             showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: nil)
             return
         }
-        //We need to discover the all characteristic
+        // We need to discover all characteristic
         services.forEach { peripheral.discoverCharacteristics(nil, for: $0) }
-        print("Discovered Services: \(services)")
+        if isDebugging {
+            print("Discovered Services: \(services)")
+        }
+        
     }
     /*
      Invoked when you discover the characteristics of a specified service.
@@ -200,7 +211,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             return
         }
         
-        print("Found \(characteristics.count) characteristics!")
+        if isDebugging {
+            print("Found \(characteristics.count) characteristics!")
+        }
         for characteristic in characteristics {
             // We only care about the Rx characteristic
             if characteristic.uuid.isEqual(BLE_Characteristic_uuid_Rx)  {
@@ -211,7 +224,9 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                 // We can return after calling CBPeripheral.setNotifyValue because CBPeripheralDelegate's
                 // didUpdateNotificationStateForCharacteristic method will be called automatically
                 peripheral.readValue(for: characteristic)
-                print("Tx Characteristic: \(characteristic.uuid)")
+                if isDebugging {
+                    print("Tx Characteristic: \(characteristic.uuid)")
+                }
             }
             peripheral.discoverDescriptors(for: characteristic)
         }
@@ -266,7 +281,10 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             }
             
         }
-        print("temperature: \(tempString)")
+        if isDebugging {
+            print("temperature: \(tempString)")
+        }
+        
         
         if let weight = weight, weight < 3000 {
             isWeightDetected = true

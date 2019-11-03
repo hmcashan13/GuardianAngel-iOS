@@ -117,6 +117,7 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         
         Auth.auth().createUser(withEmail: email, password: password, completion: { (result, error: Error?) in
             if let error = error {
+                // TODO: handle error
                 print("Failed to create user:", error)
                 let alert = UIAlertController(title: "Alert", message: error.localizedDescription, preferredStyle: UIAlertController.Style.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))

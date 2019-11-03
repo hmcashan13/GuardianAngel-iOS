@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            uuid = "17B5F170-1390-49C2-9119-ECAB43BC26F6"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GuardianAngelApp/Extensions/BluetoothExtension.swift"
-            timestampString = "585093477.611696"
+            filePath = "GuardianAngelApp/UI/DeviceViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "backgroundScan()"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "checkIfUserLoggedIn(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

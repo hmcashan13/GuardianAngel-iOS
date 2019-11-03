@@ -140,6 +140,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             
             req.start { [weak self] (connection, result, error) in
                 if let error = error {
+                    // TODO: show error message
                     print("Facebook error: \(error.localizedDescription)")
                     completion(.loggedOut)
                 } else {
@@ -177,6 +178,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             do {
                 try Auth.auth().signOut()
             } catch let logoutError {
+                // TODO: handle error
                 print("Logout error: ", logoutError)
             }
         } else if AccessToken.isCurrentAccessTokenActive {
@@ -650,6 +652,7 @@ extension DeviceViewController: GIDSignInDelegate {
         
         Auth.auth().signIn(with: credentials, completion: { (result, error) in
             if let err = error {
+                // TODO: handle error
                 print("Failed to create a Firebase User with Google account: ", err)
                 return
             }

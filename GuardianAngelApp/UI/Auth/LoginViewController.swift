@@ -163,15 +163,21 @@ class LoginViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     private func checkIfUserLoggedIn() -> Bool {
         if let uid = Auth.auth().currentUser?.uid {
             // Logged in with Firebase
-            print("Successfully logged into Firebase through email (uid): ", uid)
+            if isDebugging {
+                print("Successfully logged into Firebase through email (uid): ", uid)
+            }
             return true
         } else if AccessToken.isCurrentAccessTokenActive {
             // Logged in with Facebook
-            print("Successfully logged into Firebase through Facebook")
+            if isDebugging {
+                print("Successfully logged into Firebase through Facebook")
+            }
             return true
         } else if let shared = GIDSignIn.sharedInstance(), shared.hasAuthInKeychain() {
             // Logged in with Google
-            print("Successfully logged into Firebase through Google")
+            if isDebugging {
+                print("Successfully logged into Firebase through Google")
+            }
             return true
         } else {
             // Not logged in so stay here

@@ -178,16 +178,22 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     @objc func farenheitOrCelsius() {
         let farenheit_celsius = AppDelegate.farenheit_celsius
         AppDelegate.farenheit_celsius = !farenheit_celsius
-        print("New temp setting: ", AppDelegate.farenheit_celsius)
+        if isDebugging {
+            print("New temp setting: ", AppDelegate.farenheit_celsius)
+        }
         let sliderValue = mySlider.value
         let farenheitIntValue = Int(sliderValue)
         if AppDelegate.farenheit_celsius {
             sliderLabel.text = "\(farenheitIntValue)°F"
-            print("new farenheit max temp: ", farenheitIntValue)
+            if isDebugging {
+                print("new farenheit max temp: ", farenheitIntValue)
+            }
         } else {
             let celsiusIntValue = ((farenheitIntValue-32)*5/9)
             sliderLabel.text = "\(celsiusIntValue)°C"
-            print("new celsius max temp: ", celsiusIntValue)
+            if isDebugging {
+                print("new celsius max temp: ", celsiusIntValue)
+            }
         }
         AppDelegate.max_temp = farenheitIntValue
         defaults.set(farenheitIntValue, forKey: max_temp_key)
@@ -195,7 +201,9 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     @objc func switchStateDidChange(_ sender:UISwitch!) {
         let enabled = sender.isOn ? true : false
-        print("is temp enabled: ", enabled)
+        if isDebugging {
+            print("is temp enabled: ", enabled)
+        }
         AppDelegate.is_temp_enabled = enabled
         defaults.set(enabled, forKey: is_temp_enabled_key)
     }

@@ -17,6 +17,9 @@ let meters_feet_key: String = "meters_feet_key"
 let is_temp_enabled_key: String = "is_temp_enabled_key"
 let max_temp_key: String = "max_temp_key"
 
+// Used to turn on/off print statements and other debugging information
+let isDebugging: Bool = true
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -25,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //static let notificationURL = "https://fcm.googleapis.com/fcm/send"
     
-    static let isDebugging: Bool = true
+    
     
     private let standardUserDefaults: [String:Any] = [farenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
     // Init temperature user settings
@@ -74,7 +77,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue.main.async {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
                 (granted, error) in
-                print("Permission granted: \(granted)")
+                if isDebugging {
+                    print("Permission granted: \(granted)")
+                }
                 
                 guard granted else { return }
                 self.getNotificationSettings()
@@ -85,7 +90,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func getNotificationSettings() {
         DispatchQueue.main.async {
             UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-                print("Notification settings: \(settings)")
+                if isDebugging {
+                    print("Notification settings: \(settings)")
+                }
                 guard settings.authorizationStatus == .authorized else { return }
                 UIApplication.shared.registerForRemoteNotifications()
             }
@@ -99,7 +106,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let token = tokenParts.joined()
-        print("Device Token: \(token)")
+        if isDebugging {
+            print("Device Token: \(token)")
+        }
     }
     
     func application(_ application: UIApplication,
