@@ -15,7 +15,7 @@ import FBSDKLoginKit
 import GoogleSignIn
 
 class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDelegate, LoginDelegate {
-    var locationManager:CLLocationManager?
+    var locationManager: CLLocationManager?
     let mapView = MKMapView()
     let regionRadius: CLLocationDistance = 4000
     var actionButton : ActionButton!
@@ -23,7 +23,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Setup UI
-        title = AppDelegate.user?.name
+        //title = AppDelegate.user?.name
         view.backgroundColor = standardColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
@@ -190,15 +190,68 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     
     // MARK: Location Helper Methods
     // TODO: make this work
+    
     private func setupLocationButtons() {
-        let currentLocationButton = ActionButtonItem(title: "Go to My Location", image: UIImage(named: "proximity"))
-        currentLocationButton.action = { item in self.view.backgroundColor = UIColor.red }
-        let cushionLocationButton = ActionButtonItem(title: "Go to Cushion Location", image: UIImage(named: "gps"))
-        cushionLocationButton.action = { item in self.view.backgroundColor = UIColor.blue }
-        actionButton = ActionButton(attachedToView: mapView, items: [currentLocationButton, cushionLocationButton])
-        actionButton.setTitle("+", forState: UIControl.State())
-        actionButton.backgroundColor = UIColor(red: 238.0/255.0, green: 130.0/255.0, blue: 130.0/255.0, alpha: 1)
-        actionButton.action = { button in button.toggleMenu()}
+        let cushionLocationButton = UIButton(type: .custom)
+        cushionLocationButton.frame = CGRect(x: 200, y: 200, width: 50, height: 50)
+        cushionLocationButton.layer.cornerRadius = 0.5 * cushionLocationButton.bounds.size.width
+        cushionLocationButton.setImage(UIImage(named: "gps"), for: UIControl.State())
+//        cushionLocationButton.backgroundColor = standardColor
+        cushionLocationButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        cushionLocationButton.isUserInteractionEnabled = true
+        cushionLocationButton.translatesAutoresizingMaskIntoConstraints = false
+        cushionLocationButton.addTarget(self, action: #selector(test), for: .touchUpInside)
+        self.mapView.addSubview(cushionLocationButton)
+        cushionLocationButton.centerXAnchor.constraint(equalTo: self.mapView.rightAnchor, constant: -50).isActive=true
+        
+        cushionLocationButton.centerYAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 50).isActive=true
+        
+        let currentLocationButton = UIButton(type: .custom)
+        currentLocationButton.frame = CGRect(x: 200, y: 200, width: 50, height: 50)
+        currentLocationButton.layer.cornerRadius = 0.5 * currentLocationButton.bounds.size.width
+        currentLocationButton.setImage(UIImage(named: "proximity copy"), for: UIControl.State())
+//        cushionLocationButton.backgroundColor = standardColor
+        currentLocationButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
+        currentLocationButton.isUserInteractionEnabled = true
+        currentLocationButton.translatesAutoresizingMaskIntoConstraints = false
+        currentLocationButton.addTarget(self, action: #selector(test), for: .touchUpInside)
+        self.mapView.addSubview(currentLocationButton)
+        currentLocationButton.centerXAnchor.constraint(equalTo: self.mapView.rightAnchor, constant: -50).isActive=true
+        currentLocationButton.centerYAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 100).isActive=true
+
+        let cushionTextView = UILabel()
+        cushionTextView.translatesAutoresizingMaskIntoConstraints = false
+        cushionTextView.text = "Cushion Location"
+        cushionTextView.textAlignment = .center
+        cushionTextView.textColor = .white
+        cushionTextView.backgroundColor = standardColor
+        cushionTextView.clipsToBounds = true
+        cushionTextView.layer.cornerRadius = 10.0
+        cushionTextView.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        self.mapView.addSubview(cushionTextView)
+        cushionTextView.heightAnchor.constraint(equalToConstant: 30).isActive=true
+        cushionTextView.widthAnchor.constraint(equalToConstant: 130).isActive=true
+        cushionTextView.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor).isActive=true
+        cushionTextView.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 30).isActive=true
+        
+        let currTextView = UILabel()
+        currTextView.translatesAutoresizingMaskIntoConstraints = false
+        currTextView.text = "Your Location"
+        currTextView.textAlignment = .center
+        currTextView.textColor = .white
+        currTextView.backgroundColor = standardColor
+        currTextView.clipsToBounds = true
+        currTextView.layer.cornerRadius = 10.0
+        currTextView.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        self.mapView.addSubview(currTextView)
+        currTextView.heightAnchor.constraint(equalToConstant: 30).isActive=true
+        currTextView.widthAnchor.constraint(equalToConstant: 110).isActive=true
+        currTextView.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor, constant: -10).isActive=true
+        currTextView.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 80).isActive=true
+    }
+    
+    @objc func test() {
+        print("test is working")
     }
     
     @objc func determineCushionLocation() {

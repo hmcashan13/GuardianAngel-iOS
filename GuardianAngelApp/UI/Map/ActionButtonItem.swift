@@ -127,7 +127,9 @@ open class ActionButtonItem: NSObject {
         
     //MARK: - Button Action Methods
     @objc func buttonPressed(_ sender: UIButton) {
+        print("test")
         if let unwrappedAction = self.action {
+            print("test")
             unwrappedAction(self)
         }
     }

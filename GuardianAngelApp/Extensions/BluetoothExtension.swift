@@ -142,6 +142,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
       
     /// Bluetooth is disabled
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        // TODO: check for all states
         if central.state != CBManagerState.poweredOn {
           // Setup UI
           executeOnMainThread { [weak self] in
@@ -197,7 +198,6 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
         if isDebugging {
             print("Discovered Services: \(services)")
         }
-        
     }
     /*
      Invoked when you discover the characteristics of a specified service.
