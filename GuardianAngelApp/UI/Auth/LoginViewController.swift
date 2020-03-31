@@ -15,6 +15,7 @@ import GoogleSignIn
 protocol LoginDelegate: AnyObject {
     func setTitle(_ title: String)
 }
+
 class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,11 +164,12 @@ class LoginViewController: UIViewController {
     
     
     private func checkIfUserLoggedIn() -> Bool {
-        if let uid = Auth.auth().currentUser?.uid {
+        if let user = Auth.auth().currentUser {
             // Logged in with Firebase
             if isDebugging {
-                print("Successfully logged into Firebase through email (uid): ", uid)
+                print("Successfully logged into Firebase through email (uid): ", user.uid)
             }
+            AppDelegate.user = LocalUser(id: user.uid, name: user.displayName ?? "", email: user.email)
             return true
         } else if AccessToken.isCurrentAccessTokenActive {
             // Logged in with Facebook

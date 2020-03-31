@@ -57,11 +57,11 @@
 	<key>NSB</key>
 	<string></string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>&quot;We need to monitor the temperature of your car for the safety of your baby&quot;</string>
+	<string>&quot;We need to monitor the temperature&quot;</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>&quot;We need to monitor your location to be able to monitor your proximity to your baby&quot;</string>
+	<string>&quot;We need to monitor your location to display on our application&quot;</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>&quot;We need to monitor your location to be able to monitor your proximity to your baby&quot;</string>
+	<string>&quot;We need to monitor your location to display on our application&quot;</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

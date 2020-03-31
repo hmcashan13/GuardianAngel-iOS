@@ -14,16 +14,15 @@ import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
 
-class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDelegate, LoginDelegate {
+class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDelegate {
     var locationManager: CLLocationManager?
     let mapView = MKMapView()
     let regionRadius: CLLocationDistance = 4000
     var actionButton : ActionButton!
-    
+    var isLoggedIn: AuthState = .loggedOut
     override func viewDidLoad() {
         super.viewDidLoad()
         // Setup UI
-        //title = AppDelegate.user?.name
         view.backgroundColor = standardColor
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
@@ -71,16 +70,24 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     
     // MARK: Authentication Methods
     private func checkIfUserLoggedIn() {
+        if let user = AppDelegate.user {
+            self.navigationItem.title = user.name
+            return
+        }
+        isLoggedIn = .loggingIn
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
-            if authStatus {
+            self?.isLoggedIn = authStatus
+            if authStatus == .loggedIn {
                 self?.determineCushionLocation()
             } else {
+                self?.navigationItem.title = "Not Logged In"
+                self?.hideTitleSpinner()
                 self?.logout()
             }
         })
     }
     
-    private func checkIfUserLoggedIn(completion: @escaping ((Bool) -> Void)) {
+    private func checkIfUserLoggedIn(completion: @escaping ((AuthState) -> Void)) {
         if let currentUser = Auth.auth().currentUser, let name = currentUser.displayName, let email = currentUser.email {
             //Logged in with Firebase or Google
             // Setup user
@@ -93,11 +100,11 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
                     print("user is logged in: ", dict)
                     // TODO: handle creation of user
                 }
-                completion(true)
+                completion(.loggedIn)
             })
         } else if AccessToken.isCurrentAccessTokenActive {
             guard let accessToken = AccessToken.current else {
-                completion(false)
+                completion(.loggedOut)
                 return
             }
             //Logged in with Facebook
@@ -106,7 +113,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
             req.start { [weak self] (connection, result, error) in
                 if let error = error {
                     print("Facebook error: \(error.localizedDescription)")
-                    completion(false)
+                    completion(.loggedOut)
                 } else {
                     print("Facebook result: \(result.debugDescription)")
                     guard let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else { return }
@@ -115,14 +122,14 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
                     self?.hideTitleSpinner()
                     // Setup user
                     AppDelegate.user = LocalUser(id: id, name: name, email: email)
-                    completion(true)
+                    completion(.loggedIn)
                 }
             }
         } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
-            completion(false)
+            completion(.loggedOut)
         } else {
             //Not logged in
-            completion(false)
+            completion(.loggedOut)
         }
     }
     
@@ -167,9 +174,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     
     func disconnectDevice() {}
     
-    func setTitle(_ title: String) {
-        self.navigationItem.title = title
-    }
+
     
     // MARK: Loading view functions
     func showTitleSpinner() {
@@ -339,5 +344,50 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         )
         
         present(whatsNewViewController, animated: true)
+    }
+}
+// MARK: Google SignIn Delegate Methods
+extension GPSViewController: GIDSignInDelegate {
+    // Google sign-in delegate methods
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
+              withError error: Error!) {
+        print("Successfully logged into Google", user.debugDescription)
+        
+        if error != nil {
+            print("Error signing into Google: ", error.debugDescription)
+            return
+        }
+        guard let id = user?.userID, let profile = user?.profile, let name = profile.name, let email = profile.email else { return }
+        AppDelegate.user = LocalUser(id: id, name: name, email: email)
+        executeOnMainThread { [weak self] in
+            // Setup UI
+            self?.navigationItem.title = name
+            self?.hideTitleSpinner()
+        }
+        // Setup user
+        AppDelegate.user = LocalUser(id: id, name: name, email: email)
+        guard let idToken = user.authentication.idToken else { return }
+        guard let accessToken = user.authentication.accessToken else { return }
+        let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        
+        Auth.auth().signIn(with: credentials, completion: { (result, error) in
+            if let err = error {
+                // TODO: handle error
+                print("Failed to create a Firebase User with Google account: ", err)
+                return
+            }
+        })
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
+              withError error: Error!) {
+        // Perform any operations when the user disconnects from app here.
+        // TODO: do something
+    }
+}
+// MARK: Login Delegate Method
+extension GPSViewController: LoginDelegate {
+    func setTitle(_ title: String) {
+        self.navigationItem.title = title
     }
 }

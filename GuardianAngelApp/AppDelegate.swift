@@ -35,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var meters_feet: Bool = true
     static var is_temp_enabled: Bool = true
     static var max_temp: Int = 85
-
+    
     static var user: LocalUser?
     
     let defaults = UserDefaults.standard

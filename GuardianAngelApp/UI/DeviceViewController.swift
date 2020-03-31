@@ -16,6 +16,20 @@ import FirebaseDatabase
 import FBSDKLoginKit
 import GoogleSignIn
 
+
+enum AuthState {
+    case loggedIn
+    case loggingIn
+    case loggedOut
+}
+
+enum ConnectionState {
+    case connected
+    case notConnected
+    case connecting
+    case tempNotActive
+}
+
 class DeviceViewController: UIViewController, SettingsDelegate {
     // Beacon properties
     let beaconRegion: CLBeaconRegion = CLBeaconRegion(
@@ -27,13 +41,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     var isBeaconConnected: Bool = false
     var locationManager: CLLocationManager?
     
-    // UART properties
-    enum ConnectionState {
-        case connected
-        case notConnected
-        case connecting
-        case tempNotActive
-    }
     var rxCharacteristic: CBCharacteristic?
     var connectionState:ConnectionState = .notConnected
     var centralManager: CBCentralManager?
@@ -42,14 +49,10 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     
     // Auth properties
     var isLoggedIn: AuthState = .loggedOut
-    enum AuthState {
-        case loggedIn
-        case loggingIn
-        case loggedOut
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Setup UI
         view.backgroundColor = standardColor
         
@@ -95,6 +98,10 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     
     //MARK: Authentication Methods
     private func checkIfUserLoggedIn() {
+        if let user = AppDelegate.user {
+            self.navigationItem.title = user.name
+            return
+        }
         isLoggedIn = .loggingIn
         checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
             self?.isLoggedIn = authStatus
@@ -663,7 +670,7 @@ extension DeviceViewController: GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
               withError error: Error!) {
         // Perform any operations when the user disconnects from app here.
-        // ...
+        // TODO: do something
     }
 }
 // MARK: Login Delegate Method
