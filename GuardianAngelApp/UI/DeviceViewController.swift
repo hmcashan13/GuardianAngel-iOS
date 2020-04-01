@@ -59,7 +59,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         setupDeviceContainerView()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(goToSettings))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(goToDeviceInfoView))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Info", style: .plain, target: self, action: #selector(goToGeneralInfoView))
         
         showTitleSpinner()
         showTempSpinner()
@@ -285,11 +285,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         let infoButton = UIButton(type: .infoDark)
         infoButton.addTarget(self, action: #selector(goToDeviceInfoView), for: .touchUpInside)
         infoButton.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 13.0, *) {
-            if UITraitCollection.current.userInterfaceStyle == .dark {
-                infoButton.tintColor = UIColor.black
-            }
-        }
         return infoButton
     }()
     
@@ -417,9 +412,10 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24).isActive=true
         inputsContainerView.heightAnchor.constraint(equalToConstant: 180).isActive=true
     
-        // add identifier and info fields {
+        // add device identifier, connection status, and info fields
         inputsContainerView.addSubview(deviceIdentifierLabel)
         inputsContainerView.addSubview(deviceConnectionStatusLabel)
+        inputsContainerView.addSubview(infoButton)
         
         // add text labels to container view
         inputsContainerView.addSubview(tempTextLabel)
@@ -452,6 +448,9 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         deviceConnectionStatusLabel.topAnchor.constraint(equalTo: deviceIdentifierLabel.topAnchor).isActive=true
         deviceConnectionStatusLabel.widthAnchor.constraint(equalToConstant: 200).isActive=true
         deviceConnectionStatusLabel.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/4).isActive=true
+        
+        infoButton.rightAnchor.constraint(equalTo: inputsContainerView.rightAnchor, constant: -10).isActive=true
+        infoButton.topAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: 6).isActive=true
         
         // setup constraints for text labels
         tempTextLabel.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive=true
@@ -623,8 +622,58 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             activeStatusLabel.isHidden = false
         }
     }
-    // MARK: Info Page
-    /// Info Button Setup
+    // MARK: Info Pages
+    @objc func goToGeneralInfoView() {
+        let whatsNew = WhatsNew(
+            title: "Information about Connecting to Device",
+            items: [
+                WhatsNew.Item(
+                    title: "Ensure Bluetooth is Enabled:",
+                    subtitle: "Go to Settings > Bluetooth > Turn On",
+                    image: UIImage(named: "bluetooth")
+                ),
+                WhatsNew.Item(
+                    title: "Proximity from Cushion:",
+                    subtitle: "Ensure you are within 10 feet of the cushion to connect",
+                    image: UIImage(named: "proximity")
+                ),
+//                WhatsNew.Item(
+//                    title: "Weight Detected Section:",
+//                    subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
+//                    image: UIImage(named: "setup")
+//                ),
+                WhatsNew.Item(
+                    title: "Questions?",
+                    subtitle: "Email us at support@guardianangelcushion.com",
+                    image: UIImage(named: "question")
+                )
+            ]
+        )
+
+        let myTheme = WhatsNewViewController.Theme { configuration in
+            configuration.titleView.titleColor = .white
+            configuration.backgroundColor = standardColor
+            configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
+            configuration.itemsView.titleColor = .white
+            configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
+            configuration.itemsView.subtitleColor = .white
+            configuration.completionButton.title = "Go Back"
+            configuration.completionButton.backgroundColor = .white
+            configuration.completionButton.titleColor = standardColor
+        }
+        
+        let configuration = WhatsNewViewController.Configuration(
+            theme: myTheme
+        )
+        
+        let whatsNewViewController = WhatsNewViewController(
+            whatsNew: whatsNew,
+            configuration: configuration
+        )
+        
+        present(whatsNewViewController, animated: true)
+    }
+    /// Device Info Button Setup
     @objc func goToDeviceInfoView() {
         let whatsNew = WhatsNew(
             title: "Information about Device",

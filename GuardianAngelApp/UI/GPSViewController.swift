@@ -195,35 +195,55 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     
     // MARK: Location Helper Methods
     // TODO: make this work
-    
     private func setupLocationButtons() {
+        // Setup cushion location button
         let cushionLocationButton = UIButton(type: .custom)
         cushionLocationButton.frame = CGRect(x: 200, y: 200, width: 50, height: 50)
         cushionLocationButton.layer.cornerRadius = 0.5 * cushionLocationButton.bounds.size.width
-        cushionLocationButton.setImage(UIImage(named: "gps"), for: UIControl.State())
-//        cushionLocationButton.backgroundColor = standardColor
+        // setup image for button
+        var image1 = UIImage(named: "gps")?.maskWithColor(color: standardColor)
+        if #available(iOS 13.0, *) {
+            // If we're in dark mode, change the button image color to white
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                image1 = image1?.maskWithColor(color: UIColor.white)
+            }
+        }
+        cushionLocationButton.setImage(image1, for: UIControl.State())
         cushionLocationButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         cushionLocationButton.isUserInteractionEnabled = true
         cushionLocationButton.translatesAutoresizingMaskIntoConstraints = false
-        cushionLocationButton.addTarget(self, action: #selector(test), for: .touchUpInside)
+        cushionLocationButton.addTarget(self, action: #selector(cushionLocation), for: .touchUpInside)
+        // add cushion location button to view
         self.mapView.addSubview(cushionLocationButton)
+        // add constraints for location button view
         cushionLocationButton.centerXAnchor.constraint(equalTo: self.mapView.rightAnchor, constant: -50).isActive=true
-        
         cushionLocationButton.centerYAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 50).isActive=true
         
+        // Setup current location button
         let currentLocationButton = UIButton(type: .custom)
         currentLocationButton.frame = CGRect(x: 200, y: 200, width: 50, height: 50)
         currentLocationButton.layer.cornerRadius = 0.5 * currentLocationButton.bounds.size.width
-        currentLocationButton.setImage(UIImage(named: "proximity copy"), for: UIControl.State())
-//        cushionLocationButton.backgroundColor = standardColor
+        // setup image for button
+        var image2 = UIImage(named: "proximity")?.maskWithColor(color: standardColor)
+        if #available(iOS 13.0, *) {
+            // If we're in dark mode, change the button image color to white
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                image2 = image2?.maskWithColor(color: UIColor.white)
+            }
+        }
+        currentLocationButton.setImage(image2, for: UIControl.State())
         currentLocationButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0)
         currentLocationButton.isUserInteractionEnabled = true
         currentLocationButton.translatesAutoresizingMaskIntoConstraints = false
-        currentLocationButton.addTarget(self, action: #selector(test), for: .touchUpInside)
+        currentLocationButton.addTarget(self, action: #selector(currentLocation), for: .touchUpInside)
+        // add current location button to view
         self.mapView.addSubview(currentLocationButton)
+        // add constraints for location button view
         currentLocationButton.centerXAnchor.constraint(equalTo: self.mapView.rightAnchor, constant: -50).isActive=true
         currentLocationButton.centerYAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 100).isActive=true
 
+        // Setup cushion text view
+        // TODO: change to button
         let cushionTextView = UILabel()
         cushionTextView.translatesAutoresizingMaskIntoConstraints = false
         cushionTextView.text = "Cushion Location"
@@ -233,12 +253,16 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         cushionTextView.clipsToBounds = true
         cushionTextView.layer.cornerRadius = 10.0
         cushionTextView.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        // add to view
         self.mapView.addSubview(cushionTextView)
+        // setup constraints
         cushionTextView.heightAnchor.constraint(equalToConstant: 30).isActive=true
         cushionTextView.widthAnchor.constraint(equalToConstant: 130).isActive=true
         cushionTextView.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor).isActive=true
         cushionTextView.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 30).isActive=true
         
+        // Setup current location text view
+        // TODO: change to button
         let currTextView = UILabel()
         currTextView.translatesAutoresizingMaskIntoConstraints = false
         currTextView.text = "Your Location"
@@ -248,15 +272,21 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         currTextView.clipsToBounds = true
         currTextView.layer.cornerRadius = 10.0
         currTextView.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        // add to view
         self.mapView.addSubview(currTextView)
+        // setup constraints
         currTextView.heightAnchor.constraint(equalToConstant: 30).isActive=true
         currTextView.widthAnchor.constraint(equalToConstant: 110).isActive=true
         currTextView.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor, constant: -10).isActive=true
         currTextView.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 80).isActive=true
     }
     
-    @objc func test() {
-        print("test is working")
+    @objc func currentLocation() {
+        print("your location")
+    }
+    
+    @objc func cushionLocation() {
+        print("cushion location")
     }
     
     @objc func determineCushionLocation() {
