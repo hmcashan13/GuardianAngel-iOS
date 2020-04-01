@@ -39,6 +39,11 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         let label = UILabel()
         label.text = "Temperature Sensor On/Off:"
         label.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                label.textColor = UIColor.black
+            }
+        }
         return label
     }()
     
@@ -54,17 +59,15 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         return tempOnOff
     }()
     
-    private let seperatorView1: UIView = {
-        let view = UIView()
-        view.backgroundColor = standardColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private let metricOrNahTextLabel: UILabel = {
         let label = UILabel()
         label.text = "Farenheit or Celcius?"
         label.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                label.textColor = UIColor.black
+            }
+        }
         return label
     }()
     
@@ -74,14 +77,12 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         segCntrl.selectedSegmentIndex = AppDelegate.farenheit_celsius ? 0 : 1
         segCntrl.addTarget(self, action: #selector(farenheitOrCelsius), for: .valueChanged)
         segCntrl.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                segCntrl.selectedSegmentTintColor = standardColor
+            }
+        }
         return segCntrl
-    }()
-    
-    private let seperatorView2: UIView = {
-        let view = UIView()
-        view.backgroundColor = standardColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
     }()
     
     private let sliderLabel: UILabel = {
@@ -92,8 +93,12 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
             let celsius = (AppDelegate.max_temp - 32)*5/9
             label.text =  "\(celsius)°C"
         }
-        
         label.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                label.textColor = UIColor.black
+            }
+        }
         return label
     }()
     
@@ -101,8 +106,30 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         let label = UILabel()
         label.text = "Max Temperature:"
         label.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                label.textColor = UIColor.black
+            }
+        }
         return label
     }()
+    
+    private let seperatorView1: UIView = {
+        let view = UIView()
+        view.backgroundColor = standardColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let seperatorView2: UIView = {
+        let view = UIView()
+        view.backgroundColor = standardColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+
+
     
     private let mySlider: UISlider = {
         let slider = UISlider(frame:CGRect(x: 10, y: 100, width: 300, height: 20))

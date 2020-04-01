@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>&quot;We need to monitor the temperature of the room&quot;</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -57,7 +59,7 @@
 	<key>NSB</key>
 	<string></string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>&quot;We need to monitor the temperature&quot;</string>
+	<string>&quot;We need to monitor the temperature of the room&quot;</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>&quot;We need to monitor your location to display on our application&quot;</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

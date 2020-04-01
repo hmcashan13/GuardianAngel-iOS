@@ -257,22 +257,39 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         tf.text = "Cushion 1:"
         tf.font = UIFont.boldSystemFont(ofSize: 18)
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
+    /// gives the connection status of the current cushion
     private let deviceConnectionStatusLabel: UILabel = {
         let tf = UILabel()
         tf.text = "Disconnected"
         tf.textColor = .red
         tf.font = UIFont.systemFont(ofSize: 16)
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
+    /// info button in connection view
     private let infoButton: UIButton = {
         let infoButton = UIButton(type: .infoDark)
         infoButton.addTarget(self, action: #selector(goToDeviceInfoView), for: .touchUpInside)
         infoButton.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                infoButton.tintColor = UIColor.black
+            }
+        }
         return infoButton
     }()
     
@@ -281,6 +298,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         let tf = UILabel()
         tf.text = "Temperature:"
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
@@ -289,6 +311,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         let tf = UILabel()
         tf.text = "Proximity from Cushion:"
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
@@ -297,6 +324,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         let tf = UILabel()
         tf.text = "Weight Detected?"
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
@@ -306,6 +338,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         tf.text = notConnected
         tf.textAlignment = .right
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
@@ -315,6 +352,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         tf.text = notConnected
         tf.textAlignment = .right
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
@@ -324,6 +366,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         tf.text = no
         tf.textAlignment = .right
         tf.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 13.0, *) {
+            if UITraitCollection.current.userInterfaceStyle == .dark {
+                tf.textColor = UIColor.black
+            }
+        }
         return tf
     }()
     
@@ -582,11 +629,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         let whatsNew = WhatsNew(
             title: "Information about Device",
             items: [
-                WhatsNew.Item(
-                    title: "",
-                    subtitle: "   Note: Connecting to multiple cushions is possible",
-                    image: nil
-                ),
                 WhatsNew.Item(
                     title: "Temperature Section:",
                     subtitle: "The temperature calculated by the smart cushion",
