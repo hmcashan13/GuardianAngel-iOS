@@ -224,7 +224,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         currentLocationButton.frame = CGRect(x: 200, y: 200, width: 50, height: 50)
         currentLocationButton.layer.cornerRadius = 0.5 * currentLocationButton.bounds.size.width
         // setup image for button
-        var image2 = UIImage(named: "proximity")?.maskWithColor(color: standardColor)
+        var image2 = UIImage(named: "location.fill")?.maskWithColor(color: standardColor)
         if #available(iOS 13.0, *) {
             // If we're in dark mode, change the button image color to white
             if UITraitCollection.current.userInterfaceStyle == .dark {
@@ -243,42 +243,46 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
         currentLocationButton.centerYAnchor.constraint(equalTo: self.mapView.topAnchor, constant: 100).isActive=true
 
         // Setup cushion text view
-        // TODO: change to button
-        let cushionTextView = UILabel()
-        cushionTextView.translatesAutoresizingMaskIntoConstraints = false
-        cushionTextView.text = "Cushion Location"
-        cushionTextView.textAlignment = .center
-        cushionTextView.textColor = .white
-        cushionTextView.backgroundColor = standardColor
-        cushionTextView.clipsToBounds = true
-        cushionTextView.layer.cornerRadius = 10.0
-        cushionTextView.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        let cushionLocationLabel = UILabel()
+        cushionLocationLabel.translatesAutoresizingMaskIntoConstraints = false
+        cushionLocationLabel.text = "Cushion Location"
+        cushionLocationLabel.textAlignment = .center
+        cushionLocationLabel.textColor = .white
+        cushionLocationLabel.backgroundColor = standardColor
+        cushionLocationLabel.clipsToBounds = true
+        cushionLocationLabel.layer.cornerRadius = 10.0
+        cushionLocationLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        // add touch to text view
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(cushionLocation))
+        cushionLocationLabel.addGestureRecognizer(tapGesture1)
         // add to view
-        self.mapView.addSubview(cushionTextView)
+        self.mapView.addSubview(cushionLocationLabel)
         // setup constraints
-        cushionTextView.heightAnchor.constraint(equalToConstant: 30).isActive=true
-        cushionTextView.widthAnchor.constraint(equalToConstant: 130).isActive=true
-        cushionTextView.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor).isActive=true
-        cushionTextView.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 30).isActive=true
+        cushionLocationLabel.heightAnchor.constraint(equalToConstant: 30).isActive=true
+        cushionLocationLabel.widthAnchor.constraint(equalToConstant: 130).isActive=true
+        cushionLocationLabel.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor).isActive=true
+        cushionLocationLabel.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 30).isActive=true
         
         // Setup current location text view
-        // TODO: change to button
-        let currTextView = UILabel()
-        currTextView.translatesAutoresizingMaskIntoConstraints = false
-        currTextView.text = "Your Location"
-        currTextView.textAlignment = .center
-        currTextView.textColor = .white
-        currTextView.backgroundColor = standardColor
-        currTextView.clipsToBounds = true
-        currTextView.layer.cornerRadius = 10.0
-        currTextView.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        let currentLocationLabel = UILabel()
+        currentLocationLabel.translatesAutoresizingMaskIntoConstraints = false
+        currentLocationLabel.text = "Your Location"
+        currentLocationLabel.textAlignment = .center
+        currentLocationLabel.textColor = .white
+        currentLocationLabel.backgroundColor = standardColor
+        currentLocationLabel.clipsToBounds = true
+        currentLocationLabel.layer.cornerRadius = 10.0
+        currentLocationLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 14)
+        // add touch to text view
+        let tapGesture2 = UITapGestureRecognizer(target: self, action: #selector(currentLocation))
+        currentLocationLabel.addGestureRecognizer(tapGesture2)
         // add to view
-        self.mapView.addSubview(currTextView)
+        self.mapView.addSubview(currentLocationLabel)
         // setup constraints
-        currTextView.heightAnchor.constraint(equalToConstant: 30).isActive=true
-        currTextView.widthAnchor.constraint(equalToConstant: 110).isActive=true
-        currTextView.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor, constant: -10).isActive=true
-        currTextView.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 80).isActive=true
+        currentLocationLabel.heightAnchor.constraint(equalToConstant: 30).isActive=true
+        currentLocationLabel.widthAnchor.constraint(equalToConstant: 110).isActive=true
+        currentLocationLabel.rightAnchor.constraint(equalTo: currentLocationButton.leftAnchor, constant: -10).isActive=true
+        currentLocationLabel.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 80).isActive=true
     }
     
     @objc func currentLocation() {
@@ -323,58 +327,7 @@ class GPSViewController: UIViewController, CLLocationManagerDelegate, SettingsDe
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         // TODO: show error message
     }
-    // TODO: Have GPS specific info shown
-    /// Present Info page for GPS page
-    @objc func goToGPSInfoView() {
-        let whatsNew = WhatsNew(
-            title: "Information about GPS",
-            items: [
-                WhatsNew.Item(
-                    title: "Temperature Section:",
-                    subtitle: "The temperature calculated by the smart cushion",
-                    image: UIImage(named: "temp_image")
-                ),
-                WhatsNew.Item(
-                    title: "Proximity from Cushion Section:",
-                    subtitle: "Provides information about the proximity of the user from the smart cushion",
-                    image: UIImage(named: "proximity")
-                ),
-                WhatsNew.Item(
-                    title: "Device Active Section:",
-                    subtitle: "Determines if weight is detected on cushion. You can only receive notifications if the device is active",
-                    image: UIImage(named: "setup")
-                ),
-                WhatsNew.Item(
-                    title: "Questions?",
-                    subtitle: "Email us at support@guardianangelcushion.com",
-                    image: UIImage(named: "question")
-                )
-            ]
-        )
-        
-        let myTheme = WhatsNewViewController.Theme { configuration in
-            configuration.titleView.titleColor = .white
-            configuration.backgroundColor = standardColor
-            configuration.itemsView.titleFont = .boldSystemFont(ofSize: 22)
-            configuration.itemsView.titleColor = .white
-            configuration.itemsView.subtitleFont = .systemFont(ofSize: 13.2)
-            configuration.itemsView.subtitleColor = .white
-            configuration.completionButton.title = "Go Back"
-            configuration.completionButton.backgroundColor = .white
-            configuration.completionButton.titleColor = standardColor
-        }
-        
-        let configuration = WhatsNewViewController.Configuration(
-            theme: myTheme
-        )
-        
-        let whatsNewViewController = WhatsNewViewController(
-            whatsNew: whatsNew,
-            configuration: configuration
-        )
-        
-        present(whatsNewViewController, animated: true)
-    }
+    
 }
 // MARK: Google SignIn Delegate Methods
 extension GPSViewController: GIDSignInDelegate {
