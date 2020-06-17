@@ -11,17 +11,6 @@ import CoreBluetooth
 import UserNotifications
 import CoreLocation
 import WhatsNewKit
-import FirebaseAuth
-import FirebaseDatabase
-import FBSDKLoginKit
-import GoogleSignIn
-
-
-enum AuthState {
-    case loggedIn
-    case loggingIn
-    case loggedOut
-}
 
 enum ConnectionState {
     case connected
@@ -47,9 +36,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
     var selectedPeripherals: [CBPeripheral]? = []
     var isWeightDetected: Bool = false
     
-    // Auth properties
-    var isLoggedIn: AuthState = .loggedOut
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,6 +60,10 @@ class DeviceViewController: UIViewController, SettingsDelegate {
  
         // Setup UART
         centralManager = CBCentralManager(delegate: self, queue: nil)
+        let timer = CustomTimer(timeInterval: 1) { [weak self] in
+            self?.foregroundScan()
+        }
+        timer.start()
         
         // Setup Beacon
         locationManager = CLLocationManager()
@@ -85,122 +75,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         // Check if we are connected when we foreground
         NotificationCenter.default.addObserver(self, selector: #selector(foregroundScan), name: UIApplication.willEnterForegroundNotification, object: nil)
         
-        // Setup Google Sign in delegate
-        GIDSignIn.sharedInstance().delegate = self
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        checkIfUserLoggedIn()
-    }
-    
-    //MARK: Authentication Methods
-    private func checkIfUserLoggedIn() {
-        if let user = AppDelegate.user {
-            self.navigationItem.title = user.name
-            return
-        }
-        isLoggedIn = .loggingIn
-        checkIfUserLoggedIn(completion: { [weak self] (authStatus) in
-            self?.isLoggedIn = authStatus
-            if authStatus == .loggedIn {
-                if self?.connectionState == .notConnected {
-                    self?.backgroundScan()
-                    self?.startBeacon()
-                }
-            } else {
-                self?.navigationItem.title = "Not Logged In"
-                self?.hideTitleSpinner()
-                self?.logout()
-            }
-        })
-    }
-    
-    /// Logs the user out and brings to Login page if logged off, otherwise user stays on Device page
-    private func checkIfUserLoggedIn(completion: @escaping ((AuthState) -> Void)) {
-        if let currentUser = Auth.auth().currentUser, let name = currentUser.displayName, let email = currentUser.email {
-            //Logged in with Firebase or Google
-            // Setup UI
-            navigationItem.title = name
-            hideTitleSpinner()
-            // Setup user
-            let uid = currentUser.uid
-            AppDelegate.user = LocalUser(id: uid, name: name, email: email)
-            // TODO: Figure out what is being done here
-            Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { success in
-                completion(.loggedIn)
-            })
-        } else if AccessToken.isCurrentAccessTokenActive {
-            guard let accessToken = AccessToken.current else {
-                completion(.loggedOut)
-                return
-            }
-            //Logged in with Facebook
-            // TODO: setup FacebookCore and FacebookLogin API
-            let req = GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: accessToken.tokenString, version: nil, httpMethod: HTTPMethod(rawValue: "GET"))
-
-            req.start { [weak self] (connection, result, error) in
-                if let error = error {
-                    // TODO: show error message
-                    print("Facebook error: \(error.localizedDescription)")
-                    completion(.loggedOut)
-                } else {
-                    print("Facebook result: \(result.debugDescription)")
-                    // TODO: handle failure
-                    guard let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else { return }
-                    // Setup UI
-                    self?.navigationItem.title = name
-                    self?.hideTitleSpinner()
-                    // Setup user
-                    AppDelegate.user = LocalUser(id: id, name: name, email: email)
-                    completion(.loggedIn)
-                }
-            }
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
-            shared.restorePreviousSignIn()
-            completion(.loggedIn)
-        } else {
-            //Not logged in
-            completion(.loggedOut)
-        }
-    }
-    
-    func logout() {
-        disconnectEverything()
-        AppDelegate.user = nil
-        presentLoginPage()
-        if Auth.auth().currentUser?.uid != nil {
-            // Logged in with Firebase or Google
-            if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
-                // Logout of Google
-                shared.signOut()
-            }
-            // Logout of Firebase
-            do {
-                try Auth.auth().signOut()
-            } catch let logoutError {
-                // TODO: handle error
-                print("Logout error: ", logoutError)
-            }
-        } else if AccessToken.isCurrentAccessTokenActive {
-            // Logout of Facebook
-            let loginManager = LoginManager()
-            loginManager.logOut()
-        } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
-            // Logout of Google
-            shared.signOut()
-        }
-    }
-
-    func presentLoginPage() {
-        let loginViewController = LoginViewController()
-        loginViewController.loginDelegate = self
-        let navController = UINavigationController(rootViewController: loginViewController)
-        DispatchQueue.main.async {
-            self.present(navController, animated: true)
-        }
     }
     
     /// Disconnect from uart and beacon bluetooth devices
@@ -535,7 +409,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         } else if connectionState == .connecting {
             deviceConnectionStatusLabel.text = "Connecting"
             deviceConnectionStatusLabel.textColor = .orange
-            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerInterval) { [weak self] in
                 if self?.connectionState == .connected {
                     self?.setConnectionStatus(.connected)
                 } else {
@@ -554,6 +428,11 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         if !title_loadingView.isAnimating {
             self.navigationItem.titleView = title_loadingView
             title_loadingView.startAnimating()
+            
+            let timer = CustomTimer(timeInterval: spinnerInterval) { [weak self] in
+                self?.hideTitleSpinner()
+            }
+            timer.start()
         }
     }
     
@@ -568,7 +447,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         if !temp_loadingView.isAnimating && !tempStatusLabel.isHidden {
             temp_loadingView.startAnimating()
             tempStatusLabel.isHidden = true
-            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerInterval) { [weak self] in
                 self?.hideTempSpinner()
             }
             timer.start()
@@ -586,7 +465,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         if !beacon_loadingView.isAnimating && !beaconStatusLabel.isHidden {
             beacon_loadingView.startAnimating()
             beaconStatusLabel.isHidden = true
-            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerInterval) { [weak self] in
                 self?.hideBeaconSpinner()
             }
             timer.start()
@@ -604,7 +483,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
         if !weight_loadingView.isAnimating && !activeStatusLabel.isHidden {
             weight_loadingView.startAnimating()
             activeStatusLabel.isHidden = true
-            let timer = CustomTimer(timeInterval: spinnerTime) { [weak self] in
+            let timer = CustomTimer(timeInterval: spinnerInterval) { [weak self] in
                 self?.hideWeightSpinner()
             }
             timer.start()
@@ -616,51 +495,5 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             weight_loadingView.stopAnimating()
             activeStatusLabel.isHidden = false
         }
-    }
-   
-}
-// MARK: Google SignIn Delegate Methods
-extension DeviceViewController: GIDSignInDelegate {
-    // Google sign-in delegate methods
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!,
-              withError error: Error!) {
-        print("Successfully logged into Google", user.debugDescription)
-        
-        if error != nil {
-            print("Error signing into Google: ", error.debugDescription)
-            return
-        }
-        guard let id = user?.userID, let profile = user?.profile, let name = profile.name, let email = profile.email else { return }
-        AppDelegate.user = LocalUser(id: id, name: name, email: email)
-        executeOnMainThread { [weak self] in
-            // Setup UI
-            self?.navigationItem.title = name
-            self?.hideTitleSpinner()
-        }
-        // Setup user
-        AppDelegate.user = LocalUser(id: id, name: name, email: email)
-        guard let idToken = user.authentication.idToken else { return }
-        guard let accessToken = user.authentication.accessToken else { return }
-        let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-        
-        Auth.auth().signIn(with: credentials, completion: { (result, error) in
-            if let err = error {
-                // TODO: handle error
-                print("Failed to create a Firebase User with Google account: ", err)
-                return
-            }
-        })
-    }
-    
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!,
-              withError error: Error!) {
-        // Perform any operations when the user disconnects from app here.
-        // TODO: do something
-    }
-}
-// MARK: Login Delegate Method
-extension DeviceViewController: LoginDelegate {
-    func setTitle(_ title: String) {
-        self.navigationItem.title = title
     }
 }

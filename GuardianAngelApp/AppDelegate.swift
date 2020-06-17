@@ -8,9 +8,6 @@
 
 import UIKit
 import UserNotifications
-import Firebase
-import GoogleSignIn
-import FacebookCore
 
 // User Default keys
 let fahrenheit_celsius_key: String = "farenheit_celsius_key"
@@ -36,33 +33,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var is_temp_enabled: Bool = true
     static var max_temp: Int = 85
     
-    static var user: LocalUser?
-    
     let defaults = UserDefaults.standard
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Remote notification Setup
         registerForPushNotifications()
-
-        // Firebase/Google Setup
-        FirebaseApp.configure()
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        
-        // Facebook Setup
-        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         //Navigation and root VC setup
         let deviceViewController = DeviceViewController()
-        let gpsViewController = GPSViewController()
-        deviceViewController.tabBarItem = UITabBarItem(title: "Device", image: UIImage(named: "device"), tag: 0)
-        gpsViewController.tabBarItem = UITabBarItem(title: "GPS", image: UIImage(named: "gps"), tag: 1)
-        let controllers = [deviceViewController, gpsViewController]
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = controllers.map { UINavigationController(rootViewController: $0)}
+        let navigationController = UINavigationController(rootViewController: deviceViewController)
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = tabBarController
-        //self.window?.rootViewController = navigationController
-        //self.window?.makeKeyAndVisible()
+        self.window?.rootViewController = navigationController
+        self.window?.makeKeyAndVisible()
         
         // Set temperature user settings
         UserDefaults.standard.register(defaults:standardUserDefaults)
@@ -126,9 +108,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         defaults.set(AppDelegate.is_temp_enabled, forKey: is_temp_enabled_key)
         defaults.set(AppDelegate.max_temp, forKey: max_temp_key)
     }
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        ApplicationDelegate.shared.application(app, open: url, options: options)
-        return true
-    }
+
 }

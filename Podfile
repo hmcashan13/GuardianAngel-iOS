@@ -14,11 +14,5 @@ target 'GuardianAngelApp' do
 
   pod 'WhatsNewKit'
   #pod 'RxSwift'
-  pod 'FirebaseAuth'
-  pod 'Firebase/Storage'
-  pod 'Firebase/Database'   
-  pod 'FacebookCore'
-  pod 'FacebookLogin'
-  pod 'GoogleSignIn'
 
 end

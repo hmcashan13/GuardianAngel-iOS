@@ -11,13 +11,12 @@ import UIKit
 protocol SettingsDelegate: AnyObject {
     func backgroundScan()
     func disconnectDevice()
-    func logout()
 }
 
 class SettingsViewController: UITableViewController, UINavigationControllerDelegate {
     weak var delegate: SettingsDelegate?
     
-    private let cellNames = ["Adjust Temperature Sensor","Adjust GPS Tracker", "Reconnect to Cushion", "Disconnect From Cushion", "Logout"]
+    private let cellNames = ["Adjust Temperature Sensor", "Reconnect to Cushion", "Disconnect From Cushion"]
     private let cellID = "cellID"
     
     override func viewDidLoad() {
@@ -64,13 +63,9 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
         case 0:
             adjustTemp()
         case 1:
-            adjustGPSTracker()
-        case 2:
             reconnectDevice()
-        case 3:
+        case 2:
             disconnectDevice()
-        case 4:
-            logout()
         default:
             print("nothing")
         }
@@ -83,22 +78,12 @@ class SettingsViewController: UITableViewController, UINavigationControllerDeleg
         self.navigationController?.pushViewController(tempVC, animated: true)
     }
     // 2
-    private func adjustGPSTracker() {
-        let gpsVC = GPSAdjustViewController()
-        self.navigationController?.pushViewController(gpsVC, animated: true)
-    }
-    // 3
     private func reconnectDevice() {
         delegate?.backgroundScan()
     }
     
-    // 4
+    // 3
     private func disconnectDevice() {
         delegate?.disconnectDevice()
-    }
-    // 5
-    private func logout() {
-        delegate?.logout()
-        handleCancel()
     }
 }

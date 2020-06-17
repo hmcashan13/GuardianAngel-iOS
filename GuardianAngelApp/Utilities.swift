@@ -16,7 +16,8 @@ let yes: String = "Yes"
 let no: String = "No"
 
 // Timer constants
-let spinnerTime: TimeInterval = 20.0
+let spinnerInterval: TimeInterval = 10.0
+let scannerInterval: TimeInterval = 10.0
 
 // Custom Colors
 let standardColor: UIColor = UIColor(red: 150/255, green: 135/255, blue: 200/255, alpha: 1)

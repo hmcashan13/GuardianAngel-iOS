@@ -16,22 +16,12 @@
 		E70B925F2176E34F00B4AE8B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E70B925E2176E34F00B4AE8B /* Assets.xcassets */; };
 		E70B92622176E34F00B4AE8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E70B92602176E34F00B4AE8B /* LaunchScreen.storyboard */; };
 		E70B92782176E34F00B4AE8B /* GuardianAngelAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */; };
-		E72EACE522CD905D007246C1 /* GPSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE422CD905D007246C1 /* GPSViewController.swift */; };
-		E72EACE922D0DAA9007246C1 /* GPSAdjustViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACE822D0DAA9007246C1 /* GPSAdjustViewController.swift */; };
-		E72EACEB22D101F5007246C1 /* CushionAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACEA22D101F5007246C1 /* CushionAnnotation.swift */; };
-		E72EACED22D10950007246C1 /* CushionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACEC22D10950007246C1 /* CushionMapView.swift */; };
-		E72EACF322D11B10007246C1 /* ActionButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF222D11B10007246C1 /* ActionButtonItem.swift */; };
-		E72EACF522D11B17007246C1 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF422D11B17007246C1 /* ActionButton.swift */; };
-		E72EACF722D122DC007246C1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF622D122DC007246C1 /* LoginViewController.swift */; };
-		E72EACF922D122E4007246C1 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACF822D122E4007246C1 /* RegisterViewController.swift */; };
-		E72EACFC22D1283C007246C1 /* LocalUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72EACFB22D1283C007246C1 /* LocalUser.swift */; };
 		E72EACFE22D14831007246C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E72EACFD22D14831007246C1 /* GoogleService-Info.plist */; };
 		E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D887217BE79A00A0A627 /* NotificationExtension.swift */; };
 		E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D889217BED1800A0A627 /* BluetoothExtension.swift */; };
 		E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D88D217BF22300A0A627 /* SettingsViewController.swift */; };
 		E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D890217BF6A600A0A627 /* DeviceViewController.swift */; };
 		E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E753D894217C0B5F00A0A627 /* ImageExtension.swift */; };
-		E769BEDD2436343100768531 /* GPSInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E769BEDC2436343100768531 /* GPSInfoView.swift */; };
 		E769BEDF2436347E00768531 /* DeviceInfoViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = E769BEDE2436347E00768531 /* DeviceInfoViews.swift */; };
 		E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77AF28D2198B48700E7BC6C /* LocationExtension.swift */; };
 		E7BD9A05236F3D1F00B556F4 /* GuardianAngelAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BD9A04236F3D1F00B556F4 /* GuardianAngelAppTests.swift */; };
@@ -68,15 +58,6 @@
 		E70B92732176E34F00B4AE8B /* GuardianAngelAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GuardianAngelAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E70B92772176E34F00B4AE8B /* GuardianAngelAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardianAngelAppUITests.swift; sourceTree = "<group>"; };
 		E70B92792176E35000B4AE8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E72EACE422CD905D007246C1 /* GPSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSViewController.swift; sourceTree = "<group>"; };
-		E72EACE822D0DAA9007246C1 /* GPSAdjustViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSAdjustViewController.swift; sourceTree = "<group>"; };
-		E72EACEA22D101F5007246C1 /* CushionAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CushionAnnotation.swift; sourceTree = "<group>"; };
-		E72EACEC22D10950007246C1 /* CushionMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CushionMapView.swift; sourceTree = "<group>"; };
-		E72EACF222D11B10007246C1 /* ActionButtonItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonItem.swift; sourceTree = "<group>"; };
-		E72EACF422D11B17007246C1 /* ActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
-		E72EACF622D122DC007246C1 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		E72EACF822D122E4007246C1 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		E72EACFB22D1283C007246C1 /* LocalUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalUser.swift; sourceTree = "<group>"; };
 		E72EACFD22D14831007246C1 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E753D887217BE79A00A0A627 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		E753D889217BED1800A0A627 /* BluetoothExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothExtension.swift; sourceTree = "<group>"; };
@@ -84,7 +65,6 @@
 		E753D890217BF6A600A0A627 /* DeviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceViewController.swift; sourceTree = "<group>"; };
 		E753D894217C0B5F00A0A627 /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		E753D898217CEE4500A0A627 /* GuardianAngelApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GuardianAngelApp.entitlements; sourceTree = "<group>"; };
-		E769BEDC2436343100768531 /* GPSInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPSInfoView.swift; sourceTree = "<group>"; };
 		E769BEDE2436347E00768531 /* DeviceInfoViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoViews.swift; sourceTree = "<group>"; };
 		E77AF28D2198B48700E7BC6C /* LocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationExtension.swift; sourceTree = "<group>"; };
 		E7BD9A04236F3D1F00B556F4 /* GuardianAngelAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardianAngelAppTests.swift; sourceTree = "<group>"; };
@@ -195,40 +175,15 @@
 			children = (
 				E753D88D217BF22300A0A627 /* SettingsViewController.swift */,
 				E702BC892193BB5E002A7BF8 /* TemperatureAdjustViewController.swift */,
-				E72EACE822D0DAA9007246C1 /* GPSAdjustViewController.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		E72EACEF22D10999007246C1 /* Map */ = {
-			isa = PBXGroup;
-			children = (
-				E72EACF222D11B10007246C1 /* ActionButtonItem.swift */,
-				E72EACF422D11B17007246C1 /* ActionButton.swift */,
-				E72EACEA22D101F5007246C1 /* CushionAnnotation.swift */,
-				E72EACEC22D10950007246C1 /* CushionMapView.swift */,
-			);
-			path = Map;
-			sourceTree = "<group>";
-		};
-		E72EACFA22D12342007246C1 /* Auth */ = {
-			isa = PBXGroup;
-			children = (
-				E72EACF622D122DC007246C1 /* LoginViewController.swift */,
-				E72EACF822D122E4007246C1 /* RegisterViewController.swift */,
-				E72EACFB22D1283C007246C1 /* LocalUser.swift */,
-			);
-			path = Auth;
 			sourceTree = "<group>";
 		};
 		E746F7C72291B11F0044CDD6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				E753D890217BF6A600A0A627 /* DeviceViewController.swift */,
-				E72EACE422CD905D007246C1 /* GPSViewController.swift */,
-				E769BEDB2436341C00768531 /* Info */,
-				E72EACFA22D12342007246C1 /* Auth */,
-				E72EACEF22D10999007246C1 /* Map */,
+				E769BEDE2436347E00768531 /* DeviceInfoViews.swift */,
 				E72EACEE22D10978007246C1 /* Settings */,
 			);
 			path = UI;
@@ -245,15 +200,6 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		E769BEDB2436341C00768531 /* Info */ = {
-			isa = PBXGroup;
-			children = (
-				E769BEDE2436347E00768531 /* DeviceInfoViews.swift */,
-				E769BEDC2436343100768531 /* GPSInfoView.swift */,
-			);
-			path = Info;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -266,7 +212,6 @@
 				E70B924E2176E34E00B4AE8B /* Frameworks */,
 				E70B924F2176E34E00B4AE8B /* Resources */,
 				44667C2C874C210FE6B20B66 /* [CP] Embed Pods Frameworks */,
-				73633181F9890705FF5758BC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -408,23 +353,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		73633181F9890705FF5758BC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GuardianAngelApp/Pods-GuardianAngelApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D57F1570D2994965CCFDE505 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -455,23 +383,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E702BC8A2193BB5E002A7BF8 /* TemperatureAdjustViewController.swift in Sources */,
-				E72EACED22D10950007246C1 /* CushionMapView.swift in Sources */,
 				E753D895217C0B5F00A0A627 /* ImageExtension.swift in Sources */,
-				E72EACEB22D101F5007246C1 /* CushionAnnotation.swift in Sources */,
 				E769BEDF2436347E00768531 /* DeviceInfoViews.swift in Sources */,
 				E753D88A217BED1800A0A627 /* BluetoothExtension.swift in Sources */,
 				E753D888217BE79A00A0A627 /* NotificationExtension.swift in Sources */,
-				E72EACF322D11B10007246C1 /* ActionButtonItem.swift in Sources */,
-				E72EACF522D11B17007246C1 /* ActionButton.swift in Sources */,
 				E70AB614227DDF57003F71BF /* Utilities.swift in Sources */,
-				E72EACF922D122E4007246C1 /* RegisterViewController.swift in Sources */,
 				E70B925D2176E34E00B4AE8B /* GuardianAngelApp.xcdatamodeld in Sources */,
 				E753D891217BF6A600A0A627 /* DeviceViewController.swift in Sources */,
-				E72EACE522CD905D007246C1 /* GPSViewController.swift in Sources */,
-				E769BEDD2436343100768531 /* GPSInfoView.swift in Sources */,
-				E72EACE922D0DAA9007246C1 /* GPSAdjustViewController.swift in Sources */,
-				E72EACFC22D1283C007246C1 /* LocalUser.swift in Sources */,
-				E72EACF722D122DC007246C1 /* LoginViewController.swift in Sources */,
 				E70B92552176E34E00B4AE8B /* AppDelegate.swift in Sources */,
 				E77AF28E2198B48700E7BC6C /* LocationExtension.swift in Sources */,
 				E753D88E217BF22300A0A627 /* SettingsViewController.swift in Sources */,
