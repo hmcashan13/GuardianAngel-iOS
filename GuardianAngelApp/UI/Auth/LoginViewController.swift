@@ -16,7 +16,11 @@ protocol LoginDelegate: AnyObject {
     func setTitle(_ title: String)
 }
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, RegisterDelegate {
+    func setTitle(_ title: String) {
+        self.loginDelegate?.setTitle(title)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,7 +69,9 @@ class LoginViewController: UIViewController {
     
     let emailTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Email"
+        tf.attributedPlaceholder = NSAttributedString(string: "Email",
+                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        tf.textColor = UIColor.black
         tf.autocapitalizationType = UITextAutocapitalizationType.none
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -77,7 +83,9 @@ class LoginViewController: UIViewController {
     
     let passwordTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Password"
+        tf.attributedPlaceholder = NSAttributedString(string: "Password",
+                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        tf.textColor = UIColor.black
         tf.isSecureTextEntry = true
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -137,23 +145,46 @@ class LoginViewController: UIViewController {
         return button
     }()
     
+    // Firebase Login
     @objc private func handleLogin() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
         
-        Auth.auth().signIn(withEmail: email, password: password, completion: {
-            if let err = $1 {
+        Auth.auth().signIn(withEmail: email, password: password, completion: { result, error in
+            if let error = error {
+                // Email/Password wrong
                 showAlertMessage(presenter: self, title: "Login Failed", message: "Email/Password combination was incorrect", handler: nil)
 
-                print("Failed to sign in with email:", err)
+                print("There was a problem logging in:", error)
                 return
+            } else {
+                if let result = result {
+                    // Login successful
+                    let uid = result.user.uid
+                    let name = result.user.displayName
+                    let email = result.user.email
+                    // Setup UI
+                    self.loginDelegate?.setTitle(name ?? "")
+                    // Setup user
+                    AppDelegate.user = LocalUser(id: uid, name: name ?? "", email: email)
+                    
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    // Error Logging In
+                    showAlertMessage(presenter: self, title: "Login Failed", message: "There was a problem logging in", handler: nil)
+
+                    print("ERROR: RESULT WAS NIL")
+                }
             }
-            self.dismiss(animated: true, completion: nil)
+            
+            
+            
         })
     }
     
     @objc func handleShowSignUp() {
         let signUpController = RegisterViewController()
+        signUpController.registerDelegate = self
         navigationController?.pushViewController(signUpController, animated: true)
     }
     
@@ -166,22 +197,26 @@ class LoginViewController: UIViewController {
     private func checkIfUserLoggedIn() -> Bool {
         if let user = Auth.auth().currentUser {
             // Logged in with Firebase
+            let uid = user.uid
             if isDebugging {
                 print("Successfully logged into Firebase through email (uid): ", user.uid)
             }
-            AppDelegate.user = LocalUser(id: user.uid, name: user.displayName ?? "", email: user.email)
+            self.loginDelegate?.setTitle(user.displayName ?? "")
+            AppDelegate.user = LocalUser(id: uid, name: user.displayName ?? "", email: user.email)
             return true
         } else if AccessToken.isCurrentAccessTokenActive {
             // Logged in with Facebook
             if isDebugging {
                 print("Successfully logged into Firebase through Facebook")
             }
+            // TODO: ensure the title is set
             return true
         } else if let shared = GIDSignIn.sharedInstance(), shared.hasPreviousSignIn() {
             // Logged in with Google
             if isDebugging {
                 print("Successfully logged into Firebase through Google")
             }
+            // TODO: ensure the title is set
             return true
         } else {
             // Not logged in so stay here
@@ -263,6 +298,7 @@ extension LoginViewController: LoginButtonDelegate {
         // TODO
     }
     
+    // Facebook Login Button
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         guard let result = result, let token = result.token else {
             // TODO: Handle error
@@ -271,34 +307,42 @@ extension LoginViewController: LoginButtonDelegate {
         }
         let req = GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: token.tokenString, version: nil, httpMethod: HTTPMethod(rawValue: "GET"))
 
-        req.start { [weak self] (connection, result, error) in
-             if let error = error {
-                  // TODO: show error message
-                  print("Facebook error: \(error.localizedDescription)")
-              } else {
-                  print("Facebook result: \(result.debugDescription)")
-                  // TODO: handle failure
-                guard let delegate = self?.loginDelegate, let dict = result as? NSDictionary, let id = dict["id"] as? String, let name = dict["name"] as? String, let email = dict["email"] as? String else {
-                    return }
-                  // Setup UI
-                  delegate.setTitle(name)
-                  // Setup user
-                  AppDelegate.user = LocalUser(id: id, name: name, email: email)
-              }
+        req.start { (connection, result, error) in
+            if let error = error {
+                showAlertMessage(presenter: self, title: "Facebook Login Failed", message: "Attempt to Login via Facebook did not work", handler: nil)
+                print("Facebook error: \(error.localizedDescription)")
+                return
+            } else {
+                if let delegate = self.loginDelegate, let dict = result as? NSDictionary, let id = dict["id"] as? String  {
+                    let name = dict["name"] as? String
+                    let email = dict["email"] as? String
+                    // Setup UI
+                    delegate.setTitle(name ?? "")
+                    // Setup user
+                    AppDelegate.user = LocalUser(id: id, name: name ?? "", email: email)
+                    
+                    self.dismiss(animated: true, completion:nil)
+                } else {
+                    
+                }
+            }
         }
-        self.dismiss(animated: true, completion:nil)
+        
     }
-    
-    
 }
 
 // MARK: Google SignIn Delegate Method
 extension LoginViewController: GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if let name = user?.profile?.name, let email = user?.profile?.email {
-            loginDelegate?.setTitle(name)
-            AppDelegate.user = LocalUser(id: user.userID, name: name, email: email)
+        guard let id = user.userID else {
+            showAlertMessage(presenter: self, title: "Login with Google Failed", message: "Please try again", handler: nil, completion: nil)
+            return
         }
+        let name = user?.profile?.name
+        let email = user?.profile?.email
+        loginDelegate?.setTitle(name ?? "")
+        AppDelegate.user = LocalUser(id: id, name: name ?? "", email: email)
+        
         self.dismiss(animated: true, completion:nil)
     }
 }

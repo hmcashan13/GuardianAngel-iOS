@@ -43,10 +43,13 @@ func showAlertMessage(presenter: UIViewController, title: String, message: Strin
     }
 }
 
-func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: ((UIAlertAction) -> Void)?) {
+func showAlertMessage(presenter: UIViewController, title: String, message: String, handler: (() -> Void)?) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    
-    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: handler))
+    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: { (alert: UIAlertAction!) in
+        if let handler = handler {
+            handler()
+        }
+    }))
 
     executeOnMainThread { [weak presenter] in
         presenter?.present(alert, animated: true, completion: nil)

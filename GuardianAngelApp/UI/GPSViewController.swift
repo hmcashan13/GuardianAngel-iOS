@@ -340,8 +340,9 @@ extension GPSViewController: GIDSignInDelegate {
             print("Error signing into Google: ", error.debugDescription)
             return
         }
-        guard let id = user?.userID, let profile = user?.profile, let name = profile.name, let email = profile.email else { return }
-        AppDelegate.user = LocalUser(id: id, name: name, email: email)
+        
+        guard let profile = user?.profile, let id = user.userID else { return }
+        let name = profile.name ?? "", email = profile.email
         executeOnMainThread { [weak self] in
             // Setup UI
             self?.navigationItem.title = name

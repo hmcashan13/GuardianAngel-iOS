@@ -174,8 +174,8 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
                   self.hideWeightSpinner()
                   // Show error message
                 // TODO: formatting and retry and cancel option for alert message
-                  showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: { [weak self] _ in
-                      self?.backgroundScan()
+                  showAlertMessage(presenter: self, title: "Error", message: "There was a problem connecting to the cushion", handler: {
+                      self.backgroundScan()
                   })
               }
           }
@@ -243,13 +243,16 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
     }
     /// Getting Data from UART
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        if let ASCIIstring = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue), characteristic == rxCharacteristic {
+        if let value = characteristic.value, let ASCIIstring = NSString(data: value, encoding: String.Encoding.utf8.rawValue), characteristic == rxCharacteristic {
             let parsedData: (String,Bool) = parseData(ASCIIstring)
             // Setup UI 
             executeOnMainThread { [weak self] in
                 self?.adjustTemperature(parsedData.0)
                 self?.adjustActiveStatus(parsedData.1)
             }
+        } else {
+            showAlertMessage(presenter: self, title: "No Characteristic Value", message: "Something is wrong with the microcontroller", handler: nil)
+            print("not getting a characteristic value")
         }
     }
     /// Parsing Data from UART
@@ -275,7 +278,7 @@ extension DeviceViewController: CBPeripheralDelegate, CBCentralManagerDelegate {
             temp = Int(tempString)
             weight = Int(weightString)
             if let convertedTemp = tempString.celsiusToFarenheit() {
-                tempString = AppDelegate.farenheit_celsius ? "\(convertedTemp)˚F" : "\(tempString)˚C"
+                tempString = AppDelegate.fahrenheit_celsius ? "\(convertedTemp)˚F" : "\(tempString)˚C"
             } else {
                 tempString = notConnected
             }

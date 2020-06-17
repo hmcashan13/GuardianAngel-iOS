@@ -130,11 +130,6 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             AppDelegate.user = LocalUser(id: uid, name: name, email: email)
             // TODO: Figure out what is being done here
             Database.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { success in
-                print("response from server: ", success)
-                if let dict = success.value as? [String: AnyObject] {
-                    print("user is logged in: ", dict)
-                    // TODO: handle creation of user
-                }
                 completion(.loggedIn)
             })
         } else if AccessToken.isCurrentAccessTokenActive {
@@ -145,7 +140,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             //Logged in with Facebook
             // TODO: setup FacebookCore and FacebookLogin API
             let req = GraphRequest(graphPath: "me", parameters: ["fields":"email,name"], tokenString: accessToken.tokenString, version: nil, httpMethod: HTTPMethod(rawValue: "GET"))
-            
+
             req.start { [weak self] (connection, result, error) in
                 if let error = error {
                     // TODO: show error message
@@ -198,7 +193,7 @@ class DeviceViewController: UIViewController, SettingsDelegate {
             shared.signOut()
         }
     }
-    
+
     func presentLoginPage() {
         let loginViewController = LoginViewController()
         loginViewController.loginDelegate = self

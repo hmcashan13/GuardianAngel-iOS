@@ -13,7 +13,7 @@ import GoogleSignIn
 import FacebookCore
 
 // User Default keys
-let farenheit_celsius_key: String = "farenheit_celsius_key"
+let fahrenheit_celsius_key: String = "farenheit_celsius_key"
 let meters_feet_key: String = "meters_feet_key"
 let is_temp_enabled_key: String = "is_temp_enabled_key"
 let max_temp_key: String = "max_temp_key"
@@ -29,9 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //static let notificationURL = "https://fcm.googleapis.com/fcm/send"
 
-    private let standardUserDefaults: [String:Any] = [farenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
+    private let standardUserDefaults: [String:Any] = [fahrenheit_celsius_key : true, meters_feet_key :  true, is_temp_enabled_key : true, max_temp_key : 85]
     // Init temperature user settings
-    static var farenheit_celsius: Bool = true
+    static var fahrenheit_celsius: Bool = true
     static var meters_feet: Bool = true
     static var is_temp_enabled: Bool = true
     static var max_temp: Int = 85
@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set temperature user settings
         UserDefaults.standard.register(defaults:standardUserDefaults)
-        AppDelegate.farenheit_celsius = defaults.bool(forKey: farenheit_celsius_key)
+        AppDelegate.fahrenheit_celsius = defaults.bool(forKey: fahrenheit_celsius_key)
         AppDelegate.meters_feet = defaults.bool(forKey: meters_feet_key)
         AppDelegate.is_temp_enabled = defaults.bool(forKey: is_temp_enabled_key)
         AppDelegate.max_temp = defaults.integer(forKey: max_temp_key)
@@ -121,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Save temperature user settings
-        defaults.set(AppDelegate.farenheit_celsius, forKey: farenheit_celsius_key)
+        defaults.set(AppDelegate.fahrenheit_celsius, forKey: fahrenheit_celsius_key)
         defaults.set(AppDelegate.meters_feet, forKey: meters_feet_key)
         defaults.set(AppDelegate.is_temp_enabled, forKey: is_temp_enabled_key)
         defaults.set(AppDelegate.max_temp, forKey: max_temp_key)

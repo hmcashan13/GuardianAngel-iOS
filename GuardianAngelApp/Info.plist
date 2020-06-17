@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>&quot;We need to monitor the temperature of the room&quot;</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -17,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.4.3</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -43,10 +41,21 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>815014198865670</string>
 	<key>FacebookDisplayName</key>
 	<string>Guardian Angel</string>
+	<key>LSApplicationCategoryType</key>
+	<string>
+&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;
+&lt;array&gt;
+  &lt;string&gt;fbapi&lt;/string&gt;
+  &lt;string&gt;fb-messenger-share-api&lt;/string&gt;
+  &lt;string&gt;fbauth2&lt;/string&gt;
+  &lt;string&gt;fbshareextension&lt;/string&gt;
+&lt;/array&gt;</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -58,12 +67,14 @@
 	<true/>
 	<key>NSB</key>
 	<string></string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>"We need to monitor the temperature of the room"</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>&quot;We need to monitor the temperature of the room&quot;</string>
+	<string>"We need to monitor the temperature of the room"</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>&quot;We need to monitor your location to display on our application&quot;</string>
+	<string>"We need to monitor your location to display on our application"</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>&quot;We need to monitor your location to display on our application&quot;</string>
+	<string>"We need to monitor your location to display on our application"</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>
@@ -88,16 +99,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>10</string>
-	<key>LSApplicationCategoryType</key>
-	<string>
-&lt;key&gt;LSApplicationQueriesSchemes&lt;/key&gt;
-&lt;array&gt;
-  &lt;string&gt;fbapi&lt;/string&gt;
-  &lt;string&gt;fb-messenger-share-api&lt;/string&gt;
-  &lt;string&gt;fbauth2&lt;/string&gt;
-  &lt;string&gt;fbshareextension&lt;/string&gt;
-&lt;/array&gt;</string>
 </dict>
 </plist>

@@ -26,6 +26,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         setupUIConstraints()
     }
     
+    // MARK: Setup UI Elements
     private let inputsContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -74,8 +75,8 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     private let degreeTypeSegCntrl: UISegmentedControl = {
         let temps = ["°F","°C"]
         let segCntrl = UISegmentedControl(items: temps)
-        segCntrl.selectedSegmentIndex = AppDelegate.farenheit_celsius ? 0 : 1
-        segCntrl.addTarget(self, action: #selector(farenheitOrCelsius), for: .valueChanged)
+        segCntrl.selectedSegmentIndex = AppDelegate.fahrenheit_celsius ? 0 : 1
+        segCntrl.addTarget(self, action: #selector(fahrenheitOrCelsius), for: .valueChanged)
         segCntrl.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 13.0, *) {
             if UITraitCollection.current.userInterfaceStyle == .dark {
@@ -87,7 +88,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     private let sliderLabel: UILabel = {
         let label = UILabel()
-        if AppDelegate.farenheit_celsius {
+        if AppDelegate.fahrenheit_celsius {
             label.text = "\(AppDelegate.max_temp)°F"
         } else {
             let celsius = (AppDelegate.max_temp - 32)*5/9
@@ -114,23 +115,6 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         return label
     }()
     
-    private let seperatorView1: UIView = {
-        let view = UIView()
-        view.backgroundColor = standardColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let seperatorView2: UIView = {
-        let view = UIView()
-        view.backgroundColor = standardColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-
-
-    
     private let mySlider: UISlider = {
         let slider = UISlider(frame:CGRect(x: 10, y: 100, width: 300, height: 20))
         slider.minimumValue = 80
@@ -143,6 +127,23 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         return slider
     }()
     
+    // MARK: Seperator Views
+    private let seperatorView1: UIView = {
+        let view = UIView()
+        view.backgroundColor = standardColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    
+    private let seperatorView2: UIView = {
+        let view = UIView()
+        view.backgroundColor = standardColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    // MARK: Setup UI Constraints
     private func setupUIConstraints() {
         view.addSubview(inputsContainerView)
         view.addSubview(mySlider)
@@ -200,28 +201,28 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
     
     
     
-    @objc func farenheitOrCelsius() {
-        let farenheit_celsius = AppDelegate.farenheit_celsius
-        AppDelegate.farenheit_celsius = !farenheit_celsius
+    @objc func fahrenheitOrCelsius() {
+        let farenheit_celsius = AppDelegate.fahrenheit_celsius
+        AppDelegate.fahrenheit_celsius = !farenheit_celsius
         if isDebugging {
-            print("New temp setting: ", AppDelegate.farenheit_celsius)
+            print("New temp setting: ", AppDelegate.fahrenheit_celsius)
         }
         let sliderValue = mySlider.value
-        let farenheitIntValue = Int(sliderValue)
-        if AppDelegate.farenheit_celsius {
-            sliderLabel.text = "\(farenheitIntValue)°F"
+        let fahrenheitIntValue = Int(sliderValue)
+        if AppDelegate.fahrenheit_celsius {
+            sliderLabel.text = "\(fahrenheitIntValue)°F"
             if isDebugging {
-                print("new farenheit max temp: ", farenheitIntValue)
+                print("new farenheit max temp: ", fahrenheitIntValue)
             }
         } else {
-            let celsiusIntValue = ((farenheitIntValue-32)*5/9)
+            let celsiusIntValue = ((fahrenheitIntValue-32)*5/9)
             sliderLabel.text = "\(celsiusIntValue)°C"
             if isDebugging {
                 print("new celsius max temp: ", celsiusIntValue)
             }
         }
-        AppDelegate.max_temp = farenheitIntValue
-        defaults.set(farenheitIntValue, forKey: max_temp_key)
+        AppDelegate.max_temp = fahrenheitIntValue
+        defaults.set(fahrenheitIntValue, forKey: max_temp_key)
     }
     
     @objc func switchStateDidChange(_ sender:UISwitch!) {
@@ -238,7 +239,7 @@ class TemperatureAdjustViewController: UIViewController, UINavigationControllerD
         let roundedStepValue = round(sender.value / step) * step
         sender.value = roundedStepValue
         let farenheitIntValue = Int(roundedStepValue)
-        if AppDelegate.farenheit_celsius {
+        if AppDelegate.fahrenheit_celsius {
             sliderLabel.text = "\(farenheitIntValue)°F"
         } else {
             let celsiusIntValue = (farenheitIntValue - 32)*5/9

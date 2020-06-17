@@ -12,6 +12,10 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 
+protocol RegisterDelegate: AnyObject {
+    func setTitle(_ title: String)
+}
+
 class RegisterViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -24,7 +28,10 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     let nameTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Name"
+        tf.attributedPlaceholder = NSAttributedString(string: "Name",
+                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        tf.textColor = UIColor.black
+        tf.autocorrectionType = .no
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
@@ -36,7 +43,9 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     let emailTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Email"
+        tf.attributedPlaceholder = NSAttributedString(string: "Email",
+                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        tf.textColor = UIColor.black
         tf.autocapitalizationType = UITextAutocapitalizationType.none
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -66,7 +75,9 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     let passwordTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Password"
+        tf.attributedPlaceholder = NSAttributedString(string: "Password",
+                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        tf.textColor = UIColor.black
         tf.isSecureTextEntry = true
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -77,7 +88,9 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
     
     let confirmPasswordTextField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Confirm Password"
+        tf.attributedPlaceholder = NSAttributedString(string: "Confirm Password",
+                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
+        tf.textColor = UIColor.black
         tf.isSecureTextEntry = true
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
@@ -106,15 +119,10 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         guard let name = nameTextField.text, let email = emailTextField.text, let password = passwordTextField.text, let confirmPassword = confirmPasswordTextField.text, !name.isEmpty, !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else { return }
         
         guard confirmPassword == password else {
-            let alert = UIAlertController(title: "Alert", message: "Passwords do not match", preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
-            DispatchQueue.main.async {
-                self.present(alert, animated: true, completion: nil)
-            }
+            showAlertMessage(presenter: self, title: "Alert", message: "Passwords do not match", handler: nil)
             
             return
         }
-        
         Auth.auth().createUser(withEmail: email, password: password, completion: { (result, error: Error?) in
             if let error = error {
                 // TODO: handle error
@@ -127,8 +135,54 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
                 
                 return
             }
+            let user = Auth.auth().currentUser
+            if let user = user {
+                let changeRequest = user.createProfileChangeRequest()
+                
+                changeRequest.displayName = name
+                changeRequest.commitChanges { error in
+                    if let error = error {
+                        // TODO: handle error
+                    } else {
+                    
+                    }
+                }
+            }
+            
+            if let result = result {
+                // Registration Succsesful
+                if let email = result.user.email, let name = result.user.displayName  {
+                    let id = result.user.providerID
+                    // Present success message to user with email
+                    self.dismissKeyboard()
+                    showAlertMessage(presenter: self, title: "Registration Successful", message: "Now logging you in with your email: \(email)", handler: {
+                        // Setup UI for Device VC
+                        self.registerDelegate?.setTitle("\(name)")
+                        // Setup State
+                        AppDelegate.user = LocalUser(id: id, name: name, email: email)
+                        // Dismiss Register VC
+                        self.dismiss(animated: true, completion: nil)
+                    })
+                } else {
+                    // Present success message to user w/o email
+                    showAlertMessage(presenter: self, title: "Registration Successful", message: "Now login with your email", handler: {
+                        // Logout
+                        do {
+                            try Auth.auth().signOut()
+                        } catch let logoutError {
+                            // TODO: handle error
+                            print("Logout error: ", logoutError)
+                        }
+                        // Go back to login page
+                        self.popRegisterVC()
+                    })
+                }
+            }
+            
         })
     }
+    
+    weak var registerDelegate: RegisterDelegate?
     
     let alreadyHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
@@ -140,11 +194,11 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         
         button.setAttributedTitle(attributedTitle, for: .normal)
         
-        button.addTarget(self, action: #selector(handleAlreadyHaveAccount), for: .touchUpInside)
+        button.addTarget(self, action: #selector(popRegisterVC), for: .touchUpInside)
         return button
     }()
     
-    @objc func handleAlreadyHaveAccount() {
+    @objc func popRegisterVC() {
         navigationController?.popViewController(animated: true)
     }
     
